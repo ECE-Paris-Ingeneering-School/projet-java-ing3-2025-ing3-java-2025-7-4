@@ -56,4 +56,31 @@ package "Attraction MVC" {
   AttractionController ..> AttractionModel : uses
   AttractionController ..> AttractionView : interacts with
 }
+' ---------------------------
+' Reservation MVC
+' ---------------------------
+package "Reservation MVC" {
+  class ReservationModel {
+    - reservationID : int
+    - clientID : int
+    - attractionID : int
+    - reservationDate : Date
+    - numberTickets : int
+    - price : double
+    - discount : double
+  }
+
+  class ReservationView {
+    + displayReservation(prReservation: ReservationModel) : void
+    + getReservationInput() : Map
+  }
+
+  class ReservationController {
+    + createReservation(prReservation: Map) : void
+    + cancelReservation(prID: int) : void
+  }
+
+  ReservationController ..> ReservationModel : uses
+  ReservationController ..> ReservationView : interacts with
+}
 @enduml
