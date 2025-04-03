@@ -1,6 +1,6 @@
 @startuml
 
-skinparam classAttributeIconSize 0
+'skinparam classAttributeIconSize 0
 
 ' ---------------------------
 ' Client MVC
@@ -83,4 +83,133 @@ package "Reservation MVC" {
   ReservationController ..> ReservationModel : uses
   ReservationController ..> ReservationView : interacts with
 }
+
+
+' ---------------------------
+' Payment MVC
+' ---------------------------
+package "Payment MVC" {
+  class PaymentModel {
+    - paymentID : int
+    - reservationID : int
+    - amount : double
+    - method : String
+    - paymentDate : Date
+  }
+
+  class PaymentView {
+    + displayPaymentInfo(prPayment: PaymentModel) : void
+    + getPaymentInput() : Map
+  }
+
+  class PaymentController {
+    + processPayment(prPayment: Map) : void
+  }
+
+  PaymentController ..> PaymentModel : uses
+  PaymentController ..> PaymentView : interacts with
+}
+
+
+' ---------------------------
+' Interfaces DAO
+' ---------------------------
+package "DAO Factory"{
+interface IClientDAO {
+  + getClientAll() : ArrayList<ClientModel>
+  + getClient(prID : int) : ClientModel
+  + saveClient(prClient : ClientModel) : void
+  + updateClient(prClient : ClientModel) : void
+  + deleteClient(prID : int) : void
+}
+
+interface IAttractionDAO {
+  + getAttracAll() : ArrayList<AttractionModel>
+  + getAttraction(prID : int) : AttractionModel
+  + saveAttraction(prAttraction : AttractionModel) : void
+  + updateAttraction(prAttraction : AttractionModel) : void
+  + deleteAttraction(prID : int) : void
+}
+
+interface IReservationDAO {
+  + getReservAll() : ArrayList<ReservationModel>
+  + getReservation(prID : int) : ReservationModel
+  + saveReservation(prReservation : ReservationModel) : void
+  + updateReservation(prReservation : ReservationModel) : void
+  + deleteReservation(prID : int) : void
+}
+
+interface IPaymentDAO {
+  + getPaymentAll() : ArrayList<ReservationModel>
+  + getPayment(prID : int) : PaymentModel
+  + savePayment(prPayment : PaymentModel) : void
+  + updatePayment(prPayment : PaymentModel) : void
+  + deletePayment(prID : int) : void
+}
+
+' ---------------------------
+' Implémentations DAO
+' ---------------------------
+class ClientDAO {
+  - DAOFactory daoFactory
+
+  + getClientAll() : ArrayList<ClientModel>
+  + getClient(prID : int) : ClientModel
+  + saveClient(prClient : ClientModel) : void
+  + updateClient(prClient : ClientModel) : void
+  + deleteClient(prID : int) : void
+}
+ClientDAO ..|> IClientDAO
+
+class AttractionDAO {
+  - DAOFactory daoFactory
+
+  + getAttracAll() : ArrayList<AttractionModel>
+  + getAttraction(prID : int) : AttractionModel
+  + saveAttraction(prAttraction : AttractionModel) : void
+  + updateAttraction(prAttraction : AttractionModel) : void
+  + deleteAttraction(prID : int) : void
+}
+AttractionDAO ..|> IAttractionDAO
+
+class ReservationDAO {
+  - DAOFactory daoFactory
+
+  + getReservAll() : ArrayList<ReservationModel>
+  + getReservation(prID : int) : ReservationModel
+  + saveReservation(prReservation : ReservationModel) : void
+  + updateReservation(prReservation : ReservationModel) : void
+  + deleteReservation(prID : int) : void
+}
+ReservationDAO ..|> IReservationDAO
+
+class PaymentDAO {
+  - DAOFactory daoFactory
+
+  + getPaymentAll() : ArrayList<ReservationModel>
+  + getPayment(prID : int) : PaymentModel
+  + savePayment(prPayment : PaymentModel) : void
+  + updatePayment(prPayment : PaymentModel) : void
+  + deletePayment(prID : int) : void
+}
+PaymentDAO ..|> IPaymentDAO
+
+' ---------------------------
+' DAO Factory
+' ---------------------------
+class DAOFactory {
+  -String url
+  -String username
+  -String password
+
+
+  +DAOFactory getInstance(prUrl:String,prUsername: String,prPassword : String)
+  +getConnection():Connection
+  +getClientDAO(): ClientDAO
+  +getAttractionDAO(): AttractionDAO
+  +getReservationDAO(): ReservationDAO
+  +getPaymentDAO(): PaymentDAO
+  +disconnect(): void
+}
+
 @enduml
