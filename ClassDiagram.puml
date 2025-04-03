@@ -1,0 +1,21 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+class Person {
+  -street: String
+  -int age
+  -String email
+
+  +Person(String name, int age)
+  +String getName()
+  +void setName(String name)
+  +int getAge()
+  +void setAge(int age)
+  +String getEmail()
+  +void setEmail(String email)
+}
+
+
+
+@enduml
