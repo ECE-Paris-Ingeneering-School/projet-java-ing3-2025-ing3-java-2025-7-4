@@ -3,6 +3,8 @@ on: push
 jobs:
   render:
     runs-on: ubuntu-latest
+    permissions:  # Add this block
+     contents: write  # Allows committing files
     steps:
       - uses: actions/checkout@v4
       - name: Generate diagram
