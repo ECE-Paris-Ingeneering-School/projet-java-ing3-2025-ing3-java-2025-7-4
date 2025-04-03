@@ -16,17 +16,44 @@ package "Client MVC" {
   }
 
   class ClientView {
-    + displayClientInfo(client: ClientModel) : void
+    + displayClientInfo(prCLient: ClientModel) : void
     + getClientInput() : Map
   }
 
   class ClientController {
-    + createClient(data: Map) : void
-    + updateClient(data: Map) : void
-    + deleteClient(id: int) : void
+    + createClient(prClient: Map) : void
+    + updateClient(prClient: Map) : void
+    + deleteClient(prID: int) : void
   }
 
   ClientController ..> ClientModel : uses
   ClientController ..> ClientView : interacts with
+}
+' ---------------------------
+' Attraction MVC
+' ---------------------------
+package "Attraction MVC" {
+  class AttractionModel {
+    - attractionID : int
+    - price : double
+    - capacity : int
+    - name : String
+    - category : String
+    - description : String
+  }
+
+  class AttractionView {
+    + displayAttraInfo(prAttraction: AttractionModel) : void
+    + listAttra(prListAttra: List<AttractionModel>) : void
+  }
+
+  class AttractionController {
+    + createAttra(prAttraction: Map) : void
+    + updateAttra(prAttraction: Map) : void
+    + deleteAttra(prID: int) : void
+  }
+
+  AttractionController ..> AttractionModel : uses
+  AttractionController ..> AttractionView : interacts with
 }
 @enduml
