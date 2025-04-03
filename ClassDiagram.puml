@@ -2,20 +2,31 @@
 
 skinparam classAttributeIconSize 0
 
-class Person {
-  -street: String
-  -int age
-  -String email
+' ---------------------------
+' Client MVC
+' ---------------------------
+package "Client MVC" {
+  class ClientModel {
+    - clientID : int
+    - name : String
+    - email : String
+    - password : String
+    - type : String
+    - age : int
+  }
 
-  +Person(String name, int age)
-  +String getName()
-  +void setName(String name)
-  +int getAge()
-  +void setAge(int age)
-  +String getEmail()
-  +void setEmail(String email)
+  class ClientView {
+    + displayClientInfo(client: ClientModel) : void
+    + getClientInput() : Map
+  }
+
+  class ClientController {
+    + createClient(data: Map) : void
+    + updateClient(data: Map) : void
+    + deleteClient(id: int) : void
+  }
+
+  ClientController ..> ClientModel : uses
+  ClientController ..> ClientView : interacts with
 }
-
-
-
 @enduml
