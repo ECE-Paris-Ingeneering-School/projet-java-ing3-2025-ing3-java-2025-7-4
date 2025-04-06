@@ -33,14 +33,31 @@ package "Client MVC" {
 ' Attraction MVC
 ' ---------------------------
 package "Attraction MVC" {
-  class AttractionModel {
-    - attractionID : int
-    - price : double
-    - capacity : int
-    - name : String
-    - category : String
-    - description : String
+   abstract class AttractionModel {
+      # int attractionID
+      # double price
+      # int capacity
+      # String name
+      # String category
+      # String description
   }
+   class RollerCoasterModel extends AttractionModel {
+      - int loopCount
+      - double height
+
+      + String getType()
+      }
+   class SpectacleModel extends AttractionModel {
+      - String type
+      - String performerName
+
+      + String getType()
+      }
+  class WaterRideModel extends AttractionModel {
+      - int splashLevel
+
+      + String getType()
+      }
 
   class AttractionView {
     + displayAttraInfo(prAttraction: AttractionModel) : void
@@ -140,7 +157,7 @@ interface IReservationDAO {
 }
 
 interface IPaymentDAO {
-  + getPaymentAll() : ArrayList<ReservationModel>
+  + getPaymentAll() : ArrayList<PaymentModel>
   + getPayment(prID : int) : PaymentModel
   + savePayment(prPayment : PaymentModel) : void
   + updatePayment(prPayment : PaymentModel) : void
