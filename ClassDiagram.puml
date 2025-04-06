@@ -11,7 +11,7 @@ package "Client MVC" {
     - name : String
     - email : String
     - password : String
-    - type : String
+    - role : String
     - age : int
   }
 
@@ -29,6 +29,7 @@ package "Client MVC" {
   ClientController ..> ClientModel : uses
   ClientController ..> ClientView : interacts with
 }
+
 ' ---------------------------
 ' Attraction MVC
 ' ---------------------------
@@ -72,6 +73,7 @@ package "Attraction MVC" {
 
   AttractionController ..> AttractionModel : uses
   AttractionController ..> AttractionView : interacts with
+
 }
 ' ---------------------------
 ' Reservation MVC
@@ -126,6 +128,62 @@ package "Payment MVC" {
   PaymentController ..> PaymentModel : uses
   PaymentController ..> PaymentView : interacts with
 }
+' ---------------------------
+' Authentication MVC
+' ---------------------------
+package "Login MVC" {
+  class LoginView {
+    + getCredentials() : Map
+    + displayLoginResult(success: boolean) : void
+  }
+
+  class LoginController {
+    + authenticate(email: String, password: String) : ClientModel
+    + getUserRole(client: ClientModel) : String
+  }
+
+  LoginController ..> LoginView : interacts with
+  LoginController ..> ClientDAO : uses
+}
+' ---------------------------
+' Registration MVC
+' ---------------------------
+package "Registration MVC" {
+
+  class RegistrationView {
+    + getRegistrationInput() : Map
+    + displayRegistrationStatus(success: boolean) : void
+  }
+
+  class RegistrationController {
+    + registerNewClient(prClientData: Map) : void
+  }
+
+  RegistrationController ..> RegistrationView : interacts with
+  RegistrationController ..> ClientDAO : uses
+}
+' ---------------------------
+' Reporting MVC
+' ---------------------------
+package "Reporting MVC" {
+  class ReportingModel {
+    + getMostPopularAttractions() : List<AttractionModel>
+    + getRevenueByAttraction() : Map<String, Double>
+  }
+
+  class ReportingView {
+    + displayChart(chartType: String, data: Map) : void
+  }
+
+  class ReportingController {
+    + generateReport(reportType: String) : void
+  }
+
+  ReportingController ..> ReportingModel : uses
+  ReportingController ..> ReportingView : interacts with
+}
+
+
 
 
 ' ---------------------------
@@ -203,7 +261,7 @@ ReservationDAO ..|> IReservationDAO
 class PaymentDAO {
   - DAOFactory daoFactory
 
-  + getPaymentAll() : ArrayList<ReservationModel>
+  + getPaymentAll() : ArrayList<PaymentModel>
   + getPayment(prID : int) : PaymentModel
   + savePayment(prPayment : PaymentModel) : void
   + updatePayment(prPayment : PaymentModel) : void
