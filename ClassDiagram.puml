@@ -11,19 +11,24 @@ package "Client MVC" {
     - name : String
     - email : String
     - password : String
+    'Accès dans l'appli
     - role : String
+    'Catégorie du client (senior, enfant, adulte)
     - age : int
   }
 
   class ClientView {
     + displayClientInfo(prCLient: ClientModel) : void
+    + displayReservationHistory(prList : List<ReservationModel>) : void
     + getClientInput() : Map
+
   }
 
   class ClientController {
     + createClient(prClient: Map) : void
     + updateClient(prClient: Map) : void
     + deleteClient(prID: int) : void
+    + getReservationHistory(prID : int) : List<ReservationModel>
   }
 
   ClientController ..> ClientModel : uses
@@ -87,6 +92,8 @@ package "Reservation MVC" {
     - numberTickets : int
     - price : double
     - discount : double
+
+    + calculateDiscount(client: ClientModel) : double
   }
 
   class ReservationView {
@@ -101,6 +108,9 @@ package "Reservation MVC" {
 
   ReservationController ..> ReservationModel : uses
   ReservationController ..> ReservationView : interacts with
+  ReservationModel --> ClientModel : clientID
+  ReservationModel --> AttractionModel : attractionID
+
 }
 
 
@@ -169,6 +179,8 @@ package "Reporting MVC" {
   class ReportingModel {
     + getMostPopularAttractions() : List<AttractionModel>
     + getRevenueByAttraction() : Map<String, Double>
+    + getClientSpendingStats() : Map<ClientModel, Double>
+
   }
 
   class ReportingView {
@@ -182,9 +194,6 @@ package "Reporting MVC" {
   ReportingController ..> ReportingModel : uses
   ReportingController ..> ReportingView : interacts with
 }
-
-
-
 
 ' ---------------------------
 ' Interfaces DAO
@@ -246,6 +255,8 @@ class AttractionDAO {
   + deleteAttraction(prID : int) : void
 }
 AttractionDAO ..|> IAttractionDAO
+AttractionDAO ..> AttractionFactory : uses
+
 
 class ReservationDAO {
   - DAOFactory daoFactory
@@ -268,6 +279,10 @@ class PaymentDAO {
   + deletePayment(prID : int) : void
 }
 PaymentDAO ..|> IPaymentDAO
+
+class AttractionFactory {
+  + createAttractionFromCategory(category: String, data: Map) : AttractionModel
+}
 
 ' ---------------------------
 ' DAO Factory
