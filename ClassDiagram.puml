@@ -1,4 +1,4 @@
-@startuml
+ @startuml
 
 'skinparam classAttributeIconSize 0
 
@@ -287,19 +287,47 @@ class AttractionFactory {
 ' ---------------------------
 ' DAO Factory
 ' ---------------------------
-class DAOFactory {
-  -String url
-  -String username
-  -String password
+    class DAOFactory {
+      -String url
+      -String username
+      -String password
 
 
-  +DAOFactory getInstance(prUrl:String,prUsername: String,prPassword : String)
-  +getConnection():Connection
-  +getClientDAO(): ClientDAO
-  +getAttractionDAO(): AttractionDAO
-  +getReservationDAO(): ReservationDAO
-  +getPaymentDAO(): PaymentDAO
-  +disconnect(): void
+      +DAOFactory getInstance(prUrl:String,prUsername: String,prPassword : String)
+      +getConnection():Connection
+      +getClientDAO(): ClientDAO
+      +getAttractionDAO(): AttractionDAO
+      +getReservationDAO(): ReservationDAO
+      +getPaymentDAO(): PaymentDAO
+      +disconnect(): void
+    }
+
+    class DAOPlanning{
+       +Map getDay();
+    }
 }
+package PlanningMVC{
 
+    class PlanningModel{
+    -int ID
+    -int typeDay
+    -LocalDate date
+
+    + addToPlanning( List<PlanningModel> listPlanningModel, PlanningModel planningModel) : List<PlanningModel>
+    }
+
+    class PlanningControleur{
+
+    -int month
+    -int year
+
+    + createDays() : List<PlanningModel>
+    + nextMonth()
+    + prevMonth()
+    }
+
+    class PlanningView{
+
+    }
+}
 @enduml
