@@ -313,6 +313,7 @@ package PlanningMVC{
     -int typeDay
     -LocalDate date
 
+
     + addToPlanning( List<PlanningModel> listPlanningModel, PlanningModel planningModel) : List<PlanningModel>
     }
 
@@ -322,11 +323,19 @@ package PlanningMVC{
     -int year
 
     + createDays() : List<PlanningModel>
-    + nextMonth()
-    + prevMonth()
+    + nextMonth() : void
+    + prevMonth() : void
+    + selctDay() : void
     }
 
     class PlanningView{
+
+        -JPanel calendarPanel
+        -JLabel monthLabel
+        -YearMonth currentYearMonth
+
+        + calendar() : void
+        - drawCalendar(List<PlanningModel>) :void
 
     }
 }
