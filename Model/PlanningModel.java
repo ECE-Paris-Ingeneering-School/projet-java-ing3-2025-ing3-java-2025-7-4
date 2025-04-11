@@ -36,4 +36,16 @@ public class PlanningModel {
         listPlanningModel.add(planningModel);
         return listPlanningModel;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getTypeDay() {
+        return typeDay;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
 }

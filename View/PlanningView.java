@@ -3,26 +3,19 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 
-
-/**
- * @author erelr
- *
- * Il s'agit du View de planning ça sert à afficher le planning
- *
- */
 public class PlanningView extends JFrame {
     private JButton prevButton;
     private JButton nextButton;
     private JLabel monthLabel;
-    private JPanel calendarPanel;
+    private JPanel planningPanel;
 
     public PlanningView() {
-        setTitle("Calendrier Mensuel - MVC");
+        setTitle("Planning Mensuel - MVC");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Création du panneau d'en-tête avec les boutons et le label du mois
+        // Panneau d'en-tête avec les boutons et le label du mois
         JPanel headerPanel = new JPanel(new BorderLayout());
         prevButton = new JButton("<<");
         nextButton = new JButton(">>");
@@ -33,16 +26,16 @@ public class PlanningView extends JFrame {
         headerPanel.add(nextButton, BorderLayout.EAST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Création du panneau qui affichera la grille du calendrier
-        calendarPanel = new JPanel();
-        calendarPanel.setLayout(new GridLayout(0, 7)); // Grille dynamique avec 7 colonnes (un pour chaque jour)
-        add(calendarPanel, BorderLayout.CENTER);
+        // Panneau pour afficher la grille du planning
+        planningPanel = new JPanel();
+        planningPanel.setLayout(new GridLayout(0, 7)); // 7 colonnes pour chaque jour de la semaine
+        add(planningPanel, BorderLayout.CENTER);
 
-        // Centre la fenêtre à l'écran
+        // Centre la fenêtre sur l'écran
         setLocationRelativeTo(null);
     }
 
-    // Accesseurs pour les boutons, utiles au contrôleur
+    // Accesseurs pour les boutons (utilisés par le contrôleur)
     public JButton getPrevButton() {
         return prevButton;
     }
@@ -51,23 +44,22 @@ public class PlanningView extends JFrame {
         return nextButton;
     }
 
-    // Permet de mettre à jour le label affichant le mois et l'année
+    // Met à jour le label affichant le mois et l'année
     public void setMonthLabel(String text) {
         monthLabel.setText(text);
     }
 
-    // Méthodes pour gérer le contenu du panneau calendrier
-    public void clearCalendarPanel() {
-        calendarPanel.removeAll();
+    // Méthodes pour manipuler le contenu du panneau planning
+    public void clearPlanningPanel() {
+        planningPanel.removeAll();
     }
 
-    public void addToCalendarPanel(Component comp) {
-        calendarPanel.add(comp);
+    public void addToPlanningPanel(Component comp) {
+        planningPanel.add(comp);
     }
 
-    public void refreshCalendarPanel() {
-        calendarPanel.revalidate();
-        calendarPanel.repaint();
+    public void refreshPlanningPanel() {
+        planningPanel.revalidate();
+        planningPanel.repaint();
     }
 }
-

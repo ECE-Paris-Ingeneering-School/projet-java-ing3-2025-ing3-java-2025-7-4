@@ -1,7 +1,6 @@
-import Controller.PlanningController;
-import View.PlanningView;
-
 import javax.swing.SwingUtilities;
+import View.PlanningView;
+import Controller.PlanningController;
 
 public class TestPlanning {
     public static void main(String[] args) {
