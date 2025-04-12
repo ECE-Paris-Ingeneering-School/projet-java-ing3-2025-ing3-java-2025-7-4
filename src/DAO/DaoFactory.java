@@ -3,6 +3,7 @@ package DAO;
 
 
 // import des packages externes
+
 import java.sql.*;
 
 // import des packages internes
@@ -75,6 +76,10 @@ public class DaoFactory {
             e.printStackTrace();
             System.out.println("Erreur de déconnexion à la base de données");
         }
+    }
+    public OrdersDAOImpl getOrdersDAO() {
+        // Retourner un objet de ClientDAOImpl qui implémente ClientDAO
+        return new OrdersDAOImpl(this);
     }
     /**
      * Override de la méthode toString() pour afficher un message de succès

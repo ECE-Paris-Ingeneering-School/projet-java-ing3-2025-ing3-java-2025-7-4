@@ -5,17 +5,15 @@ import Model.OrdersModel;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.Locale;
-import java.util.Optional;
 
-class OrderDAO {
+public class OrdersDAOImpl {
     private DaoFactory daoFactory;
 
     /**
      * Instancie un daoFactory
      * @param daoFactory
      */
-    public OrderDAO(DaoFactory daoFactory) {
+    public OrdersDAOImpl(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
@@ -53,7 +51,7 @@ class OrderDAO {
             Connection connexion= daoFactory.getConnection();
             Statement statement= connexion.createStatement();
 
-            String sql="UPDATE orders SET status = '" + newStatus + "' WHERE orderId = " + orderId;
+            String sql="UPDATE orders SET status = '" + newStatus + "' WHERE order_id = " + orderId;
             int rowsAffected= statement.executeUpdate(sql);
             // Vérification que la mise à jour a bien eu lieu
             if (rowsAffected > 0) {

@@ -27,7 +27,7 @@ public class OrdersModel {
      * @param attractionId
      * @param reservationId
      */
-    public void OrdersModel(int orderId, LocalDateTime rdvFulltime, int personCount, float price,
+    public OrdersModel(int orderId, LocalDateTime rdvFulltime, int personCount, float price,
                        String status, int attractionId, int reservationId) {
         this.orderId = orderId;
         this.rdvFulltime = rdvFulltime;
