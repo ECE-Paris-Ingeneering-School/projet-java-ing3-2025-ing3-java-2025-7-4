@@ -46,7 +46,7 @@ public class PlanningView extends JFrame {
         if (page == 0) {
             JPanel square1 = new JPanel();
             JLabel desc1 = new JLabel("Jour Spécial 40€");
-            square1.setBackground(Color.GREEN);
+            square1.setBackground(new Color(238, 130, 238));
             square1.setBounds(10, 560, 10, 10);
             desc1.setBounds(25, 560, 100, 10);
             add(square1);
@@ -54,7 +54,7 @@ public class PlanningView extends JFrame {
 
             JPanel square2 = new JPanel();
             JLabel desc2 = new JLabel("Haute Saison 25€");
-            square2.setBackground(Color.BLUE);
+            square2.setBackground(new Color(47, 78, 193, 137));
             square2.setBounds(165, 560, 10, 10);
             desc2.setBounds(180, 560, 100, 10);
             add(square2);
@@ -62,7 +62,7 @@ public class PlanningView extends JFrame {
 
             JPanel square3 = new JPanel();
             JLabel desc3 = new JLabel("Basse Saison 20€");
-            square3.setBackground(new Color(238, 130, 238));
+            square3.setBackground(Color.GREEN);
             square3.setBounds(320, 560, 10, 10);
             desc3.setBounds(335, 560, 150, 10);
             add(square3);
@@ -70,11 +70,7 @@ public class PlanningView extends JFrame {
 
 
 
-            /*
-            legendPanel.add(createLegendEntry(Color.BLUE, "Haute Saison"));
-            legendPanel.add(createLegendEntry(new Color(238, 130, 238), "Basse Saison"));
-            add(legendPanel);
-*/
+
             // Panneau pour le bouton "Valider"
             JButton validateButton = new JButton("Valider");
             validateButton.setBounds((width/2) - 100, 600, 200, 40);
@@ -113,27 +109,4 @@ public class PlanningView extends JFrame {
         planningPanel.repaint();
     }
 
-    /**
-     * Créé une ligne de légende composée d'un petit carré coloré et d'un texte descriptif.
-     * @param color la couleur à afficher dans le carré
-     * @param text le texte à afficher à côté du carré
-     * @return le JPanel contenant cette entrée
-     */
-    private JPanel createLegendEntry(Color color, String text) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        // Création d'une petite case colorée.
-        JPanel colorBox = new JPanel();
-        colorBox.setBackground(color);
-        colorBox.setPreferredSize(new Dimension(20, 20));
-        colorBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        // Label pour la description
-        JLabel label = new JLabel(text);
-
-        panel.add(colorBox);
-        panel.add(Box.createHorizontalStrut(10)); // Espace entre la case et le texte
-        panel.add(label);
-        return panel;
-    }
 }

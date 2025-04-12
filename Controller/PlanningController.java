@@ -26,7 +26,7 @@ public class PlanningController {
 
         // Exemples de jours spéciaux pour la démonstration :
         // Par exemple, le 10 du mois courant en type 1 (vert), le 15 en type 2 (bleu) et le 20 en type 3 (violet)
-        specialDays.add(new PlanningModel(1, 1, LocalDate.parse("10/04/2025", formatter)));
+        specialDays.add(new PlanningModel(1, 1, LocalDate.parse("13/04/2025", formatter)));
         specialDays.add(new PlanningModel(2, 2, LocalDate.parse("15/04/2025", formatter)));
         specialDays.add(new PlanningModel(3, 3,  LocalDate.parse("18/04/2025", formatter)));
 
@@ -79,14 +79,15 @@ public class PlanningController {
 
         // Ajoute chaque jour du mois dans la grille
         int daysInMonth = currentYearMonth.lengthOfMonth();
+
         for (int day = 1; day <= daysInMonth; day++) {
             final LocalDate currentDate = currentYearMonth.atDay(day);
             JLabel dayLabel = new JLabel(String.valueOf(day), SwingConstants.CENTER);
             dayLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            // (Optionnel) Coloration si le jour est spécial...
             PlanningModel planning = getPlanningByDate(currentDate);
             if (planning != null) {
+                // Application de la couleur en fonction de la spécialité
                 switch (planning.getTypeDay()) {
                     case 1:
                         dayLabel.setOpaque(true);
@@ -94,21 +95,37 @@ public class PlanningController {
                         break;
                     case 2:
                         dayLabel.setOpaque(true);
-                        dayLabel.setBackground(Color.BLUE);
+                        dayLabel.setBackground(new Color(47, 78, 193, 137));
                         break;
                     case 3:
                         dayLabel.setOpaque(true);
                         dayLabel.setBackground(new Color(238, 130, 238));
                         break;
                 }
+            } else {
+                // Jour normal : Couleur en fonction du weekend ou de la semaine
+                int dayOfWeekValue = currentDate.getDayOfWeek().getValue();
+                dayLabel.setOpaque(true);
+                if (dayOfWeekValue == 6 || dayOfWeekValue == 7) { // Weekend
+                    dayLabel.setBackground(new Color(47, 78, 193, 137));
+                } else { // Semaine
+                    dayLabel.setBackground(Color.GREEN);
+                }
             }
 
-            // Ajout d'un écouteur de clic pour afficher la date formatée dans la console
+            // Écouteur pour afficher la date et la couleur de la case dans la console
             dayLabel.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                    // Formater et afficher la date en "dd/MM/yyyy"
-                    System.out.println("Dernière date cliquée : " + currentDate.format(formatter));
+                    // Formater la date
+                    String dateStr = currentDate.format(formatter);
+                    // Récupérer la couleur de fond
+                    Color bgColor = dayLabel.getBackground();
+                    // Option 1 : Afficher directement la chaîne de la couleur (par défaut)
+                    System.out.println("Date : " + dateStr + " - Couleur : " + bgColor.toString());
+                    // Option 2 : Afficher la couleur en notation hexadécimale
+                    String hexColor = String.format("#%02x%02x%02x", bgColor.getRed(), bgColor.getGreen(), bgColor.getBlue());
+                    System.out.println("Date : " + dateStr + " - Couleur (hex) : " + hexColor);
                 }
             });
 
@@ -116,6 +133,7 @@ public class PlanningController {
         }
 
         view.refreshPlanningPanel();
+
     }
 
     // Retourne le PlanningModel correspondant à la date donnée (s'il existe)
