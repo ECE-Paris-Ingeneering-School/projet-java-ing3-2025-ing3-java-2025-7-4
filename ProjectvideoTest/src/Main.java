@@ -1,4 +1,4 @@
-import javafx.application.Application;
+/**import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -31,7 +31,7 @@ public class Main extends Application {
 
         // 📏 Forcer taille du MediaView à s'adapter à la scène
         mediaView.setPreserveRatio(true);
-        mediaView.setFitWidth(900);
+        mediaView.setFitWidth(800);
         mediaView.setFitHeight(600);
 
         // 🎮 Boutons de contrôle
@@ -95,3 +95,4 @@ public class Main extends Application {
         launch();
     }
 }
+*/
