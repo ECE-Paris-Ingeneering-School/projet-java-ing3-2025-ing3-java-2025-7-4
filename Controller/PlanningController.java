@@ -58,6 +58,7 @@ public class PlanningController {
     // Construit la grille du planning et colore les jours spéciaux
     private void drawPlanning() {
         view.clearPlanningPanel();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         // Ajoute l'en-tête avec les noms des jours de la semaine
         String[] days = {"Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"};
@@ -79,14 +80,13 @@ public class PlanningController {
         // Ajoute chaque jour du mois dans la grille
         int daysInMonth = currentYearMonth.lengthOfMonth();
         for (int day = 1; day <= daysInMonth; day++) {
-            LocalDate date = currentYearMonth.atDay(day);
+            final LocalDate currentDate = currentYearMonth.atDay(day);
             JLabel dayLabel = new JLabel(String.valueOf(day), SwingConstants.CENTER);
             dayLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            // Vérifie si la date correspond à un jour spécial
-            PlanningModel planning = getPlanningByDate(date);
+            // (Optionnel) Coloration si le jour est spécial...
+            PlanningModel planning = getPlanningByDate(currentDate);
             if (planning != null) {
-                // Change la couleur de fond en fonction du type de jour
                 switch (planning.getTypeDay()) {
                     case 1:
                         dayLabel.setOpaque(true);
@@ -102,6 +102,15 @@ public class PlanningController {
                         break;
                 }
             }
+
+            // Ajout d'un écouteur de clic pour afficher la date formatée dans la console
+            dayLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    // Formater et afficher la date en "dd/MM/yyyy"
+                    System.out.println("Dernière date cliquée : " + currentDate.format(formatter));
+                }
+            });
 
             view.addToPlanningPanel(dayLabel);
         }
