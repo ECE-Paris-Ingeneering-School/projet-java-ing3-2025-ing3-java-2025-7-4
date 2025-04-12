@@ -1,32 +1,39 @@
+
+import Controller.PaymentController;
 import DAO.DaoFactory;
 import DAO.OrdersDAOImpl;
 import Model.OrdersModel;
+import view.PaymentView;
 
 import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) {
 
-        //ligne de code à changer en fonction des paramètres
+        // Connexion BDD via ta DaoFactory custom
         DaoFactory dao = DaoFactory.getInstance("attractions_db", "root", "");
-        System.out.println(dao);
         OrdersDAOImpl daoImpl = new OrdersDAOImpl(dao);
 
+        // Création d’une nouvelle commande
         OrdersModel newOrder = new OrdersModel(
-                4, // id auto-généré
+                1, // ID auto-généré
                 LocalDateTime.now().plusDays(1),
-                2, // 2 personnes
+                2, // personnes
                 35.50f,
                 "Pending",
                 1, // id attraction
                 42 // id réservation fictive
         );
 
-        daoImpl.createOrder(newOrder);
+        // Insertion dans la base
+        boolean created = daoImpl.createOrder(newOrder);
 
-        daoImpl.updateOrderStatus(newOrder.getOrderId(), "Paid");
-
-
-
+        // Si l’order a bien été créé, lancer le paiement
+        if (created) {
+            PaymentController controller = new PaymentController(daoImpl);
+            controller.effectuerPaiement(newOrder.getOrderId()); // << Ton workflow
+        } else {
+            System.out.println("Erreur lors de la création de la commande.");
+        }
     }
 }

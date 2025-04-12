@@ -21,7 +21,7 @@ public class OrdersDAOImpl {
      * crée un nouvelle commande dans la base de donnée
      * @param order
      */
-    public void createOrder(OrdersModel order) {
+    public boolean createOrder(OrdersModel order) {
         try{
             Connection connexion= daoFactory.getConnection();
 
@@ -39,26 +39,56 @@ public class OrdersDAOImpl {
                 int generatedId = generatedKeys.getInt(1);
                 order.setOrderId(generatedId);
                 System.out.println("Order créé avec ID : " + generatedId);
+                return true;
             }
         }catch(SQLException e){
             e.printStackTrace();
             System.out.println("Ajout de la commande impossible");
+            return false;
         }
+        return false;
+    }
+    public OrdersModel getOrderById(int prOrderId) {
+        OrdersModel resultOrder = null;
+        try{
+            Connection connexion= daoFactory.getConnection();
+            Statement statement= connexion.createStatement();
+
+            ResultSet resultSet= statement.executeQuery("SELECT * FROM orders WHERE order_id = '" + prOrderId + "'");
+            while (resultSet.next()) {
+                int orderID = resultSet.getInt("order_id");
+                LocalDateTime rdvFulltime = resultSet.getTimestamp("rdv_fulltime").toLocalDateTime();
+                int personCount = resultSet.getInt("person_count");
+                float price = resultSet.getFloat("price");
+                String status = resultSet.getString("status");
+                int attractionId = resultSet.getInt("attraction_id");
+                int reservationId = resultSet.getInt("reservation_id");
+
+                if(prOrderId==orderID){
+                    System.out.println("Commande trouvée dans la base de données");
+                    resultOrder=new OrdersModel(orderID,rdvFulltime,personCount,price,status,attractionId,reservationId);
+                    break;
+                }
+
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            System.out.println("Ajout de la commande impossible");
+        }
+        return resultOrder;
     }
 
-    public void updateOrderStatus(int orderId, String newStatus) {
+    public boolean updateOrderStatus(int orderId, String newStatus) {
+        int rowsAffected=0;
         try{
             Connection connexion= daoFactory.getConnection();
             Statement statement= connexion.createStatement();
 
             String sql="UPDATE orders SET status = '" + newStatus + "' WHERE order_id = " + orderId;
-            int rowsAffected= statement.executeUpdate(sql);
+            rowsAffected= statement.executeUpdate(sql);
             // Vérification que la mise à jour a bien eu lieu
-            if (rowsAffected > 0) {
-                System.out.println("Produit mis à jour avec succès.");
-            } else {
-                System.out.println("Aucun produit trouvé avec l'ID spécifié.");
-            }
+
 
             // Fermeture des ressources
             statement.close();
@@ -67,6 +97,12 @@ public class OrdersDAOImpl {
             e.printStackTrace();
             System.out.println("Modification du produit impossible");
         }
-
+        if (rowsAffected > 0) {
+            System.out.println("Produit mis à jour avec succès.");
+            return true;
+        } else {
+            System.out.println("Aucun produit trouvé avec l'ID spécifié.");
+            return false;
+        }
     }
 }
