@@ -8,11 +8,13 @@ public class PlanningView extends JFrame {
     private JButton nextButton;
     private JLabel monthLabel;
     private JPanel planningPanel;
-    private JButton validateButton;
-    private int page;
+    private JButton validateButton1;
+    private JButton validateButton2;
+    private JRadioButton option1;
+    private JRadioButton option2;
+    private JRadioButton option3;
 
     public PlanningView(int page) {
-        this.page = page;
         setTitle("Planning Mensuel - MVC");
         int height = 700;
         int width = 600;
@@ -73,9 +75,51 @@ public class PlanningView extends JFrame {
 
 
             // Panneau pour le bouton "Valider"
-            validateButton = new JButton("Valider");
-            validateButton.setBounds((width/2) - 100, 600, 200, 40);
-            add(validateButton);
+            validateButton1 = new JButton("Valider");
+            validateButton1.setBounds((width/2) - 100, 600, 200, 40);
+            add(validateButton1);
+        }
+
+        if (page == 1) {
+
+            // Création des boutons radio
+            option1 = new JRadioButton("Jour Spécial 40€");
+            option2 = new JRadioButton("Haute Saison 25€");
+            option3 = new JRadioButton("Basse Saison 20€");
+
+            // Regroupement dans un ButtonGroup pour assurer l'exclusivité
+            ButtonGroup group = new ButtonGroup();
+            group.add(option1);
+            group.add(option2);
+            group.add(option3);
+
+            JPanel square1 = new JPanel();
+            square1.setBackground(new Color(238, 130, 238));
+            square1.setBounds(10, 560, 10, 10);
+            option1.setBounds(25, 560, 150, 10);
+            add(square1);
+
+            JPanel square2 = new JPanel();
+            square2.setBackground(new Color(47, 78, 193, 137));
+            square2.setBounds(165, 560, 10, 10);
+            option2.setBounds(180, 560, 150, 10);
+            add(square2);
+
+            JPanel square3 = new JPanel();
+            square3.setBackground(Color.GREEN);
+            square3.setBounds(320, 560, 10, 10);
+            option3.setBounds(335, 560, 150, 10);
+            add(square3);
+
+            // Ajout des boutons au conteneur
+            add(option1);
+            add(option2);
+            add(option3);
+
+            // Panneau pour le bouton "Valider"
+            validateButton2 = new JButton("Valider");
+            validateButton2.setBounds((width/2) - 100, 600, 200, 40);
+            add(validateButton2);
         }
 
 
@@ -83,8 +127,12 @@ public class PlanningView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public JButton getValidateButton() {
-        return validateButton;
+    public JButton getValidateButton1() {
+        return validateButton1;
+    }
+
+    public JButton getValidateButton2() {
+        return validateButton2;
     }
 
     // Accesseurs pour les boutons (utilisés par le contrôleur)
@@ -113,6 +161,18 @@ public class PlanningView extends JFrame {
     public void refreshPlanningPanel() {
         planningPanel.revalidate();
         planningPanel.repaint();
+    }
+
+    public JRadioButton getOption1() {
+        return option1;
+    }
+
+    public JRadioButton getOption2() {
+        return option2;
+    }
+
+    public JRadioButton getOption3() {
+        return option3;
     }
 
 }

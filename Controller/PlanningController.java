@@ -35,7 +35,8 @@ public class PlanningController {
 
         initController();
         updatePlanning();
-        initValidateButton();
+        initValidateButton1();
+        initValidateButtonForRadio();
     }
 
     // Configure les écouteurs d’événements pour les boutons de navigation
@@ -60,8 +61,8 @@ public class PlanningController {
     }
 
     // Ajout de l'écouteur pour le bouton "Valider"
-    private void initValidateButton() {
-        JButton validateButton = view.getValidateButton();
+    private void initValidateButton1() {
+        JButton validateButton = view.getValidateButton1();
         if (validateButton != null) {
             validateButton.addActionListener(e -> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -71,6 +72,29 @@ public class PlanningController {
                             + " - Prix : " + lastClickedPrice);
                 } else {
                     System.out.println("Aucune date n'a été sélectionnée.");
+                }
+            });
+        }
+    }
+    private void initValidateButtonForRadio() {
+        JButton validateButton = view.getValidateButton2();
+        if (validateButton != null ) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            validateButton.addActionListener(e -> {
+                if (lastClickedDate != null) {
+                    String selectedOption = "";
+                    if (view.getOption1().isSelected()) {
+                        selectedOption = view.getOption1().getText();
+                    } else if (view.getOption2().isSelected()) {
+                        selectedOption = view.getOption2().getText();
+                    } else if (view.getOption3().isSelected()) {
+                        selectedOption = view.getOption3().getText();
+                    }
+                    if (!selectedOption.isEmpty()) {
+                        System.out.println("Choix sélectionné: " + selectedOption + " Jour sélectionné: " + lastClickedDate.format(formatter));
+                    } else {
+                        System.out.println("Aucune option n'a été sélectionnée.");
+                    }
                 }
             });
         }
