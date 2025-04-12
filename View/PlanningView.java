@@ -8,12 +8,17 @@ public class PlanningView extends JFrame {
     private JButton nextButton;
     private JLabel monthLabel;
     private JPanel planningPanel;
+    private int page;
 
-    public PlanningView() {
+    public PlanningView(int page) {
+        this.page = page;
+        int day;
         setTitle("Planning Mensuel - MVC");
-        setSize(600, 700);
+        int height = 700;
+        int width = 600;
+        setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setLayout(null);
 
         // Panneau d'en-tête avec les boutons et le label du mois
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -21,15 +26,23 @@ public class PlanningView extends JFrame {
         nextButton = new JButton(">>");
         monthLabel = new JLabel("", SwingConstants.CENTER);
 
-        headerPanel.add(prevButton, BorderLayout.WEST);
-        headerPanel.add(monthLabel, BorderLayout.CENTER);
-        headerPanel.add(nextButton, BorderLayout.EAST);
-        add(headerPanel, BorderLayout.NORTH);
+        // Positionnement en pixels dans le header
+        prevButton.setBounds(10, 50, 80, 30);   // x, y, largeur, hauteur
+        nextButton.setBounds(width - 105, 50, 80, 30);
+        monthLabel.setBounds((width/2) - 300, 50, 600, 30);
 
-        // Panneau pour afficher la grille du planning
+        add(prevButton);
+        add(nextButton);
+        add(monthLabel);
+
+        // Création du panneau planning (la grille) avec un GridLayout
         planningPanel = new JPanel();
-        planningPanel.setLayout(new GridLayout(0, 7)); // 7 colonnes pour chaque jour de la semaine
-        add(planningPanel, BorderLayout.CENTER);
+        planningPanel.setLayout(new GridLayout(0, 7)); // Grille avec 7 colonnes (jours de la semaine)
+        // Positionné de manière absolue pour commencer à x=10, y=50 et se terminer à x=590, y=600
+        planningPanel.setBounds(10, 90, 575, 450);
+        // Optionnel : Ajout d'une bordure pour visualiser la zone
+        planningPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        add(planningPanel);
 
         // Centre la fenêtre sur l'écran
         setLocationRelativeTo(null);
