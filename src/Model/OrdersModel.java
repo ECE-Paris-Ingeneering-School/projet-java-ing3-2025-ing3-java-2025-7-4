@@ -27,7 +27,7 @@ public class OrdersModel {
      * @param attractionId
      * @param reservationId
      */
-    public void Orders(int orderId, LocalDateTime rdvFulltime, int personCount, float price,
+    public void OrdersModel(int orderId, LocalDateTime rdvFulltime, int personCount, float price,
                        String status, int attractionId, int reservationId) {
         this.orderId = orderId;
         this.rdvFulltime = rdvFulltime;
@@ -65,7 +65,7 @@ public class OrdersModel {
 
     /**
      *
-     * @return
+     * @return price
      */
     public float getPrice() {
         return price;
@@ -73,7 +73,7 @@ public class OrdersModel {
 
     /**
      *
-     * @return
+     * @return status
      */
     public String getStatus() {
         return status;
@@ -81,7 +81,7 @@ public class OrdersModel {
 
     /**
      *
-     * @return
+     * @return attractionId
      */
     public int getAttractionId() {
         return attractionId;
@@ -89,7 +89,7 @@ public class OrdersModel {
 
     /**
      *
-     * @return
+     * @return reservationId
      */
     public int getReservationId() {
         return reservationId;
