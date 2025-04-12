@@ -16,7 +16,7 @@ public class Main {
 
         // Création d’une nouvelle commande
         OrdersModel newOrder = new OrdersModel(
-                1, // ID auto-généré
+                7, // ID auto-généré
                 LocalDateTime.now().plusDays(1),
                 2, // personnes
                 35.50f,
