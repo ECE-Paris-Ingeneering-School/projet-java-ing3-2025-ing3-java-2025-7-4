@@ -11,7 +11,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.io.File;
-
+package Video;
 public class Main extends Application {
     @Override
     public void start(Stage stage) {
