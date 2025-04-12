@@ -8,6 +8,7 @@ public class PlanningView extends JFrame {
     private JButton nextButton;
     private JLabel monthLabel;
     private JPanel planningPanel;
+    private JButton validateButton;
     private int page;
 
     public PlanningView(int page) {
@@ -72,13 +73,18 @@ public class PlanningView extends JFrame {
 
 
             // Panneau pour le bouton "Valider"
-            JButton validateButton = new JButton("Valider");
+            validateButton = new JButton("Valider");
             validateButton.setBounds((width/2) - 100, 600, 200, 40);
             add(validateButton);
         }
 
+
         // Centre la fenêtre sur l'écran
         setLocationRelativeTo(null);
+    }
+
+    public JButton getValidateButton() {
+        return validateButton;
     }
 
     // Accesseurs pour les boutons (utilisés par le contrôleur)

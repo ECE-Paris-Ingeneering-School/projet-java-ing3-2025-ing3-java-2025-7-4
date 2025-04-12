@@ -16,6 +16,9 @@ public class PlanningController {
     private PlanningView view;
     private YearMonth currentYearMonth;
     private List<PlanningModel> specialDays; // Liste des jours spéciaux
+    private LocalDate lastClickedDate = null;
+    private Color lastClickedColor= null;
+    private int lastClickedPrice = 0;
 
     public PlanningController(PlanningView view) {
         this.view = view;
@@ -32,6 +35,7 @@ public class PlanningController {
 
         initController();
         updatePlanning();
+        initValidateButton();
     }
 
     // Configure les écouteurs d’événements pour les boutons de navigation
@@ -53,6 +57,23 @@ public class PlanningController {
         // Mise en majuscule de la première lettre du mois
         view.setMonthLabel(month.substring(0, 1).toUpperCase() + month.substring(1) + " " + year);
         drawPlanning();
+    }
+
+    // Ajout de l'écouteur pour le bouton "Valider"
+    private void initValidateButton() {
+        JButton validateButton = view.getValidateButton();
+        if (validateButton != null) {
+            validateButton.addActionListener(e -> {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                if (lastClickedDate != null && lastClickedPrice != 0) {
+                    System.out.println("Dernière date sélectionnée : "
+                            + lastClickedDate.format(formatter)
+                            + " - Prix : " + lastClickedPrice);
+                } else {
+                    System.out.println("Aucune date n'a été sélectionnée.");
+                }
+            });
+        }
     }
 
     // Construit la grille du planning et colore les jours spéciaux
@@ -113,19 +134,21 @@ public class PlanningController {
                 }
             }
 
-            // Écouteur pour afficher la date et la couleur de la case dans la console
+            // Stocker la date et la couleur lors d'un clic
             dayLabel.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                    // Formater la date
-                    String dateStr = currentDate.format(formatter);
-                    // Récupérer la couleur de fond
-                    Color bgColor = dayLabel.getBackground();
-                    // Option 1 : Afficher directement la chaîne de la couleur (par défaut)
-                    System.out.println("Date : " + dateStr + " - Couleur : " + bgColor.toString());
-                    // Option 2 : Afficher la couleur en notation hexadécimale
-                    String hexColor = String.format("#%02x%02x%02x", bgColor.getRed(), bgColor.getGreen(), bgColor.getBlue());
-                    System.out.println("Date : " + dateStr + " - Couleur (hex) : " + hexColor);
+                    lastClickedDate = currentDate;
+                    lastClickedColor = dayLabel.getBackground();
+                    if (lastClickedColor.equals(Color.GREEN)) {
+                        lastClickedPrice = 20;
+                    }
+                    if (lastClickedColor.equals(new Color(47, 78, 193, 137))) {
+                        lastClickedPrice = 25;
+                    }
+                    if (lastClickedColor.equals(new Color(238, 130, 238))) {
+                        lastClickedPrice = 40;
+                    }
                 }
             });
 
