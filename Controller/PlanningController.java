@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import Model.PlanningModel;
 import View.PlanningView;
+import java.time.format.DateTimeFormatter;
 
 public class PlanningController {
     private PlanningView view;
@@ -18,22 +19,19 @@ public class PlanningController {
 
     public PlanningController(PlanningView view) {
         this.view = view;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         // Initialisation sur le mois en cours
         currentYearMonth = YearMonth.now();
         specialDays = new ArrayList<>();
 
         // Exemples de jours spéciaux pour la démonstration :
         // Par exemple, le 10 du mois courant en type 1 (vert), le 15 en type 2 (bleu) et le 20 en type 3 (violet)
-        specialDays.add(new PlanningModel(1, 1, currentYearMonth.atDay(10)));
-        specialDays.add(new PlanningModel(2, 2, currentYearMonth.atDay(15)));
-        specialDays.add(new PlanningModel(3, 3, getDate()));
+        specialDays.add(new PlanningModel(1, 1, LocalDate.parse("10/04/2025", formatter)));
+        specialDays.add(new PlanningModel(2, 2, LocalDate.parse("15/04/2025", formatter)));
+        specialDays.add(new PlanningModel(3, 3,  LocalDate.parse("18/04/2025", formatter)));
 
         initController();
         updatePlanning();
-    }
-
-    private LocalDate getDate() {
-        return currentYearMonth.atDay(20);
     }
 
     // Configure les écouteurs d’événements pour les boutons de navigation

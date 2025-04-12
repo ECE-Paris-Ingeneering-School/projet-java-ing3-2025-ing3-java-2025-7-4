@@ -11,7 +11,7 @@ public class PlanningView extends JFrame {
 
     public PlanningView() {
         setTitle("Planning Mensuel - MVC");
-        setSize(800, 600);
+        setSize(600, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
