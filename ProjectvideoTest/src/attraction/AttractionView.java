@@ -19,7 +19,7 @@ public class AttractionView extends JFrame {
     private AttractionController controller;
     private List<AttractionModel> attractions;
 
-    public AttractionView() {
+    public AttractionView() { //procédure d'utilisation et de la gestion d'affichage des attractions
         controller = new AttractionController();
         attractions = controller.getAllAttractions();
 
@@ -38,7 +38,7 @@ public class AttractionView extends JFrame {
         setVisible(true);
     }
 
-    private void buildAccueilPanel() {
+    private void buildAccueilPanel() { // Affichage de la page d'accueil
         accueilPanel = new JPanel(new BorderLayout());
 
         // Bandeau haut
@@ -100,7 +100,7 @@ public class AttractionView extends JFrame {
         mainPanel.add(accueilPanel, "accueil");
     }
 
-    private void buildDetailPanel() {
+    private void buildDetailPanel() { // Procédure d'affichage du PANEL détaillé de l'attraction
         detailPanel = new JPanel(new BorderLayout());
 
         // Bandeau haut
@@ -166,7 +166,7 @@ public class AttractionView extends JFrame {
         mainPanel.add(detailPanel, "detail");
     }
 
-    private void showDetail(AttractionModel attraction) {
+    private void showDetail(AttractionModel attraction) { //Montrer les détails de l'attraction
         imageDetail.setIcon(loadImage(attraction.getImage(), 300, 200));
         titreDetail.setText(attraction.getNom());
         descriptionDetail.setText("<html><p style='width:600px'>" + attraction.getDescription() + "</p></html>");
@@ -175,7 +175,7 @@ public class AttractionView extends JFrame {
         cardLayout.show(mainPanel, "detail");
     }
 
-    private ImageIcon loadImage(String filename, int width, int height) {
+    private ImageIcon loadImage(String filename, int width, int height) { //Charger les images
         java.net.URL resource = getClass().getResource("/attraction/images/" + filename);
         if (resource == null) {
             System.err.println("❌ Image non trouvée : " + "/attraction/images/" + filename);
