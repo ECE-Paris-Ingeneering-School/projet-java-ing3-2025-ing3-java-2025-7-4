@@ -6,7 +6,7 @@ package attraction;
  * Sert de modèle pour le module MVC lié aux attractions.
  *
  * @author
- * @version 1.0
+ * @version 1.1
  * @since 2025
  */
 public class AttractionModel {
@@ -16,7 +16,8 @@ public class AttractionModel {
     private String description;
     private String typePers; // ex : Sensations fortes, Famille, Découverte
     private String video;    // chemin vers le fichier vidéo
-    private String image;    // chemin vers l'image
+    private String image;    // chemin vers l'image de l'attraction
+    private float prix;      // prix du billet pour l'attraction
 
     /**
      * Constructeur de la classe AttractionModel.
@@ -26,15 +27,17 @@ public class AttractionModel {
      * @param description description de l'attraction
      * @param typePers type de public ciblé (Sensations fortes, Famille, etc.)
      * @param video chemin d'accès au fichier vidéo
-     * @param image chemin d'accès à l'image de l'attraction
+     * @param image chemin d'accès à l'image
+     * @param prix prix de l'attraction
      */
-    public AttractionModel(int attractionID, String nom, String description, String typePers, String video, String image) {
+    public AttractionModel(int attractionID, String nom, String description, String typePers, String video, String image, float prix) {
         this.attractionID = attractionID;
         this.nom = nom;
         this.description = description;
         this.typePers = typePers;
         this.video = video;
         this.image = image;
+        this.prix = prix;
     }
 
     public int getAttractionID() {
@@ -85,8 +88,16 @@ public class AttractionModel {
         this.image = image;
     }
 
+    public float getPrix() {
+        return prix;
+    }
+
+    public void setPrix(float prix) {
+        this.prix = prix;
+    }
+
     @Override
     public String toString() {
-        return nom + " [" + typePers + "]";
+        return nom + " [" + typePers + "] - " + prix + " €";
     }
 }
