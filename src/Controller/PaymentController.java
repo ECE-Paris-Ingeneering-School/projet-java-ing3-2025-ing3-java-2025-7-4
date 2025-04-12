@@ -27,6 +27,9 @@ public class PaymentController {
     }
 
     private boolean isValidCardNumber(String cardNumber) {
+        //If spaces , the program will crash
+        if (cardNumber == null || cardNumber.isBlank()) return false;
+        cardNumber = cardNumber.replaceAll("\\s+", "");
         int sum = 0;
         boolean alternate = false;
         for (int i = cardNumber.length() - 1; i >= 0; i--) {
