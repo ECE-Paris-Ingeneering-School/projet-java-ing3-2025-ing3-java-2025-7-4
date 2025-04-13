@@ -101,6 +101,24 @@ public class OrdersDAOImpl {
         }
         return statusMap;
     }
+    public Map<Integer, Float> getRevenueByAttraction() {
+        Map<Integer, Float> revenueMap = new HashMap<>();
+        String sql = "SELECT attraction_id, SUM(price) AS revenue FROM Orders WHERE status = 'Paid' GROUP BY attraction_id";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int attractionId = rs.getInt("attraction_id");
+                float revenue = rs.getFloat("revenue");
+                revenueMap.put(attractionId, revenue);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return revenueMap;
+    }
 
     public OrdersModel getOrderById(int prOrderId) {
         OrdersModel resultOrder = null;

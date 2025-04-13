@@ -1,5 +1,6 @@
 
 import Controller.PaymentController;
+import Controller.ReportingController;
 import DAO.DaoFactory;
 import DAO.OrdersDAOImpl;
 import Model.OrdersModel;
@@ -19,12 +20,14 @@ public class Main {
                 7, // ID auto-généré
                 LocalDateTime.now().plusDays(1),
                 2, // personnes
-                35.50f,
+                07.50f,
                 "Pending",
                 1, // id attraction
                 42 // id réservation fictive
         );
-
+        ReportingController controller = new ReportingController(daoImpl);
+        controller.afficherReporting();
+/*
         // Insertion dans la base
         boolean created = daoImpl.createOrder(newOrder);
 
@@ -35,5 +38,7 @@ public class Main {
         } else {
             System.out.println("Erreur lors de la création de la commande.");
         }
+
+ */
     }
 }
