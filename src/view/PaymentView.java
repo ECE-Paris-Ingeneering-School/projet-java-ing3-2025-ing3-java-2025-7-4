@@ -12,11 +12,15 @@ import java.awt.event.ActionListener;
 public class PaymentView extends JFrame {
     public PaymentView(OrdersModel order, PaymentController controller) {
         setTitle("Paiement de la commande");
-        setSize(400, 400);
+        setSize(600, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridLayout(8, 1));
+        setLayout(new BorderLayout());
 
-        JLabel labelInfos = new JLabel("Commande n°" + order.getOrderId() + " - statut : " + order.getStatus());
+        JPanel contentPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel labelInfos = new JLabel("Commande n°" + order.getOrderId());
+        JLabel labelStatut = new JLabel("Statut actuel : " + order.getStatus());
         JLabel labelPrix = new JLabel("Montant à payer : " + order.getPrice() + " €");
 
         JTextField nomField = new JTextField();
@@ -25,7 +29,18 @@ public class PaymentView extends JFrame {
         JTextField numeroCarteField = new JTextField();
         JTextField cvcField = new JTextField();
 
-        JButton boutonPayer = new JButton("Payer");
+        contentPanel.add(new JLabel("Nom :"));
+        contentPanel.add(nomField);
+        contentPanel.add(new JLabel("Email :"));
+        contentPanel.add(emailField);
+        contentPanel.add(new JLabel("Nom sur la carte :"));
+        contentPanel.add(nomCarteField);
+        contentPanel.add(new JLabel("Numéro de carte :"));
+        contentPanel.add(numeroCarteField);
+        contentPanel.add(new JLabel("CVC :"));
+        contentPanel.add(cvcField);
+
+        JButton boutonPayer = new JButton("Valider le paiement");
 
         boutonPayer.addActionListener(e -> {
             String nom = nomField.getText();
@@ -37,25 +52,27 @@ public class PaymentView extends JFrame {
             controller.traitementRetourPaiement(order, valid);
 
             if (valid) {
-                JOptionPane.showMessageDialog(this, "Paiement réussi !");
+                JOptionPane.showMessageDialog(this, "Paiement réussi ! Merci pour votre achat.");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Paiement refusé !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Paiement refusé. Veuillez vérifier vos informations.", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        add(labelInfos);
-        add(labelPrix);
-        add(new JLabel("Nom :"));
-        add(nomField);
-        add(new JLabel("Nom sur la carte :"));
-        add(nomCarteField);
-        add(new JLabel("Numéro de carte :"));
-        add(numeroCarteField);
-        add(new JLabel("CVC :"));
-        add(cvcField);
-        add(boutonPayer);
+        JPanel header = new JPanel(new GridLayout(3, 1));
+        header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        header.add(labelInfos);
+        header.add(labelStatut);
+        header.add(labelPrix);
 
+        JPanel footer = new JPanel();
+        footer.add(boutonPayer);
+
+        add(header, BorderLayout.NORTH);
+        add(contentPanel, BorderLayout.CENTER);
+        add(footer, BorderLayout.SOUTH);
+
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 }
