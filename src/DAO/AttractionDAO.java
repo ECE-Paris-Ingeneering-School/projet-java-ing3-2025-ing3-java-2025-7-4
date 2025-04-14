@@ -27,11 +27,11 @@ public class AttractionDAO {
 
             while (rs.next()) {
                 int id = rs.getInt("attraction_id");
-                String nom = rs.getString("nom");
+                String nom = rs.getString("name");
                 String description = rs.getString("description");
-                String typePers = rs.getString("type_pers");
-                String image = rs.getString("image");
-                double prix = rs.getDouble("prix");
+                String typePers = rs.getString("person_type");
+                String image = rs.getString("image_path");
+                double prix = rs.getDouble("price");
 
                 attractions.add(new AttractionModel(id, nom, description, typePers, image, prix));
             }

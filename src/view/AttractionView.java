@@ -1,89 +1,56 @@
 package view;
 
+// --- AttractionView.java (version unifiée avec accueil et détail) ---
+
 import Controller.AttractionController;
 import DAO.DaoFactory;
 import Model.AttractionModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.List;
 
 public class AttractionView extends JFrame {
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel mainPanel = new JPanel(cardLayout);
+    private final AttractionController controller;
 
-    private CardLayout cardLayout;
-    private JPanel mainPanel;
-    private JPanel accueilPanel;
-    private JPanel detailPanel;
-    private JLabel imageDetail;
-    private JLabel descriptionDetail;
-    private JLabel prixDetail;
-    private JLabel titreDetail;
+    private JLabel detailImage, detailTitre, detailDescription, detailPrix;
 
-    private AttractionController controller;
-    private List<AttractionModel> attractions;
-
-    public AttractionView() { //procédure d'utilisation et de la gestion d'affichage des attractions
-        DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "mysql");
+    public AttractionView(boolean isLoggedIn, boolean isAdmin, String userName) {
+        DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
         controller = new AttractionController(daoFactory);
-        attractions = controller.getAllAttractions();
 
         setTitle("Legendaria");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        add(new NavigationBar("Legendaria", isLoggedIn, isAdmin, userName), BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
 
-        buildAccueilPanel();
-        buildDetailPanel();
+        buildAccueilPanel(isLoggedIn, isAdmin, userName);
+        buildDetailPanel(isLoggedIn, isAdmin, userName);
 
-        add(mainPanel);
+        cardLayout.show(mainPanel, "accueil");
         setVisible(true);
     }
 
-    private void buildAccueilPanel() { // Affichage de la page d'accueil
-        accueilPanel = new JPanel(new BorderLayout());
+    private void buildAccueilPanel(boolean isLoggedIn, boolean isAdmin, String userName) {
+        JPanel accueilPanel = new JPanel(new BorderLayout());
 
-        // Bandeau haut
-        JPanel topBar = new JPanel(new BorderLayout());
-        topBar.setBackground(Color.BLACK);
-        topBar.setPreferredSize(new Dimension(800, 50));
-
-        JLabel logo = new JLabel(loadImage("logo.png", 40, 40));
-        logo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        logo.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(mainPanel, "accueil");
-            }
-        });
-
-        JLabel title = new JLabel("Legendaria", SwingConstants.CENTER);
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font("Serif", Font.BOLD, 20));
-
-        JButton btnCompte = new JButton(loadImage("compte.png", 40, 40));
-        btnCompte.setBorderPainted(false);
-        btnCompte.setContentAreaFilled(false);
-
-        topBar.add(logo, BorderLayout.WEST);
-        topBar.add(title, BorderLayout.CENTER);
-        topBar.add(btnCompte, BorderLayout.EAST);
-
-        // Grille d’attractions
         JPanel grid = new JPanel(new GridLayout(2, 3, 20, 20));
         grid.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        List<AttractionModel> attractions = controller.getAllAttractions();
         for (AttractionModel attraction : attractions) {
             JPanel card = new JPanel(new BorderLayout());
-
             JLabel img = new JLabel(loadImage(attraction.getImage(), 150, 150));
             img.setHorizontalAlignment(SwingConstants.CENTER);
             img.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-            img.addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
+            img.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent e) {
                     showDetail(attraction);
                 }
             });
@@ -94,104 +61,75 @@ public class AttractionView extends JFrame {
             grid.add(card);
         }
 
-        // Footer
         JLabel credits = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
         credits.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        accueilPanel.add(topBar, BorderLayout.NORTH);
         accueilPanel.add(grid, BorderLayout.CENTER);
         accueilPanel.add(credits, BorderLayout.SOUTH);
-
         mainPanel.add(accueilPanel, "accueil");
     }
 
-    private void buildDetailPanel() { // Procédure d'affichage du PANEL détaillé de l'attraction
-        detailPanel = new JPanel(new BorderLayout());
+    private void buildDetailPanel(boolean isLoggedIn, boolean isAdmin, String userName) {
+        JPanel detailPanel = new JPanel(new BorderLayout());
 
-        // Bandeau haut
-        JPanel topBar = new JPanel(new BorderLayout());
-        topBar.setBackground(Color.BLACK);
-        topBar.setPreferredSize(new Dimension(800, 50));
-
-        JLabel logo = new JLabel(loadImage("logo.png", 40, 40));
-        logo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        logo.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(mainPanel, "accueil");
-            }
-        });
-
-        titreDetail = new JLabel("Attraction", SwingConstants.CENTER);
-        titreDetail.setForeground(Color.WHITE);
-        titreDetail.setFont(new Font("Serif", Font.BOLD, 20));
-
-        JButton btnCompte = new JButton(loadImage("compte.png", 40, 40));
-        btnCompte.setBorderPainted(false);
-        btnCompte.setContentAreaFilled(false);
-
-        topBar.add(logo, BorderLayout.WEST);
-        topBar.add(titreDetail, BorderLayout.CENTER);
-        topBar.add(btnCompte, BorderLayout.EAST);
-
-        // Corps de l’attraction
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        imageDetail = new JLabel();
-        imageDetail.setAlignmentX(Component.CENTER_ALIGNMENT);
+        detailImage = new JLabel();
+        detailImage.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        descriptionDetail = new JLabel();
-        descriptionDetail.setAlignmentX(Component.CENTER_ALIGNMENT);
+        detailTitre = new JLabel("Titre", SwingConstants.CENTER);
+        detailTitre.setFont(new Font("Serif", Font.BOLD, 22));
+        detailTitre.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        prixDetail = new JLabel();
-        prixDetail.setAlignmentX(Component.CENTER_ALIGNMENT);
+        detailDescription = new JLabel();
+        detailDescription.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton reserverBtn = new JButton("Réserver");
-        reserverBtn.setBackground(Color.GREEN);
-        reserverBtn.setForeground(Color.WHITE);
-        reserverBtn.setFont(new Font("SansSerif", Font.BOLD, 20));
-        reserverBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        detailPrix = new JLabel();
+        detailPrix.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        content.add(imageDetail);
+        JButton reserver = new JButton("Réserver");
+        reserver.setAlignmentX(Component.CENTER_ALIGNMENT);
+        reserver.setBackground(Color.GREEN);
+        reserver.setForeground(Color.WHITE);
+        reserver.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Ouverture de la réservation...");
+        });
+
+        content.add(detailImage);
         content.add(Box.createRigidArea(new Dimension(0, 15)));
-        content.add(descriptionDetail);
-        content.add(prixDetail);
+        content.add(detailTitre);
+        content.add(detailDescription);
+        content.add(detailPrix);
         content.add(Box.createRigidArea(new Dimension(0, 15)));
-        content.add(reserverBtn);
+        content.add(reserver);
 
-        // Footer
         JLabel credits = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
         credits.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        detailPanel.add(topBar, BorderLayout.NORTH);
         detailPanel.add(content, BorderLayout.CENTER);
         detailPanel.add(credits, BorderLayout.SOUTH);
-
         mainPanel.add(detailPanel, "detail");
     }
 
-    private void showDetail(AttractionModel attraction) { //Montrer les détails de l'attraction
-        imageDetail.setIcon(loadImage(attraction.getImage(), 300, 200));
-        titreDetail.setText(attraction.getName());
-        descriptionDetail.setText("<html><p style='width:600px'>" + attraction.getDescription() + "</p></html>");
-        prixDetail.setText("Prix : " + attraction.getPrix() + " €");
-
+    private void showDetail(AttractionModel attraction) {
+        detailImage.setIcon(loadImage(attraction.getImage(), 300, 200));
+        detailTitre.setText(attraction.getName());
+        detailDescription.setText("<html><p style='width:600px'>" + attraction.getDescription() + "</p></html>");
+        detailPrix.setText("Prix : " + attraction.getPrix() + " €");
         cardLayout.show(mainPanel, "detail");
     }
 
-    private ImageIcon loadImage(String filename, int width, int height) { //Charger les images
-        java.net.URL resource = getClass().getResource("/attraction/images/" + filename);
-        if (resource == null) {
-            System.err.println("❌ Image non trouvée : " + "/attraction/images/" + filename);
-            return new ImageIcon(); // image vide pour éviter le crash
-        }
+    private ImageIcon loadImage(String filename, int width, int height) {
+        java.net.URL resource = getClass().getResource("/images/" + filename);
+        if (resource == null) System.err.println("❌ Image non trouvée : /images/" + filename);
         ImageIcon icon = new ImageIcon(resource);
         Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
     }
 
-    //public static void main(String[] args) {
-        //SwingUtilities.invokeLater(AttractionView::new);
-    //}
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new AttractionView(true, false, "ClientNom"));
+    }
 }

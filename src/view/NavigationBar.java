@@ -1,39 +1,72 @@
 package view;
+// --- NavigationBar.java personnalisée (fond noir, logo, titre, bouton compte) ---
 
-// --- NavigationBar.java ---
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class NavigationBar extends JPanel {
-    public NavigationBar(boolean isLoggedIn, boolean isAdmin, String userName) {
+    public NavigationBar(String siteTitle, boolean isLoggedIn, boolean isAdmin, String userName) {
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        setBackground(new Color(230, 230, 230));
+        setPreferredSize(new Dimension(800, 50));
+        setBackground(Color.BLACK);
 
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton accueilBtn = new JButton("Accueil");
-        leftPanel.add(accueilBtn);
-        if (isAdmin) {
-            JButton adminBtn = new JButton("Admin");
-            leftPanel.add(adminBtn);
-        }
+        // ---- Logo à gauche ----
+        ImageIcon icon = loadImage("logo.png", 40, 40);
+        JButton logoBtn = new JButton(icon);
+        logoBtn.setBorderPainted(false);
+        logoBtn.setContentAreaFilled(false);
+        logoBtn.setFocusPainted(false);
+        logoBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        logoBtn.addActionListener((ActionEvent e) -> {
+            new AttractionView(isLoggedIn, isAdmin, userName);
+            SwingUtilities.getWindowAncestor(this).dispose();
+        });
 
-        JLabel title = new JLabel("Parc Attraction");
-        title.setFont(new Font("Arial", Font.BOLD, 18));
+        // ---- Titre au centre ----
+        JLabel title = new JLabel(siteTitle, SwingConstants.CENTER);
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Serif", Font.BOLD, 20));
+
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        centerPanel.setOpaque(false);
         centerPanel.add(title);
 
+        // ---- Boutons à droite ----
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        if (isLoggedIn) {
-            JButton compteBtn = new JButton("Mon compte (" + userName + ")");
-            rightPanel.add(compteBtn);
-        } else {
-            rightPanel.add(new JButton("Se connecter"));
-            rightPanel.add(new JButton("S'inscrire"));
-        }
+        rightPanel.setOpaque(false);
 
-        add(leftPanel, BorderLayout.WEST);
+        JButton compteBtn = new JButton(loadImage("compte.png", 40, 40));
+        compteBtn.setBorderPainted(false);
+        compteBtn.setContentAreaFilled(false);
+        compteBtn.setFocusPainted(false);
+        compteBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        compteBtn.setToolTipText(isLoggedIn ? "Mon compte" : "Se connecter");
+        compteBtn.addActionListener((ActionEvent e) -> {
+            if (isLoggedIn) {
+                // TODO : ouvrir page compte
+                JOptionPane.showMessageDialog(this, "Vers Mon compte : " + userName);
+            } else {
+                // TODO : ouvrir page login
+                JOptionPane.showMessageDialog(this, "Vers Se connecter / S'inscrire");
+            }
+        });
+
+        rightPanel.add(compteBtn);
+
+        add(logoBtn, BorderLayout.WEST);
         add(centerPanel, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
+    }
+
+    private ImageIcon loadImage(String filename, int width, int height) {
+        java.net.URL resource = getClass().getResource("/images/" + filename);
+        if (resource == null) {
+            System.err.println("❌ Image non trouvée : /images/" + filename);
+            return new ImageIcon();
+        }
+        ImageIcon icon = new ImageIcon(resource);
+        Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
     }
 }
