@@ -101,24 +101,29 @@ public class OrdersDAOImpl {
         }
         return statusMap;
     }
-    public Map<Integer, Float> getRevenueByAttraction() {
-        Map<Integer, Float> revenueMap = new HashMap<>();
-        String sql = "SELECT attraction_id, SUM(price) AS revenue FROM Orders WHERE status = 'Paid' GROUP BY attraction_id";
+    public Map<String, Float> getRevenueByAttraction() {
+        Map<String, Float> revenueMap = new HashMap<>();
+        String sql = "SELECT a.name AS attraction_name, SUM(o.price) AS revenue " +
+                "FROM Orders o " +
+                "JOIN Attraction a ON o.attraction_id = a.attraction_id " +
+                "WHERE o.status = 'Paid' " +
+                "GROUP BY a.name";
 
         try (Connection conn = daoFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                int attractionId = rs.getInt("attraction_id");
+                String name = rs.getString("attraction_name");
                 float revenue = rs.getFloat("revenue");
-                revenueMap.put(attractionId, revenue);
+                revenueMap.put(name, revenue);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return revenueMap;
     }
+
 
     public OrdersModel getOrderById(int prOrderId) {
         OrdersModel resultOrder = null;

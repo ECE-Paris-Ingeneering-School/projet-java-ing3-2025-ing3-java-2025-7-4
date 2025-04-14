@@ -1,13 +1,9 @@
 package view;
 
-// Vue PaymentView.java (simplifiée)
 import Controller.PaymentController;
 import Model.OrdersModel;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PaymentView extends JFrame {
     public PaymentView(OrdersModel order, PaymentController controller) {
@@ -16,12 +12,31 @@ public class PaymentView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JPanel contentPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // Crée la barre de navigation
+        NavigationBar nav = new NavigationBar(true, false, "ClientNom");
 
+        // Crée le header avec infos de commande
         JLabel labelInfos = new JLabel("Commande n°" + order.getOrderId());
         JLabel labelStatut = new JLabel("Statut actuel : " + order.getStatus());
         JLabel labelPrix = new JLabel("Montant à payer : " + order.getPrice() + " €");
+
+        JPanel header = new JPanel(new GridLayout(3, 1));
+        header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        header.add(labelInfos);
+        header.add(labelStatut);
+        header.add(labelPrix);
+
+        // Combine nav + header dans un seul panneau vertical
+        JPanel topWrapper = new JPanel();
+        topWrapper.setLayout(new BoxLayout(topWrapper, BoxLayout.Y_AXIS));
+        topWrapper.add(nav);
+        topWrapper.add(header);
+
+        add(topWrapper, BorderLayout.NORTH);
+
+        // Formulaire de paiement
+        JPanel contentPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JTextField nomField = new JTextField();
         JTextField emailField = new JTextField();
@@ -40,8 +55,8 @@ public class PaymentView extends JFrame {
         contentPanel.add(new JLabel("CVC :"));
         contentPanel.add(cvcField);
 
+        // Bouton valider
         JButton boutonPayer = new JButton("Valider le paiement");
-
         boutonPayer.addActionListener(e -> {
             String nom = nomField.getText();
             String nomCarte = nomCarteField.getText();
@@ -59,16 +74,9 @@ public class PaymentView extends JFrame {
             }
         });
 
-        JPanel header = new JPanel(new GridLayout(3, 1));
-        header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        header.add(labelInfos);
-        header.add(labelStatut);
-        header.add(labelPrix);
-
         JPanel footer = new JPanel();
         footer.add(boutonPayer);
 
-        add(header, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
         add(footer, BorderLayout.SOUTH);
 

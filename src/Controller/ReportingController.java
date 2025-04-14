@@ -15,7 +15,7 @@ public class ReportingController {
 
     public void afficherReporting() {
         Map<String, Integer> pieData = ordersDAO.getStatusCount();
-        Map<Integer, Float> revenueData = ordersDAO.getRevenueByAttraction();
+        Map<String, Float> revenueData = ordersDAO.getRevenueByAttraction();
         new ReportingView(pieData, revenueData);
     }
 }

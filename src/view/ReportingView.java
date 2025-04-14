@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.Map;
 
 public class ReportingView extends JFrame {
-    public ReportingView(Map<String, Integer> pieData, Map<Integer, Float> revenueData) {
+    public ReportingView(Map<String, Integer> pieData, Map<String, Float> revenueData) {
         setTitle("Dashboard Reporting");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -46,9 +46,9 @@ public class ReportingView extends JFrame {
         return panel;
     }
 
-    private JPanel createBarChartPanel(Map<Integer, Float> data) {
+    private JPanel createBarChartPanel(Map<String, Float> data) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Map.Entry<Integer, Float> entry : data.entrySet()) {
+        for (Map.Entry<String, Float> entry : data.entrySet()) {
             dataset.addValue(entry.getValue(), "Chiffre d'affaires", String.valueOf(entry.getKey()));
         }
 
@@ -58,6 +58,7 @@ public class ReportingView extends JFrame {
                 "Revenu (€)",
                 dataset
         );
+
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new ChartPanel(chart), BorderLayout.CENTER);
