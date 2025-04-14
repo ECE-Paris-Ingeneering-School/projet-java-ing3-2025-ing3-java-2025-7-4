@@ -186,7 +186,7 @@ public class AttractionView extends JFrame {
         return new ImageIcon(img);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(AttractionView::new);
-    }
+    //public static void main(String[] args) {
+        //SwingUtilities.invokeLater(AttractionView::new);
+    //}
 }

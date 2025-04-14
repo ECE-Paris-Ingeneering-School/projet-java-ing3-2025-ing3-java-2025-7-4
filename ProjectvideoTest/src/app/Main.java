@@ -1,3 +1,16 @@
+package app;
+
+import login.LoginView;
+
+public class Main {
+    public static void main(String[] args) {
+        // Lance simplement la fenêtre de connexion
+        new LoginView();
+    }
+}
+
+
+
 /**import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
