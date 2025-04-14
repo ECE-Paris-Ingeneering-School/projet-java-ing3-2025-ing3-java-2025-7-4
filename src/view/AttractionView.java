@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static Model.SoundPlayer.playSound;
+
 public class AttractionView extends JFrame {
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel mainPanel = new JPanel(cardLayout);
@@ -52,6 +54,13 @@ public class AttractionView extends JFrame {
             img.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     showDetail(attraction);
+                    // 🔊 Lecture du son en fonction de l'attraction
+                    if (attraction.getName().equalsIgnoreCase("Dragon")) {
+                        playSound("rugissement.wav");
+                    } else if (attraction.getName().equalsIgnoreCase("Zeus")) {
+                        playSound("eclair.wav");
+                    }
+                    // Ajoute autant de cas que tu veux !
                 }
             });
 
