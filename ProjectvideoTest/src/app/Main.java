@@ -1,13 +1,13 @@
 package app;
 
-import login.LoginView;
+import registration.RegistrationView;
 
 public class Main {
     public static void main(String[] args) {
-        // Lance simplement la fenêtre de connexion
-        new LoginView();
+        new RegistrationView();
     }
 }
+
 
 
 

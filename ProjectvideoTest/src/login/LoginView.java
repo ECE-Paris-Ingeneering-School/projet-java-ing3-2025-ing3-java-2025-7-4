@@ -5,6 +5,8 @@ import client.ClientModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 
 public class LoginView extends JFrame {
@@ -29,16 +31,25 @@ public class LoginView extends JFrame {
         topBar.setBackground(Color.BLACK);
         topBar.setPreferredSize(new Dimension(800, 50));
 
-        JLabel logo = new JLabel("🏰", SwingConstants.LEFT);
-        logo.setFont(new Font("SansSerif", Font.BOLD, 30));
-        logo.setForeground(Color.WHITE);
+        JLabel logo = new JLabel(loadImage("logo.png", 40, 40));
+        logo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        logo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JOptionPane.showMessageDialog(null, "Retour vers la page d'accueil (à implémenter)");
+            }
+        });
 
         JLabel title = new JLabel("Legendaria", SwingConstants.CENTER);
         title.setForeground(Color.WHITE);
         title.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 25));
 
+        JButton btnCompte = new JButton(loadImage("compte.png", 40, 40));
+        btnCompte.setBorderPainted(false);
+        btnCompte.setContentAreaFilled(false);
+
         topBar.add(logo, BorderLayout.WEST);
         topBar.add(title, BorderLayout.CENTER);
+        topBar.add(btnCompte, BorderLayout.EAST);
 
         // ===== Formulaire de connexion =====
         JPanel formPanel = new JPanel();
@@ -99,4 +110,15 @@ public class LoginView extends JFrame {
             JOptionPane.showMessageDialog(this, "Redirection vers la page d'inscription (à coder)");
         });
     }
-} 
+
+    private ImageIcon loadImage(String filename, int width, int height) {
+        java.net.URL resource = getClass().getResource("/attraction/images/" + filename);
+        if (resource == null) {
+            System.err.println("❌ Image non trouvée : " + filename);
+            return new ImageIcon();
+        }
+        ImageIcon icon = new ImageIcon(resource);
+        Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
+}
