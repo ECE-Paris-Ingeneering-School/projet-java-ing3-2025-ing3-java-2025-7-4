@@ -6,7 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PaymentView extends JFrame {
-    public PaymentView(OrdersModel order, PaymentController controller) {
+    private final JFrame parent;
+    public PaymentView(OrdersModel order, PaymentController controller, JFrame parentToClose) {
+        this.parent = parentToClose;
         setTitle("Paiement de la commande");
         setSize(600, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -82,5 +84,6 @@ public class PaymentView extends JFrame {
 
         setLocationRelativeTo(null);
         setVisible(true);
+        this.parent.dispose();
     }
 }

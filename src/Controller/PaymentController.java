@@ -6,6 +6,8 @@ import DAO.OrdersDAOImpl;
 import Model.OrdersModel;
 import view.PaymentView;
 
+import javax.swing.*;
+
 // Contrôleur PaymentController.java
 public class PaymentController {
     //Attribut pour le DAO
@@ -25,10 +27,10 @@ public class PaymentController {
      *
      * @param orderId identifiant de la commande
      */
-    public void effectuerPaiement(int orderId) {
+    public void effectuerPaiement(int orderId, JFrame parentToClose) {
         OrdersModel orderToPay = orderDAO.getOrderById(orderId);
         if (orderToPay != null) {
-            new PaymentView(orderToPay, this); // appel simplifié
+            new PaymentView(orderToPay, this,parentToClose); // appel simplifié
         } else {
             System.out.println("Commande introuvable.");
         }

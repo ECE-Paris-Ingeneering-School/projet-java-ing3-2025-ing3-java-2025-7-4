@@ -3,8 +3,10 @@ package view;
 // --- AttractionView.java (version unifiée avec accueil et détail) ---
 
 import Controller.AttractionController;
+import Controller.PaymentController;
 import DAO.DaoFactory;
 import Model.AttractionModel;
+import Model.OrdersModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +18,8 @@ public class AttractionView extends JFrame {
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel mainPanel = new JPanel(cardLayout);
     private final AttractionController controller;
+    private AttractionModel attractionCourante;
+
 
     private JLabel detailImage, detailTitre, detailDescription, detailPrix;
 
@@ -103,8 +107,24 @@ public class AttractionView extends JFrame {
         reserver.setBackground(Color.GREEN);
         reserver.setForeground(Color.WHITE);
         reserver.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Ouverture de la réservation...");
+            // 👇 Création d'une fausse commande simulée
+            OrdersModel fakeOrder = new OrdersModel(
+                    0,                           // Pas encore inséré dans la BDD
+                    java.time.LocalDateTime.now(),
+                    1,                           // 1 personne par défaut
+                    (float) attractionCourante.getPrix(), // prix de l'attraction
+                    "Pending",                  // statut initial
+                    attractionCourante.getAttractionID(),
+                    0                           // pas de réservation réelle pour l'instant
+            );
+
+            DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
+            PaymentController paiementCtrl = new PaymentController(daoFactory.getOrdersDAO());
+
+            // Ouverture directe de la vue de paiement
+            new PaymentView(fakeOrder, paiementCtrl,this);
         });
+
 
         content.add(detailImage);
         content.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -128,6 +148,7 @@ public class AttractionView extends JFrame {
         detailDescription.setText("<html><p style='width:600px'>" + attraction.getDescription() + "</p></html>");
         detailPrix.setText("Prix : " + attraction.getPrix() + " €");
         cardLayout.show(mainPanel, "detail");
+        this.attractionCourante = attraction;
     }
 
     private ImageIcon loadImage(String filename, int width, int height) {
@@ -136,9 +157,5 @@ public class AttractionView extends JFrame {
         ImageIcon icon = new ImageIcon(resource);
         Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new AttractionView(true, false, "ClientNom"));
     }
 }
