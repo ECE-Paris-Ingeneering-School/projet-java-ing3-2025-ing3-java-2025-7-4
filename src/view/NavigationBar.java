@@ -51,9 +51,15 @@ public class NavigationBar extends JPanel {
         compteBtn.setToolTipText(isLoggedIn ? "Mon compte" : "Se connecter");
 
         compteBtn.addActionListener((ActionEvent e) -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame frame) {
+                frame.dispose();
+            }
+
             if (isLoggedIn) {
                 new ClientDashBoardView();
-            } else {
+            }
+            else {
                 JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                 NavigationBarHelper.openLoginView(currentFrame);
             }

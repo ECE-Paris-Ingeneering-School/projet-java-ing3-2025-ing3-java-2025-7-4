@@ -19,6 +19,11 @@ public class ClientDashBoardView extends JFrame {
         setSize(600, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Ajout de la barre de navigation
+        add(new NavigationBar("Espace personnel"), BorderLayout.NORTH);
+
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -51,13 +56,15 @@ public class ClientDashBoardView extends JFrame {
 
             JButton btnClients = new JButton("Gérer les clients");
             btnClients.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnClients.addActionListener(e -> JOptionPane.showMessageDialog(this, "Gestion des clients (non implémentée)."));
+            btnClients.addActionListener(e -> new UserManagementView());
             panel.add(btnClients);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
 
             JButton btnStats = new JButton("Afficher les statistiques");
             btnStats.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnStats.addActionListener(e -> {
+                dispose();
                 DaoFactory daoFactory= DaoFactory.getInstance("attractions_db","root","");
                 ReportingController controller= new ReportingController(daoFactory.getOrdersDAO());
                 controller.afficherReporting();
