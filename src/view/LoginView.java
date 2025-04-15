@@ -108,7 +108,8 @@ public class LoginView extends JFrame {
 
         // Bouton pour l'inscription (à venir)
         goToRegisterButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Redirection vers la page d'inscription (à coder)");
+            dispose(); // ferme la fenêtre actuelle
+            new RegistrationView(); // ouvre l'inscription
         });
     }
 

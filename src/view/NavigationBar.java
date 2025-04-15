@@ -49,12 +49,13 @@ public class NavigationBar extends JPanel {
         compteBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         compteBtn.setToolTipText(isLoggedIn ? "Mon compte" : "Se connecter");
         compteBtn.addActionListener((ActionEvent e) -> {
+            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
             if (isLoggedIn) {
-                // TODO : ouvrir page compte
-                JOptionPane.showMessageDialog(this, "Vers Mon compte : " + userName);
+                JOptionPane.showMessageDialog(this, "Mon compte : " + userName);
+                // Plus tard tu peux faire : NavigationBarHelper.openAccountView(currentFrame);
             } else {
-                // TODO : ouvrir page login
-                JOptionPane.showMessageDialog(this, "Vers Se connecter / S'inscrire");
+                toolbox.NavigationBarHelper.openLoginView(currentFrame);
             }
         });
 

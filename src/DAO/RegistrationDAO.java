@@ -9,9 +9,9 @@ import java.util.Map;
  */
 public class RegistrationDAO {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/ParcAttraction";
+    private static final String URL = "jdbc:mysql://localhost:3306/attractions_db";
     private static final String USER = "root";
-    private static final String PASSWORD = "mysql";
+    private static final String PASSWORD = "";
 
     /**
      * Insère un nouveau client si l'email n'est pas déjà utilisé.
@@ -39,7 +39,7 @@ public class RegistrationDAO {
 
             stmt.setString(5, data.get("email"));
             stmt.setString(6, data.get("password"));
-            stmt.setString(7, "member"); // rôle par défaut
+            stmt.setInt(7, 1); // rôle par défaut
 
             stmt.executeUpdate();
             return true;

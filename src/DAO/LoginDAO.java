@@ -10,7 +10,7 @@ import java.time.LocalDate;
  */
 public class LoginDAO {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/ParcAttraction";
+    private static final String URL = "jdbc:mysql://localhost:3306/attractions_db";
     private static final String USER = "root";
 
     public ClientModel authenticate(String email, String password) {
