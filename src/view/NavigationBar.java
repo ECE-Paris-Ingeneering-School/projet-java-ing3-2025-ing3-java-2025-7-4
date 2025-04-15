@@ -1,5 +1,8 @@
 package view;
-// --- NavigationBar.java personnalisée (fond noir, logo, titre, bouton compte) ---
+
+import Model.ClientModel;
+import toolbox.SessionManager;
+import toolbox.NavigationBarHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,11 +10,10 @@ import java.awt.event.ActionEvent;
 
 public class NavigationBar extends JPanel {
     public NavigationBar(String siteTitle) {
-        Model.ClientModel user = toolbox.SessionManager.getCurrentUser();
+        ClientModel user = SessionManager.getCurrentUser();
         boolean isLoggedIn = user != null;
         boolean isAdmin = isLoggedIn && user.getAccountType() == 2;
         String userName = isLoggedIn ? user.getFullName() : "Invité";
-
 
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(800, 50));
@@ -25,8 +27,7 @@ public class NavigationBar extends JPanel {
         logoBtn.setFocusPainted(false);
         logoBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoBtn.addActionListener((ActionEvent e) -> {
-            new AttractionView();
-            SwingUtilities.getWindowAncestor(this).dispose();
+            NavigationBarHelper.openAttractionView((JFrame) SwingUtilities.getWindowAncestor(this), user);
         });
 
         // ---- Titre au centre ----
@@ -49,14 +50,45 @@ public class NavigationBar extends JPanel {
         compteBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         compteBtn.setToolTipText(isLoggedIn ? "Mon compte" : "Se connecter");
         compteBtn.addActionListener((ActionEvent e) -> {
-            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-
-            if (isLoggedIn) {
-                JOptionPane.showMessageDialog(this, "Mon compte : " + userName);
-                // Plus tard tu peux faire : NavigationBarHelper.openAccountView(currentFrame);
-            } else {
-                toolbox.NavigationBarHelper.openLoginView(currentFrame);
+            if (!isLoggedIn) {
+                NavigationBarHelper.openLoginView((JFrame) SwingUtilities.getWindowAncestor(this));
+                return;
             }
+
+            JPopupMenu menu = new JPopupMenu();
+
+            JMenuItem infos = new JMenuItem("Mes informations");
+            infos.addActionListener(ev -> new ClientInfosView());
+            menu.add(infos);
+
+            JMenuItem rdv = new JMenuItem("Mes rendez-vous");
+            rdv.addActionListener(ev -> JOptionPane.showMessageDialog(this, "Affichage des rendez-vous (non implémenté)."));
+            menu.add(rdv);
+
+            if (isAdmin) {
+                JMenuItem manageAttr = new JMenuItem("Gérer les attractions");
+                manageAttr.addActionListener(ev -> JOptionPane.showMessageDialog(this, "Gestion des attractions (non implémentée)."));
+                menu.add(manageAttr);
+
+                JMenuItem manageUsers = new JMenuItem("Gérer les clients");
+                manageUsers.addActionListener(ev -> JOptionPane.showMessageDialog(this, "Gestion des clients (non implémentée)."));
+                menu.add(manageUsers);
+
+                JMenuItem stats = new JMenuItem("Voir les statistiques");
+                stats.addActionListener(ev -> JOptionPane.showMessageDialog(this, "Affichage des statistiques (non implémenté)."));
+                menu.add(stats);
+            }
+
+            JMenuItem logout = new JMenuItem("Se déconnecter");
+            logout.addActionListener(ev -> {
+                JFrame current = (JFrame) SwingUtilities.getWindowAncestor(this);
+                SessionManager.logout();
+                current.dispose();
+                NavigationBarHelper.openAttractionView(null,null);
+            });
+            menu.add(logout);
+
+            menu.show(compteBtn, 0, compteBtn.getHeight());
         });
 
         rightPanel.add(compteBtn);
@@ -67,13 +99,23 @@ public class NavigationBar extends JPanel {
     }
 
     private ImageIcon loadImage(String filename, int width, int height) {
-        java.net.URL resource = getClass().getResource("/images/" + filename);
-        if (resource == null) {
-            System.err.println("❌ Image non trouvée : /images/" + filename);
-            return new ImageIcon();
+        try {
+            // ✅ On enlève le '/' du début : chemin RELATIF depuis le classpath
+            java.net.URL resource = getClass().getClassLoader().getResource("images/" + filename);
+
+            if (resource == null) {
+                System.err.println(" Image non trouvée : images/" + filename);
+                return new ImageIcon(); // retourne une image vide
+            }
+
+            ImageIcon icon = new ImageIcon(resource);
+            Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ImageIcon(); // fallback image vide
         }
-        ImageIcon icon = new ImageIcon(resource);
-        Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(img);
     }
+
 }

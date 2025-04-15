@@ -27,31 +27,6 @@ public class LoginView extends JFrame {
 
         JPanel panel = new JPanel(new BorderLayout());
 
-        // ===== Bandeau haut =====
-        JPanel topBar = new JPanel(new BorderLayout());
-        topBar.setBackground(Color.BLACK);
-        topBar.setPreferredSize(new Dimension(800, 50));
-
-        JLabel logo = new JLabel(loadImage("logo.png", 40, 40));
-        logo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        logo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                JOptionPane.showMessageDialog(null, "Retour vers la page d'accueil (à implémenter)");
-            }
-        });
-
-        JLabel title = new JLabel("Legendaria", SwingConstants.CENTER);
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 25));
-
-        JButton btnCompte = new JButton(loadImage("compte.png", 40, 40));
-        btnCompte.setBorderPainted(false);
-        btnCompte.setContentAreaFilled(false);
-
-        topBar.add(logo, BorderLayout.WEST);
-        topBar.add(title, BorderLayout.CENTER);
-        topBar.add(btnCompte, BorderLayout.EAST);
-
         // ===== Formulaire de connexion =====
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
@@ -78,7 +53,8 @@ public class LoginView extends JFrame {
         JLabel footer = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
         footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        panel.add(topBar, BorderLayout.NORTH);
+        // ===== NavigationBar (avec logo et bouton compte) =====
+        panel.add(new NavigationBar("Legendaria"), BorderLayout.NORTH);
         panel.add(formPanel, BorderLayout.CENTER);
         panel.add(footer, BorderLayout.SOUTH);
 
@@ -103,24 +79,12 @@ public class LoginView extends JFrame {
                 SessionManager.setCurrentUser(client);
                 NavigationBarHelper.openAttractionView(this, client);
             }
-
         });
 
-        // Bouton pour l'inscription (à venir)
+        // Bouton pour l'inscription
         goToRegisterButton.addActionListener(e -> {
-            dispose(); // ferme la fenêtre actuelle
-            new RegistrationView(); // ouvre l'inscription
+            dispose();
+            new RegistrationView();
         });
-    }
-
-    private ImageIcon loadImage(String filename, int width, int height) {
-        java.net.URL resource = getClass().getResource("/attraction/images/" + filename);
-        if (resource == null) {
-            System.err.println(" Image non trouvée : " + filename);
-            return new ImageIcon();
-        }
-        ImageIcon icon = new ImageIcon(resource);
-        Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(img);
     }
 }
