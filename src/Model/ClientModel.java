@@ -100,6 +100,10 @@ public class ClientModel {
         this.password = password;
     }
 
+    public String getFullName() {
+        return firstname + " " + surname;
+    }
+
     @Override
     public String toString() {
         return firstname + " " + surname + " (" + accountType + ")";
