@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.List;
 import java.util.ArrayList;
 import Model.PlanningModel;
+import Model.ReservationModel;
 import View.PlanningView;
 import java.time.format.DateTimeFormatter;
 
@@ -19,8 +20,10 @@ public class PlanningController {
     private LocalDate lastClickedDate = null;
     private Color lastClickedColor= null;
     private int lastClickedPrice = 0;
+    private ReservationModel reservation;
 
-    public PlanningController(PlanningView view) {
+    public PlanningController(PlanningView view, ReservationModel reservation) {
+        this.reservation = reservation;
         this.view = view;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         // Initialisation sur le mois en cours
@@ -67,9 +70,13 @@ public class PlanningController {
             validateButton.addActionListener(e -> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 if (lastClickedDate != null && lastClickedPrice != 0) {
+
+                    reservation.addReservationDate(lastClickedDate.format(formatter));
+                    reservation.addPrice((lastClickedPrice*reservation.getNumAdults())+(lastClickedPrice*reservation.getNumKids()*0.7));
+
                     System.out.println("Dernière date sélectionnée : "
-                            + lastClickedDate.format(formatter)
-                            + " - Prix : " + lastClickedPrice);
+                            + reservation.getReservationDate()
+                            + " - Prix : " + reservation.getPrice());
                 } else {
                     System.out.println("Aucune date n'a été sélectionnée.");
                 }

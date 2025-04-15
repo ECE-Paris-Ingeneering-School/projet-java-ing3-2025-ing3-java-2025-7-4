@@ -2,11 +2,11 @@ package Controller;
 
 import Model.ReservationModel;
 import View.ReservationView;
-import javax.swing.*;
+import View.PlanningView;
 
 public class ReservationController {
     private ReservationView view;
-    private ReservationModel model = new ReservationModel(2, 0.8) ;
+    private ReservationModel reservation = new ReservationModel(2, 0) ;
 
     public ReservationController(ReservationView view) {
         this.view = view;
@@ -19,19 +19,21 @@ public class ReservationController {
             int nbEnfant = (Integer) view.getChildrenBox().getSelectedItem();
             int nbBebe = (Integer) view.getBabiesBox().getSelectedItem();
 
-            model.addNumClient(nbAdulte, nbEnfant, nbBebe);
+            reservation.addNumClient(nbAdulte, nbEnfant, nbBebe);
 
-            System.out.println("Adulte(s): " + model.getNumAdults()
-                    + ", Enfant(s): " + model.getNumKids()
-                    + ", Bébé(s): " + model.getNumBabys());
-        });
-    }
+            System.out.println("Adulte(s): " + reservation.getNumAdults()
+                    + ", Enfant(s): " + reservation.getNumKids()
+                    + ", Bébé(s): " + reservation.getNumBabys());
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            ReservationView view = new ReservationView();
-            new ReservationController(view);
-            view.setVisible(true);
+            // Fermez ou cachez la fenêtre de réservation
+            view.dispose(); // ou view.setVisible(false);
+
+            // Créez la page du planning (vous pouvez passer 0 ou un autre paramètre selon votre logique)
+            PlanningView planningView = new PlanningView(0);
+            // Créez le contrôleur correspondant
+            new PlanningController(planningView, reservation);
+            // Affichez la nouvelle fenêtre
+            planningView.setVisible(true);
         });
     }
 }

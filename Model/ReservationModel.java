@@ -21,10 +21,17 @@ public class ReservationModel {
     private String reservationDate;
     private double price = 0;
     private double discount;
+    private double typeAcount;
 
-    public ReservationModel(int clientID, double discount) {
+    public ReservationModel(int clientID, int typeAcount) {
         this.clientID = clientID;
-        this.discount = discount;
+        this.typeAcount = typeAcount;
+        if (typeAcount == 1) {
+            this.discount = 0.8;
+        }else {
+            this.discount = 1;
+        }
+
     }
 
     //Fonction pour ajouter le nombre de participant.
