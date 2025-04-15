@@ -31,15 +31,7 @@ public class RegistrationView extends JFrame {
 
         JPanel panel = new JPanel(new BorderLayout());
 
-        // ===== Bandeau haut =====
-        JPanel topBar = new JPanel(new BorderLayout());
-        topBar.setBackground(Color.BLACK);
-        topBar.setPreferredSize(new Dimension(800, 50));
 
-        JLabel title = new JLabel("Legendaria", SwingConstants.CENTER);
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 25));
-        topBar.add(title, BorderLayout.CENTER);
 
         // ===== Formulaire =====
         JPanel formPanel = new JPanel();
@@ -87,7 +79,7 @@ public class RegistrationView extends JFrame {
         JLabel footer = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
         footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        panel.add(topBar, BorderLayout.NORTH);
+        panel.add(new NavigationBar("Legendaria"), BorderLayout.NORTH);
         panel.add(formPanel, BorderLayout.CENTER);
         panel.add(footer, BorderLayout.SOUTH);
 

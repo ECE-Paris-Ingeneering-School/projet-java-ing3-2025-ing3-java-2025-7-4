@@ -145,13 +145,19 @@ public class AttractionView extends JFrame {
     }
 
     private ImageIcon loadImage(String filename, int width, int height) {
-        java.net.URL resource = getClass().getResource("/images/" + filename);
-        if (resource == null) {
-            System.err.println("❌ Image non trouvée : /images/" + filename);
+        try {
+            java.net.URL resource = getClass().getClassLoader().getResource("images/" + filename);
+            if (resource == null) {
+                System.err.println(" Image non trouvée : images/" + filename);
+                return new ImageIcon(); // retourne une image vide
+            }
+            ImageIcon icon = new ImageIcon(resource);
+            Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ImageIcon();
         }
-        ImageIcon icon = new ImageIcon(resource);
-        Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(img);
     }
 }
+
