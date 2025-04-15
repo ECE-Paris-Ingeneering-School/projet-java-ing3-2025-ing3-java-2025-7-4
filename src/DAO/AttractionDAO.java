@@ -1,5 +1,7 @@
-// --- AttractionDAO.java refactorisé avec DaoFactory ---
+//Attraction DAO
 package DAO;
+
+//Import des packages nécessaires
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -7,15 +9,29 @@ import java.util.List;
 
 import Model.AttractionModel;
 
+
+/**
+ * AttractionDAO permettant toutes les manipulations avec la base de donnée
+ */
 public class AttractionDAO {
+    /**
+     * Attribut daoFactory
+     */
     private final DaoFactory daoFactory;
 
+    /**
+     * Constructeur de AttractionDAo
+     *
+     * @param daoFactory permet d'avoir les informations sur la bdd
+     */
     public AttractionDAO(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
     /**
-     * Récupère toutes les attractions de la base de données.
+     * Permet de récupérer toutes les informations des attractions dans la bdd et de les mettre dans un tableau
+     *
+     * @return un tableau d'attractions
      */
     public List<AttractionModel> getAllAttractions() {
         List<AttractionModel> attractions = new ArrayList<>();
@@ -41,6 +57,13 @@ public class AttractionDAO {
 
         return attractions;
     }
+
+    /**
+     * Permet de récupérer les informations précises d'une attraction
+     *
+     * @param id de l'attraction, identifiant unique
+     * @return un objet de la classe attractionModel
+     */
     public AttractionModel getAttractionById(int id) {
         AttractionModel resultAttraction = null;
 
@@ -78,7 +101,10 @@ public class AttractionDAO {
 
 
     /**
-     * Insère une nouvelle attraction dans la base.
+     * Insère une nouvelle attraction dans la base de donnée
+     *
+     * @param attraction , objet de la classe à rajouter dans la base
+     * @return true ou false (indique si l'ajout a bien été effectué)
      */
     public boolean insertAttraction(AttractionModel attraction) {
         try {
@@ -108,7 +134,12 @@ public class AttractionDAO {
         return false;
     }
 
-
+    /**
+     * Mets à jour une attraction déja présente dans la base donnée
+     *
+     * @param attraction informations de la nouvelle attraction
+     * @return true ou false indiquant si il y a avait bien une attraction correspondante et si elle a bien été mise à jour
+     */
     public boolean updateAttraction(AttractionModel attraction) {
         int rowsAffected = 0;
         try {
@@ -152,7 +183,9 @@ public class AttractionDAO {
 
 
     /**
-     * Supprime une attraction selon son ID.
+     * Supprime une attraction selon son id
+     *
+     * @param id , indentifiant unique de l'attraction
      */
     public void deleteAttraction(int id) {
         String query = "DELETE FROM Attraction WHERE attraction_id = ?";

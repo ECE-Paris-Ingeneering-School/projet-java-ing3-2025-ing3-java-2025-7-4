@@ -13,7 +13,7 @@ public class PaymentView extends JFrame {
         setLayout(new BorderLayout());
 
         // Crée la barre de navigation
-        NavigationBar nav = new NavigationBar(true, false, "ClientNom");
+        NavigationBar nav = new NavigationBar("Legendaria", true,false, "ClientNom");
 
         // Crée le header avec infos de commande
         JLabel labelInfos = new JLabel("Commande n°" + order.getOrderId());
@@ -63,7 +63,7 @@ public class PaymentView extends JFrame {
             String numeroCarte = numeroCarteField.getText();
             String cvc = cvcField.getText();
 
-            boolean valid = controller.validerPaiement(nom, nomCarte, numeroCarte, cvc);
+            boolean valid = controller.validerPaiement(nom, nomCarte, numeroCarte);
             controller.traitementRetourPaiement(order, valid);
 
             if (valid) {

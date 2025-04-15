@@ -4,7 +4,6 @@ import Controller.ReportingController;
 import DAO.DaoFactory;
 import DAO.OrdersDAOImpl;
 import Model.OrdersModel;
-import view.PaymentView;
 
 import java.time.LocalDateTime;
 
@@ -17,28 +16,28 @@ public class Main {
 
         // Création d’une nouvelle commande
         OrdersModel newOrder = new OrdersModel(
-                7, // ID auto-généré
+                20, // ID auto-généré
                 LocalDateTime.now().plusDays(1),
                 2, // personnes
                 07.50f,
-                "Pending",
+                "Paid",
                 1, // id attraction
                 42 // id réservation fictive
         );
         ReportingController controller = new ReportingController(daoImpl);
         controller.afficherReporting();
-/*
+
         // Insertion dans la base
         boolean created = daoImpl.createOrder(newOrder);
 
         // Si l’order a bien été créé, lancer le paiement
         if (created) {
-            PaymentController controller = new PaymentController(daoImpl);
-            controller.effectuerPaiement(newOrder.getOrderId()); // << Ton workflow
+            PaymentController controllerPayement = new PaymentController(daoImpl);
+            controllerPayement.effectuerPaiement(newOrder.getOrderId()); // << Ton workflow
         } else {
             System.out.println("Erreur lors de la création de la commande.");
         }
 
- */
+
     }
 }

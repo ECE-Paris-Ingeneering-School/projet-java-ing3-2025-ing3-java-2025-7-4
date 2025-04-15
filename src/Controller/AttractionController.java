@@ -11,14 +11,22 @@ import java.util.Map;
  * Contrôleur pour la gestion des attractions.
  * Sert d’intermédiaire entre la vue et la couche DAO.
  *
- * @author
- * @version 1.0
+ * @author William
+ * @version 2.0
  * @since 2025
  */
 public class AttractionController {
 
+    /**
+     * Attribut pour récupérer et communiquer avec le DAO
+     */
     private final AttractionDAO dao;
 
+    /**
+     * Constructeur du controller
+     *
+     * @param daoFactory Paramètre contenant les informations pour se connecter à la base de données
+     */
     public AttractionController(DaoFactory daoFactory) {
         this.dao = new AttractionDAO(daoFactory);
     }
@@ -40,11 +48,11 @@ public class AttractionController {
     public void createAttra(Map<String, Object> prAttraction) {
         AttractionModel attraction = new AttractionModel(
                 0,
-                (String) prAttraction.get("nom"),
+                (String) prAttraction.get("name"),
                 (String) prAttraction.get("description"),
-                (String) prAttraction.get("typePers"),
-                (String) prAttraction.get("image"),
-                (double) prAttraction.get("prix")
+                (String) prAttraction.get("person_type"),
+                (String) prAttraction.get("image_path"),
+                (double) prAttraction.get("price")
         );
         dao.insertAttraction(attraction);
     }
@@ -56,12 +64,12 @@ public class AttractionController {
      */
     public void updateAttra(Map<String, Object> prAttraction) {
         AttractionModel attraction = new AttractionModel(
-                (int) prAttraction.get("id"),
-                (String) prAttraction.get("nom"),
+                (int) prAttraction.get("attraction_id"),
+                (String) prAttraction.get("name"),
                 (String) prAttraction.get("description"),
-                (String) prAttraction.get("typePers"),
-                (String) prAttraction.get("image"),
-                (double) prAttraction.get("prix")
+                (String) prAttraction.get("person_type"),
+                (String) prAttraction.get("image_path"),
+                (double) prAttraction.get("price")
         );
         dao.updateAttraction(attraction);
     }
