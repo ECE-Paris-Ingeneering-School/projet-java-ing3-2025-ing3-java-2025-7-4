@@ -1,18 +1,17 @@
 package view;
 
-// --- AttractionView.java (version unifiée avec accueil et détail) ---
-
 import Controller.AttractionController;
 import Controller.PaymentController;
 import DAO.DaoFactory;
 import Model.AttractionModel;
 import Model.OrdersModel;
+import toolbox.NavigationBarHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-import static Model.SoundPlayer.playSound;
+import static toolbox.SoundPlayer.playSound;
 
 public class AttractionView extends JFrame {
     private final CardLayout cardLayout = new CardLayout();
@@ -20,10 +19,9 @@ public class AttractionView extends JFrame {
     private final AttractionController controller;
     private AttractionModel attractionCourante;
 
-
     private JLabel detailImage, detailTitre, detailDescription, detailPrix;
 
-    public AttractionView(boolean isLoggedIn, boolean isAdmin, String userName) {
+    public AttractionView() {
         DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
         controller = new AttractionController(daoFactory);
 
@@ -33,19 +31,21 @@ public class AttractionView extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        add(new NavigationBar("Legendaria", isLoggedIn, isAdmin, userName), BorderLayout.NORTH);
+        // ✅ BARRE DE NAVIGATION
+        add(new NavigationBar("Legendaria"), BorderLayout.NORTH);
+
+        // ✅ PANEL PRINCIPAL
         add(mainPanel, BorderLayout.CENTER);
 
-        buildAccueilPanel(isLoggedIn, isAdmin, userName);
-        buildDetailPanel(isLoggedIn, isAdmin, userName);
+        buildAccueilPanel();
+        buildDetailPanel();
 
         cardLayout.show(mainPanel, "accueil");
         setVisible(true);
     }
 
-    private void buildAccueilPanel(boolean isLoggedIn, boolean isAdmin, String userName) {
+    private void buildAccueilPanel() {
         JPanel accueilPanel = new JPanel(new BorderLayout());
-
         JPanel grid = new JPanel(new GridLayout(2, 3, 20, 20));
         grid.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -58,13 +58,8 @@ public class AttractionView extends JFrame {
             img.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     showDetail(attraction);
-                    // 🔊 Lecture du son en fonction de l'attraction
-                    if (attraction.getName().equalsIgnoreCase("Dragon")) {
-                        playSound("rugissement.wav");
-                    } else if (attraction.getName().equalsIgnoreCase("Zeus")) {
-                        playSound("eclair.wav");
-                    }
-                    // Ajoute autant de cas que tu veux !
+                    if (attraction.getName().equalsIgnoreCase("Dragon")) playSound("rugissement.wav");
+                    if (attraction.getName().equalsIgnoreCase("Zeus")) playSound("eclair.wav");
                 }
             });
 
@@ -82,7 +77,7 @@ public class AttractionView extends JFrame {
         mainPanel.add(accueilPanel, "accueil");
     }
 
-    private void buildDetailPanel(boolean isLoggedIn, boolean isAdmin, String userName) {
+    private void buildDetailPanel() {
         JPanel detailPanel = new JPanel(new BorderLayout());
 
         JPanel content = new JPanel();
@@ -107,24 +102,22 @@ public class AttractionView extends JFrame {
         reserver.setBackground(Color.GREEN);
         reserver.setForeground(Color.WHITE);
         reserver.addActionListener(e -> {
-            // 👇 Création d'une fausse commande simulée
+            if (attractionCourante == null) return;
             OrdersModel fakeOrder = new OrdersModel(
-                    0,                           // Pas encore inséré dans la BDD
+                    0,
                     java.time.LocalDateTime.now(),
-                    1,                           // 1 personne par défaut
-                    (float) attractionCourante.getPrix(), // prix de l'attraction
-                    "Pending",                  // statut initial
+                    1,
+                    (float) attractionCourante.getPrix(),
+                    "Pending",
                     attractionCourante.getAttractionID(),
-                    0                           // pas de réservation réelle pour l'instant
+                    0
             );
 
             DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
             PaymentController paiementCtrl = new PaymentController(daoFactory.getOrdersDAO());
 
-            // Ouverture directe de la vue de paiement
-            new PaymentView(fakeOrder, paiementCtrl,this);
+            NavigationBarHelper.openPaymentView(this, fakeOrder);
         });
-
 
         content.add(detailImage);
         content.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -153,7 +146,10 @@ public class AttractionView extends JFrame {
 
     private ImageIcon loadImage(String filename, int width, int height) {
         java.net.URL resource = getClass().getResource("/images/" + filename);
-        if (resource == null) System.err.println("❌ Image non trouvée : /images/" + filename);
+        if (resource == null) {
+            System.err.println("❌ Image non trouvée : /images/" + filename);
+            return new ImageIcon();
+        }
         ImageIcon icon = new ImageIcon(resource);
         Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(img);

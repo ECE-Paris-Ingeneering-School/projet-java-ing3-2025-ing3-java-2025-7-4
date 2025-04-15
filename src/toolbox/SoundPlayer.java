@@ -1,4 +1,4 @@
-package Model;
+package toolbox;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -10,7 +10,7 @@ public class SoundPlayer {
             try {
                 URL soundURL = SoundPlayer.class.getResource("/sounds/" + filename);
                 if (soundURL == null) {
-                    System.err.println("❌ Son non trouvé : " + filename);
+                    System.err.println("Son non trouvé : " + filename);
                     return;
                 }
 
@@ -21,7 +21,7 @@ public class SoundPlayer {
             } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
                 e.printStackTrace();
             }
-        }).start(); // 🔁 Non bloquant grâce au Thread
+        }).start(); // non bloquant grâce au thread
     }
 }
 

@@ -6,7 +6,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class NavigationBar extends JPanel {
-    public NavigationBar(String siteTitle, boolean isLoggedIn, boolean isAdmin, String userName) {
+    public NavigationBar(String siteTitle) {
+        Model.ClientModel user = toolbox.SessionManager.getCurrentUser();
+        boolean isLoggedIn = user != null;
+        boolean isAdmin = isLoggedIn && user.getAccountType() == 2;
+        String userName = isLoggedIn ? user.getFullName() : "Invité";
+
+
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(800, 50));
         setBackground(Color.BLACK);
@@ -19,7 +25,7 @@ public class NavigationBar extends JPanel {
         logoBtn.setFocusPainted(false);
         logoBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoBtn.addActionListener((ActionEvent e) -> {
-            new AttractionView(isLoggedIn, isAdmin, userName);
+            new AttractionView();
             SwingUtilities.getWindowAncestor(this).dispose();
         });
 

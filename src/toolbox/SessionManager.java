@@ -1,4 +1,4 @@
-//Import des packages nécessaires
+package toolbox;//Import des packages nécessaires
 import Model.ClientModel;
 
 /**
@@ -31,7 +31,7 @@ public class SessionManager {
      * @return true ou false
      */
     public static boolean isLoggedIn() {
-        return currentUser != null && currentUser.getClientID() != 7;
+        return currentUser != null && currentUser.getId() != 7;
     }
 
     /**
@@ -39,7 +39,7 @@ public class SessionManager {
      * @return true ou false
      */
     public static boolean isAdmin() {
-        return isLoggedIn() && currentUser.getRole() == 2;
+        return isLoggedIn() && currentUser.getAccountType() == 2;
     }
 
     /**

@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 public class ClientModel {
     private int id;
-    private String accountType;  // "guest", "admin", "member"
+    private int accountType;  // "guest", "admin", "member"
     private String firstname;
     private String surname;
     private int age;
@@ -22,7 +22,7 @@ public class ClientModel {
     private String email;
     private String password;
 
-    public ClientModel(int id, String accountType, String firstname, String surname,
+    public ClientModel(int id, int accountType, String firstname, String surname,
                        int age, LocalDate birthdate, String email, String password) {
         this.id = id;
         this.accountType = accountType;
@@ -44,11 +44,11 @@ public class ClientModel {
         this.id = id;
     }
 
-    public String getAccountType() {
+    public int getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(int accountType) {
         this.accountType = accountType;
     }
 

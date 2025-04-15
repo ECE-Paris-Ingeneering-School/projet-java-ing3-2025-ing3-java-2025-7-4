@@ -1,23 +1,27 @@
 package view;
 
 import Controller.PaymentController;
+import DAO.DaoFactory;
+import DAO.OrdersDAOImpl;
 import Model.OrdersModel;
+import toolbox.SessionManager;
+import toolbox.NavigationBarHelper;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class PaymentView extends JFrame {
-    private final JFrame parent;
-    public PaymentView(OrdersModel order, PaymentController controller, JFrame parentToClose) {
-        this.parent = parentToClose;
+
+    public PaymentView(OrdersModel order) {
         setTitle("Paiement de la commande");
         setSize(600, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Crée la barre de navigation
-        NavigationBar nav = new NavigationBar("Legendaria", true,false, "ClientNom");
+        // Barre de navigation
+        NavigationBar nav = new NavigationBar("Legendaria");
 
-        // Crée le header avec infos de commande
+        // Header commande
         JLabel labelInfos = new JLabel("Commande n°" + order.getOrderId());
         JLabel labelStatut = new JLabel("Statut actuel : " + order.getStatus());
         JLabel labelPrix = new JLabel("Montant à payer : " + order.getPrice() + " €");
@@ -28,7 +32,6 @@ public class PaymentView extends JFrame {
         header.add(labelStatut);
         header.add(labelPrix);
 
-        // Combine nav + header dans un seul panneau vertical
         JPanel topWrapper = new JPanel();
         topWrapper.setLayout(new BoxLayout(topWrapper, BoxLayout.Y_AXIS));
         topWrapper.add(nav);
@@ -36,7 +39,7 @@ public class PaymentView extends JFrame {
 
         add(topWrapper, BorderLayout.NORTH);
 
-        // Formulaire de paiement
+        // Formulaire
         JPanel contentPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -57,13 +60,15 @@ public class PaymentView extends JFrame {
         contentPanel.add(new JLabel("CVC :"));
         contentPanel.add(cvcField);
 
-        // Bouton valider
+        // Bouton de paiement
         JButton boutonPayer = new JButton("Valider le paiement");
         boutonPayer.addActionListener(e -> {
             String nom = nomField.getText();
             String nomCarte = nomCarteField.getText();
             String numeroCarte = numeroCarteField.getText();
-            String cvc = cvcField.getText();
+
+            PaymentController controller = new PaymentController(new OrdersDAOImpl(
+                    DaoFactory.getInstance("attractions_db", "root", "")));
 
             boolean valid = controller.validerPaiement(nom, nomCarte, numeroCarte);
             controller.traitementRetourPaiement(order, valid);
@@ -71,8 +76,10 @@ public class PaymentView extends JFrame {
             if (valid) {
                 JOptionPane.showMessageDialog(this, "Paiement réussi ! Merci pour votre achat.");
                 dispose();
+                NavigationBarHelper.openAttractionView(null, SessionManager.getCurrentUser());
             } else {
-                JOptionPane.showMessageDialog(this, "Paiement refusé. Veuillez vérifier vos informations.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Paiement refusé. Veuillez vérifier vos informations.",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -84,6 +91,5 @@ public class PaymentView extends JFrame {
 
         setLocationRelativeTo(null);
         setVisible(true);
-        this.parent.dispose();
     }
 }
