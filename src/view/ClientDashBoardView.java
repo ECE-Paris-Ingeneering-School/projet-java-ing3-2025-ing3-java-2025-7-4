@@ -1,5 +1,7 @@
 package view;
 
+import Controller.ReportingController;
+import DAO.DaoFactory;
 import Model.ClientModel;
 import toolbox.SessionManager;
 import toolbox.NavigationBarHelper;
@@ -55,7 +57,11 @@ public class ClientDashBoardView extends JFrame {
 
             JButton btnStats = new JButton("Afficher les statistiques");
             btnStats.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnStats.addActionListener(e -> JOptionPane.showMessageDialog(this, "Affichage des statistiques (non implémenté)."));
+            btnStats.addActionListener(e -> {
+                DaoFactory daoFactory= DaoFactory.getInstance("attractions_db","root","");
+                ReportingController controller= new ReportingController(daoFactory.getOrdersDAO());
+                controller.afficherReporting();
+            });
             panel.add(btnStats);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
         }

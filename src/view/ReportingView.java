@@ -17,6 +17,8 @@ public class ReportingView extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+        add(new NavigationBar("Statistiques"), BorderLayout.NORTH);
+
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.add("Répartition paiements", createPieChartPanel(pieData));
