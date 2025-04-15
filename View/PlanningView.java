@@ -76,6 +76,8 @@ public class PlanningView extends JFrame {
 
             // Panneau pour le bouton "Valider"
             validateButton1 = new JButton("Valider");
+            validateButton1.setOpaque(true);
+            validateButton1.setBackground(Color.GREEN);
             validateButton1.setBounds((width/2) - 100, 600, 200, 40);
             add(validateButton1);
         }
@@ -118,6 +120,8 @@ public class PlanningView extends JFrame {
 
             // Panneau pour le bouton "Valider"
             validateButton2 = new JButton("Valider");
+            validateButton2.setOpaque(true);
+            validateButton2.setBackground(Color.GREEN);
             validateButton2.setBounds((width/2) - 100, 600, 200, 40);
             add(validateButton2);
         }
