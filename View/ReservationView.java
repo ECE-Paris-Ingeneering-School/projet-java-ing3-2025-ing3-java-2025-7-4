@@ -13,7 +13,7 @@ public class ReservationView extends JFrame {
     public ReservationView() {
         super("Formulaire");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 700);
+        setSize(800, 600);
         setLocationRelativeTo(null);
 
         // Panneau principal avec GridBagLayout pour gérer la disposition
@@ -74,7 +74,7 @@ public class ReservationView extends JFrame {
         validateButton = new JButton("Valider");
         validateButton.setOpaque(true);
         validateButton.setBackground(Color.GREEN);
-        validateButton.setBounds((600/2) - 100, 600, 200, 40);
+        validateButton.setBounds((800/2) - 100, 520, 200, 40);
         add(validateButton);
 
         // Ajout du panneau principal à la fenêtre

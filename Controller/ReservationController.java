@@ -26,7 +26,7 @@ public class ReservationController {
                     + ", Bébé(s): " + reservation.getNumBabys());
 
             // Fermez ou cachez la fenêtre de réservation
-            view.dispose(); // ou view.setVisible(false);
+            view.dispose();
 
             // Créez la page du planning (vous pouvez passer 0 ou un autre paramètre selon votre logique)
             PlanningView planningView = new PlanningView(0);

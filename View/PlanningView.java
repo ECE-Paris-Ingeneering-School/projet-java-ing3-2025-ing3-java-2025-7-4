@@ -16,8 +16,8 @@ public class PlanningView extends JFrame {
 
     public PlanningView(int page) {
         setTitle("Planning Mensuel - MVC");
-        int height = 700;
-        int width = 600;
+        int height = 600;
+        int width = 800;
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -25,12 +25,12 @@ public class PlanningView extends JFrame {
         // Panneau d'en-tête avec les boutons et le label du mois
         prevButton = new JButton("<<");
         nextButton = new JButton(">>");
-        monthLabel = new JLabel("", SwingConstants.CENTER);
+        monthLabel = new JLabel("");
 
         // Positionnement en pixels dans le header
         prevButton.setBounds(10, 50, 80, 30);   // x, y, largeur, hauteur
         nextButton.setBounds(width - 105, 50, 80, 30);
-        monthLabel.setBounds(0, 50, 600, 30);
+        monthLabel.setBounds(width/2 - 50, 50, 600, 30);
 
         add(prevButton);
         add(nextButton);
@@ -40,7 +40,7 @@ public class PlanningView extends JFrame {
         planningPanel = new JPanel();
         planningPanel.setLayout(new GridLayout(0, 7)); // Grille avec 7 colonnes (jours de la semaine)
         // Positionné de manière absolue pour commencer à x=10, y=50 et se terminer à x=590, y=600
-        planningPanel.setBounds(10, 90, 575, 450);
+        planningPanel.setBounds(10, 90, width-35, 400);
         // Optionnel : Ajout d'une bordure pour visualiser la zone
         planningPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(planningPanel);
@@ -50,27 +50,30 @@ public class PlanningView extends JFrame {
             JPanel square1 = new JPanel();
             JLabel desc1 = new JLabel("Jour Spécial 40€");
             square1.setBackground(new Color(238, 130, 238));
-            square1.setBounds(10, 560, 10, 10);
-            desc1.setBounds(25, 560, 100, 10);
+            square1.setBounds(10, 500, 15, 15);
+            desc1.setBounds(25, 500, 100, 15);
             add(square1);
             add(desc1);
 
             JPanel square2 = new JPanel();
             JLabel desc2 = new JLabel("Haute Saison 25€");
             square2.setBackground(new Color(47, 78, 193, 137));
-            square2.setBounds(165, 560, 10, 10);
-            desc2.setBounds(180, 560, 100, 10);
+            square2.setBounds(165, 500, 15, 15);
+            desc2.setBounds(180, 500, 100, 15);
             add(square2);
             add(desc2);
 
             JPanel square3 = new JPanel();
             JLabel desc3 = new JLabel("Basse Saison 20€");
             square3.setBackground(Color.GREEN);
-            square3.setBounds(320, 560, 10, 10);
-            desc3.setBounds(335, 560, 150, 10);
+            square3.setBounds(320, 500, 15, 15);
+            desc3.setBounds(335, 500, 150, 15);
             add(square3);
             add(desc3);
 
+            JLabel desc4 = new JLabel("-30% pour les enfant et gratuit pour les moins de 4 ans");
+            desc4.setBounds(465, 500, 350, 15);
+            add(desc4);
 
 
 
@@ -78,7 +81,7 @@ public class PlanningView extends JFrame {
             validateButton1 = new JButton("Valider");
             validateButton1.setOpaque(true);
             validateButton1.setBackground(Color.GREEN);
-            validateButton1.setBounds((width/2) - 100, 600, 200, 40);
+            validateButton1.setBounds((width/2) - 100, 520, 200, 40);
             add(validateButton1);
         }
 
@@ -97,20 +100,20 @@ public class PlanningView extends JFrame {
 
             JPanel square1 = new JPanel();
             square1.setBackground(new Color(238, 130, 238));
-            square1.setBounds(10, 560, 10, 10);
-            option1.setBounds(25, 560, 150, 10);
+            square1.setBounds(10, 500, 15, 15);
+            option1.setBounds(25, 500, 150, 15);
             add(square1);
 
             JPanel square2 = new JPanel();
             square2.setBackground(new Color(47, 78, 193, 137));
-            square2.setBounds(165, 560, 10, 10);
-            option2.setBounds(180, 560, 150, 10);
+            square2.setBounds(165, 500, 15, 15);
+            option2.setBounds(180, 500, 150, 15);
             add(square2);
 
             JPanel square3 = new JPanel();
             square3.setBackground(Color.GREEN);
-            square3.setBounds(320, 560, 10, 10);
-            option3.setBounds(335, 560, 150, 10);
+            square3.setBounds(320, 500, 15, 15);
+            option3.setBounds(335, 500, 150, 15);
             add(square3);
 
             // Ajout des boutons au conteneur
@@ -122,7 +125,7 @@ public class PlanningView extends JFrame {
             validateButton2 = new JButton("Valider");
             validateButton2.setOpaque(true);
             validateButton2.setBackground(Color.GREEN);
-            validateButton2.setBounds((width/2) - 100, 600, 200, 40);
+            validateButton2.setBounds((width/2) - 100, 520, 200, 40);
             add(validateButton2);
         }
 
