@@ -49,7 +49,7 @@ public class PlanningView extends JFrame {
         if (page == 0) {
             JPanel square1 = new JPanel();
             JLabel desc1 = new JLabel("Jour Spécial 40€");
-            square1.setBackground(new Color(238, 130, 238));
+            square1.setBackground(new Color(72, 255, 255));
             square1.setBounds(10, 500, 15, 15);
             desc1.setBounds(25, 500, 100, 15);
             add(square1);
@@ -57,7 +57,7 @@ public class PlanningView extends JFrame {
 
             JPanel square2 = new JPanel();
             JLabel desc2 = new JLabel("Haute Saison 25€");
-            square2.setBackground(new Color(47, 78, 193, 137));
+            square2.setBackground(new Color(218, 45, 4, 137));
             square2.setBounds(165, 500, 15, 15);
             desc2.setBounds(180, 500, 100, 15);
             add(square2);
@@ -65,7 +65,7 @@ public class PlanningView extends JFrame {
 
             JPanel square3 = new JPanel();
             JLabel desc3 = new JLabel("Basse Saison 20€");
-            square3.setBackground(Color.GREEN);
+            square3.setBackground(new Color(234, 197, 4, 137));
             square3.setBounds(320, 500, 15, 15);
             desc3.setBounds(335, 500, 150, 15);
             add(square3);
@@ -99,19 +99,19 @@ public class PlanningView extends JFrame {
             group.add(option3);
 
             JPanel square1 = new JPanel();
-            square1.setBackground(new Color(238, 130, 238));
+            square1.setBackground(new Color(72, 255, 255));
             square1.setBounds(10, 500, 15, 15);
             option1.setBounds(25, 500, 150, 15);
             add(square1);
 
             JPanel square2 = new JPanel();
-            square2.setBackground(new Color(47, 78, 193, 137));
+            square2.setBackground(new Color(218, 45, 4, 137));
             square2.setBounds(165, 500, 15, 15);
             option2.setBounds(180, 500, 150, 15);
             add(square2);
 
             JPanel square3 = new JPanel();
-            square3.setBackground(Color.GREEN);
+            square3.setBackground(new Color(234, 197, 4, 137));
             square3.setBounds(320, 500, 15, 15);
             option3.setBounds(335, 500, 150, 15);
             add(square3);
@@ -129,8 +129,6 @@ public class PlanningView extends JFrame {
             add(validateButton2);
         }
 
-
-        // Centre la fenêtre sur l'écran
         setLocationRelativeTo(null);
     }
 

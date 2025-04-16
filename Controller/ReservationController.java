@@ -21,18 +21,11 @@ public class ReservationController {
 
             reservation.addNumClient(nbAdulte, nbEnfant, nbBebe);
 
-            System.out.println("Adulte(s): " + reservation.getNumAdults()
-                    + ", Enfant(s): " + reservation.getNumKids()
-                    + ", Bébé(s): " + reservation.getNumBabys());
-
-            // Fermez ou cachez la fenêtre de réservation
             view.dispose();
 
-            // Créez la page du planning (vous pouvez passer 0 ou un autre paramètre selon votre logique)
+
             PlanningView planningView = new PlanningView(0);
-            // Créez le contrôleur correspondant
             new PlanningController(planningView, reservation);
-            // Affichez la nouvelle fenêtre
             planningView.setVisible(true);
         });
     }

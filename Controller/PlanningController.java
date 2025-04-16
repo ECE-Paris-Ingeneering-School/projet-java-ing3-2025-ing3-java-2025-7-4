@@ -143,15 +143,15 @@ public class PlanningController {
                 switch (planning.getTypeDay()) {
                     case 1:
                         dayLabel.setOpaque(true);
-                        dayLabel.setBackground(Color.GREEN);
+                        dayLabel.setBackground(new Color(234, 197, 4, 137));
                         break;
                     case 2:
                         dayLabel.setOpaque(true);
-                        dayLabel.setBackground(new Color(47, 78, 193, 137));
+                        dayLabel.setBackground(new Color(218, 45, 4, 137));
                         break;
                     case 3:
                         dayLabel.setOpaque(true);
-                        dayLabel.setBackground(new Color(238, 130, 238));
+                        dayLabel.setBackground(new Color(72, 255, 255));
                         break;
                 }
             } else {
@@ -159,9 +159,9 @@ public class PlanningController {
                 int dayOfWeekValue = currentDate.getDayOfWeek().getValue();
                 dayLabel.setOpaque(true);
                 if (dayOfWeekValue == 6 || dayOfWeekValue == 7) { // Weekend
-                    dayLabel.setBackground(new Color(47, 78, 193, 137));
+                    dayLabel.setBackground(new Color(218, 45, 4, 137));
                 } else { // Semaine
-                    dayLabel.setBackground(Color.GREEN);
+                    dayLabel.setBackground(new Color(234, 197, 4, 137));
                 }
             }
 
@@ -171,13 +171,13 @@ public class PlanningController {
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     lastClickedDate = currentDate;
                     lastClickedColor = dayLabel.getBackground();
-                    if (lastClickedColor.equals(Color.GREEN)) {
+                    if (lastClickedColor.equals(new Color(234, 197, 4, 137))) {
                         lastClickedPrice = 20;
                     }
-                    if (lastClickedColor.equals(new Color(47, 78, 193, 137))) {
+                    if (lastClickedColor.equals(new Color(218, 45, 4, 137))) {
                         lastClickedPrice = 25;
                     }
-                    if (lastClickedColor.equals(new Color(238, 130, 238))) {
+                    if (lastClickedColor.equals(new Color(72, 255, 255))) {
                         lastClickedPrice = 40;
                     }
                 }
