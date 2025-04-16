@@ -29,7 +29,7 @@ public class UserManagementView extends JFrame {
         DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
         clientDAO = new ClientDAO(daoFactory);
 
-        model = new DefaultTableModel(new Object[]{"ID", "Nom complet", "Email", "Rôle"}, 0);
+        model = new DefaultTableModel(new Object[]{"ID", "Nom complet", "Email", "Rôle","RoleCode"}, 0);
         table = new JTable(model);
 
         loadUsers();
@@ -47,9 +47,32 @@ public class UserManagementView extends JFrame {
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner un utilisateur.");
             }
         });
+        JButton btnChangeRole = new JButton("Changer rôle");
+        btnChangeRole.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                int id = (int) table.getValueAt(selectedRow, 0);
+                int currentRole = (int) table.getValueAt(selectedRow, 4);
+
+                if (currentRole == 0) {
+                    JOptionPane.showMessageDialog(this, "Impossible de changer le rôle d'un invité !");
+                    return;
+                }
+
+                boolean updated = clientDAO.toggleClientRole(id, currentRole);
+                if (updated) {
+                    JOptionPane.showMessageDialog(this, "Rôle mis à jour avec succès !");
+                    loadUsers();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erreur lors de la mise à jour du rôle.");
+                }
+            }
+        });
+
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(deleteButton);
+        bottomPanel.add(btnChangeRole);
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
@@ -64,7 +87,7 @@ public class UserManagementView extends JFrame {
                 case 1 -> "Utilisateur";
                 default -> "Invité";
             };
-            model.addRow(new Object[]{c.getId(), c.getFullName(), c.getEmail(), roleLabel});
+            model.addRow(new Object[]{c.getId(), c.getFullName(), c.getEmail(), roleLabel,c.getAccountType()});
         }
     }
 

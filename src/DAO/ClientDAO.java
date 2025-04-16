@@ -40,6 +40,23 @@ public class ClientDAO {
         return clients;
     }
 
+    public boolean toggleClientRole(int clientId, int currentRole) {
+        int newRole = (currentRole == 2) ? 1 : 2; // admin <-> member
+        String sql = "UPDATE account SET account_type = ? WHERE account_id = ?";
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, newRole);
+            stmt.setInt(2, clientId);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public boolean deleteClientById(int id) {
         String sql = "DELETE FROM account WHERE account_id = ?";
         try (Connection conn = daoFactory.getConnection();
