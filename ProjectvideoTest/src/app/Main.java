@@ -1,10 +1,12 @@
 package app;
 
-import registration.RegistrationView;
+import attraction.AttractionAdminView;
 
 public class Main {
     public static void main(String[] args) {
-        new RegistrationView();
+        // Simuler l'ouverture de l'interface admin avec un compte administrateur
+        int typeCompte = 2; // 0 = invité, 1 = utilisateur, 2 = admin
+        new AttractionAdminView(typeCompte);
     }
 }
 
