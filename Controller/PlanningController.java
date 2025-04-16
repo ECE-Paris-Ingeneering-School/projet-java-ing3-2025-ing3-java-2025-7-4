@@ -21,6 +21,7 @@ public class PlanningController {
     private Color lastClickedColor= null;
     private int lastClickedPrice = 0;
     private ReservationModel reservation;
+    private JLabel lastClickedDayLabel = null;
 
     public PlanningController(PlanningView view, ReservationModel reservation) {
         this.reservation = reservation;
@@ -135,7 +136,18 @@ public class PlanningController {
         for (int day = 1; day <= daysInMonth; day++) {
             final LocalDate currentDate = currentYearMonth.atDay(day);
             JLabel dayLabel = new JLabel(String.valueOf(day), SwingConstants.CENTER);
+
             dayLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            if (lastClickedDate != null && currentDate.equals(lastClickedDate)) {
+                dayLabel.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+                // Actualisation de la référence pour la dernière case cliquée (optionnel)
+                lastClickedDayLabel = dayLabel;
+            } else {
+                dayLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+            }
+
+
 
             PlanningModel planning = getPlanningByDate(currentDate);
             if (planning != null) {
@@ -165,10 +177,13 @@ public class PlanningController {
                 }
             }
 
+
+
             // Stocker la date et la couleur lors d'un clic
             dayLabel.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
+
                     lastClickedDate = currentDate;
                     lastClickedColor = dayLabel.getBackground();
                     if (lastClickedColor.equals(new Color(234, 197, 4, 137))) {
@@ -180,6 +195,7 @@ public class PlanningController {
                     if (lastClickedColor.equals(new Color(72, 255, 255))) {
                         lastClickedPrice = 40;
                     }
+                    updatePlanning();
                 }
             });
 
