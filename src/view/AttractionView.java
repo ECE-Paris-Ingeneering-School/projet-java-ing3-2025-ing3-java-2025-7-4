@@ -2,10 +2,13 @@ package view;
 
 import Controller.AttractionController;
 import Controller.PaymentController;
+import Controller.ReservationController;
 import DAO.DaoFactory;
 import Model.AttractionModel;
+import Model.ClientModel;
 import Model.OrdersModel;
 import toolbox.NavigationBarHelper;
+import toolbox.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,21 +105,18 @@ public class AttractionView extends JFrame {
         reserver.setBackground(Color.GREEN);
         reserver.setForeground(Color.WHITE);
         reserver.addActionListener(e -> {
-            if (attractionCourante == null) return;
-            OrdersModel fakeOrder = new OrdersModel(
-                    0,
-                    java.time.LocalDateTime.now(),
-                    1,
-                    (float) attractionCourante.getPrix(),
-                    "Pending",
-                    attractionCourante.getAttractionID(),
-                    0
-            );
+            ClientModel user = SessionManager.getCurrentUser();
+            if (user == null) {
+                JOptionPane.showMessageDialog(this, "Vous devez être connecté pour réserver.");
+                return;
+            }
+            ReservationView reservationView = new ReservationView();
+            reservationView.setAttraction(attractionCourante);
+            reservationView.setClient(user);
 
-            DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
-            PaymentController paiementCtrl = new PaymentController(daoFactory.getOrdersDAO());
+            ReservationController controller = new ReservationController(reservationView);
 
-            NavigationBarHelper.openPaymentView(this, fakeOrder);
+            dispose();
         });
 
         content.add(detailImage);
@@ -133,6 +133,7 @@ public class AttractionView extends JFrame {
         detailPanel.add(content, BorderLayout.CENTER);
         detailPanel.add(credits, BorderLayout.SOUTH);
         mainPanel.add(detailPanel, "detail");
+        setVisible(true);
     }
 
     private void showDetail(AttractionModel attraction) {

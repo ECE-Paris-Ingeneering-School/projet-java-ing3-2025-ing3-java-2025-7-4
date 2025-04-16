@@ -155,6 +155,32 @@ public class OrdersDAOImpl {
         }
         return resultOrder;
     }
+    public List<OrdersModel> getOrdersByUser(int accountId) {
+        List<OrdersModel> list = new ArrayList<>();
+        String sql = "SELECT * FROM orders o JOIN reservation r ON o.reservation_id = r.reservation_id WHERE r.account_id = ?";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, accountId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                OrdersModel order = new OrdersModel(
+                        rs.getInt("order_id"),
+                        rs.getTimestamp("rdv_fulltime").toLocalDateTime(),
+                        rs.getInt("person_count"),
+                        rs.getFloat("price"),
+                        rs.getString("status"),
+                        rs.getInt("attraction_id"),
+                        rs.getInt("reservation_id")
+                );
+                list.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     public boolean updateOrderStatus(int orderId, String newStatus) {
         int rowsAffected = 0;

@@ -16,7 +16,7 @@ public class ClientDashBoardView extends JFrame {
         boolean isAdmin = user != null && user.getAccountType() == 2;
 
         setTitle("Espace personnel - Legendaria");
-        setSize(600, 400);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -50,13 +50,19 @@ public class ClientDashBoardView extends JFrame {
         if (isAdmin) {
             JButton btnAttractions = new JButton("Gérer les attractions");
             btnAttractions.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnAttractions.addActionListener(e -> JOptionPane.showMessageDialog(this, "Gestion des attractions (non implémentée)."));
+            btnAttractions.addActionListener(e -> {
+                DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
+                new AttractionAdminView(user.getAccountType());
+            });
             panel.add(btnAttractions);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
             JButton btnClients = new JButton("Gérer les clients");
             btnClients.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnClients.addActionListener(e -> new UserManagementView());
+            btnClients.addActionListener(e -> {
+                dispose();
+                new UserManagementView();
+            });
             panel.add(btnClients);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
@@ -65,8 +71,8 @@ public class ClientDashBoardView extends JFrame {
             btnStats.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnStats.addActionListener(e -> {
                 dispose();
-                DaoFactory daoFactory= DaoFactory.getInstance("attractions_db","root","");
-                ReportingController controller= new ReportingController(daoFactory.getOrdersDAO());
+                DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
+                ReportingController controller = new ReportingController(daoFactory.getOrdersDAO());
                 controller.afficherReporting();
             });
             panel.add(btnStats);

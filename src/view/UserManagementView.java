@@ -3,8 +3,6 @@ package view;
 import DAO.ClientDAO;
 import DAO.DaoFactory;
 import Model.ClientModel;
-import toolbox.NavigationBarHelper;
-import toolbox.SessionManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +17,7 @@ public class UserManagementView extends JFrame {
 
     public UserManagementView() {
         setTitle("Gestion des utilisateurs");
-        setSize(800, 500);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

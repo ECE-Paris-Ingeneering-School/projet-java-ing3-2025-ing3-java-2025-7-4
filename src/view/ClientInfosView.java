@@ -12,7 +12,7 @@ public class ClientInfosView extends JFrame {
         ClientModel user = SessionManager.getCurrentUser();
 
         setTitle("Mes informations - Legendaria");
-        setSize(400, 300);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
