@@ -283,4 +283,29 @@ public class OrdersDAOImpl {
         return orders;
     }
 
+    public Map<String, Integer> getOrderCountByAttraction() {
+        Map<String, Integer> result = new HashMap<>();
+        String sql = "SELECT a.name AS attraction_name, COUNT(*) AS order_count " +
+                "FROM Orders o " +
+                "JOIN Attraction a ON o.attraction_id = a.attraction_id " +
+                "GROUP BY a.name";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String attractionName = rs.getString("attraction_name");
+                int count = rs.getInt("order_count");
+                result.put(attractionName, count);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
 }

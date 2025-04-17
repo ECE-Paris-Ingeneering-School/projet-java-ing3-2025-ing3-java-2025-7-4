@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.Map;
 
 public class ReportingView extends JFrame {
-    public ReportingView(Map<String, Integer> pieData, Map<String, Float> revenueData) {
+    public ReportingView(Map<String, Integer> pieData, Map<String, Float> revenueData, Map<String, Integer> popularityData) {
         setTitle("Dashboard Reporting");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -23,6 +23,7 @@ public class ReportingView extends JFrame {
         JTabbedPane tabs = new JTabbedPane();
         tabs.add("Répartition paiements", createPieChartPanel(pieData));
         tabs.add("Revenus par attraction", createBarChartPanel(revenueData));
+        tabs.add("Attractivité par attraction", createAttractionPopularityPanel(popularityData));
 
         add(tabs, BorderLayout.CENTER);
         setLocationRelativeTo(null);
@@ -66,4 +67,23 @@ public class ReportingView extends JFrame {
         panel.add(new ChartPanel(chart), BorderLayout.CENTER);
         return panel;
     }
+    private JPanel createAttractionPopularityPanel(Map<String, Integer> data) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Map.Entry<String, Integer> entry : data.entrySet()) {
+            dataset.addValue(entry.getValue(), "Réservations", entry.getKey());
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Nombre de réservations par attraction",
+                "Attraction",
+                "Nombre de réservations",
+                dataset
+        );
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new ChartPanel(chart), BorderLayout.CENTER);
+        return panel;
+    }
+
+
 }
