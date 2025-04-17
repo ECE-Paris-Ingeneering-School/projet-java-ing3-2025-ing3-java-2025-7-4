@@ -1,6 +1,6 @@
 package DAO;
 
-import Model.PlanningModel;
+import Model.Reservation.PlanningModel;
 
 import java.sql.*;
 import java.time.LocalDate;

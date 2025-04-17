@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 17 avr. 2025 à 16:54
+-- Généré le : jeu. 17 avr. 2025 à 23:13
 -- Version du serveur : 9.1.0
 -- Version de PHP : 8.3.14
 
@@ -47,7 +47,9 @@ CREATE TABLE IF NOT EXISTS `account` (
 
 INSERT INTO `account` (`account_id`, `firstname`, `surname`, `birthdate`, `age`, `email`, `password`, `account_type`) VALUES
 (2, 'William', 'Walker', '2004-09-29', 20, 'w@mail', 'w', 1),
-(5, 'Wi', 'Walker', '2004-09-29', 20, 'wi@mail', 'wi', 2);
+(5, 'Wi', 'Walker', '2004-09-29', 20, 'wi@mail', 'wi', 2),
+(6, 'Erel', 'Rebot', '0004-09-29', 18, 'e@mail', 'e', 1),
+(10, 'Willy', 'Willy', '2004-09-29', 18, 'willy@mail', 'willy', 2);
 
 -- --------------------------------------------------------
 
@@ -73,10 +75,10 @@ CREATE TABLE IF NOT EXISTS `attraction` (
 INSERT INTO `attraction` (`attraction_id`, `name`, `description`, `person_type`, `image_path`, `price`) VALUES
 (1, 'Belenos', 'Belenos, inspiré de l\'attraction Toutatis, offre des sensations fortes dans un décor mythique. Montez à bord pour une expérience palpitante où virages serrés et accélérations impressionnantes vous attendent. Taille minimum requise : 1.30 m.', 'Sensations fortes', 'belenos.png', 4.250),
 (2, 'Dragon', 'Dragon, connu sous le nom de \"dragon du jardin d\'acclimatation\", vous transporte dans un univers féerique. Vivez une aventure où le mythe rencontre la réalité. Taille minimum requise : 1.20 m.', 'Découverte', 'dragon.png', 4.250),
-(3, 'Le Carroussel', 'Le Carroussel des Héros est une attraction emblématique pour toute la famille. Embarquez pour une balade enchanteresse dans un univers de légendes, sans exigence de taille pour les petits accompagnés.', 'Famille', 'carroussel.png', 3.000),
+(3, 'Carroussel', 'Le Carroussel des Héros est une attraction emblématique pour toute la famille. Embarquez pour une balade enchanteresse dans un univers de légendes, sans exigence de taille pour les petits accompagnés.', 'Famille', 'carroussel.png', 3.000),
 (4, 'Meduse Express', 'Meduse Express, équivalent de Pégase Express, combine légèreté et vitesse pour une aventure divertissante. Une attraction idéale pour découvrir les sensations en douceur. Taille minimum requise : 1.10 m.', 'Famille', 'meduseExpress.png', 3.000),
 (5, 'Par Isis', 'Par Isis, inspiré d\'Oziris, propose un voyage mythologique au cœur de mystères et d\'effets visuels époustouflants. L\'attraction est conçue pour offrir une montée d\'adrénaline mesurée. Taille minimum requise : 1.25 m.', 'Sensations fortes', 'parisis.png', 6.500),
-(6, 'Zeus', 'Zeus, reprenant les codes de Tonnerre 2 Zeus, vous promet une expérience électrisante avec des accélérations fulgurantes et des descentes vertigineuses. Idéal pour les amateurs de sensations intenses. Taille minimum requise : 1.35 m.', 'Sensations fortes', 'zeus.png', 6.500);
+(6, 'PasZeus', 'Zeus, reprenant les codes de Tonnerre 2 Zeus, vous promet une expérience électrisante avec des accélérations fulgurantes et des descentes vertigineuses. Idéal pour les amateurs de sensations intenses. Taille minimum requise : 1.35 m.', 'Sensations fortes', 'zeus.png', 6.500);
 
 -- --------------------------------------------------------
 
@@ -97,29 +99,25 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `payer_email` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`order_id`),
   KEY `attraction_id` (`attraction_id`),
-  KEY `reservation_id` (`reservation_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_orders_reservation` (`reservation_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `orders`
 --
 
 INSERT INTO `orders` (`order_id`, `rdv_fulltime`, `person_count`, `price`, `status`, `attraction_id`, `reservation_id`, `payer_name`, `payer_email`) VALUES
-(7, '2025-04-13 22:16:59', 2, 15.50, 'Paid', 1, 42, NULL, NULL),
-(6, '2025-04-13 22:16:31', 2, 35.50, 'Paid', 2, 42, NULL, NULL),
-(8, '2025-04-13 22:29:18', 2, 8.00, 'Pending', 1, 42, NULL, NULL),
-(9, '2025-04-13 22:33:04', 2, 35.50, 'Paid', 1, 42, NULL, NULL),
-(10, '2025-04-13 22:33:14', 2, 8.00, 'Pending', 1, 42, NULL, NULL),
-(11, '2025-04-13 22:33:22', 2, 15.50, 'Pending', 1, 42, NULL, NULL),
-(12, '2025-04-13 22:36:19', 2, 7.50, 'Paid', 1, 42, NULL, NULL),
-(13, '2025-04-13 22:38:23', 2, 35.50, 'Pending', 1, 42, NULL, NULL),
-(14, '2025-04-13 22:39:54', 2, 35.50, 'Paid', 1, 42, NULL, NULL),
-(15, '2025-04-13 22:40:27', 2, 35.50, 'Paid', 1, 42, NULL, NULL),
-(16, '2025-04-15 19:47:15', 2, 7.50, 'Paid', 1, 42, NULL, NULL),
-(17, '2025-04-15 19:47:52', 2, 7.50, 'Paid', 1, 42, NULL, NULL),
-(18, '2025-04-15 19:49:40', 2, 7.50, 'Paid', 1, 42, NULL, NULL),
 (30, '2025-04-17 14:40:09', 5, 94.50, 'Paid', 5, 5, NULL, NULL),
-(33, '2025-04-17 15:41:49', 6, 111.00, 'Paid', 4, 8, NULL, NULL);
+(76, '2025-04-17 23:37:58', 5, 105.50, 'Paid', 3, 28, NULL, NULL),
+(75, '2025-04-17 23:37:58', 5, 106.75, 'Pending', 2, 28, NULL, NULL),
+(79, '2025-04-18 00:02:28', 3, 112.25, 'Paid', 1, 29, NULL, NULL),
+(73, '2025-04-17 23:36:07', 4, 72.25, 'Paid', 2, 27, NULL, NULL),
+(71, '2025-04-17 23:13:03', 4, 71.00, 'Paid', 3, 26, NULL, NULL),
+(77, '2025-04-17 23:37:58', 5, 105.50, 'Pending', 4, 28, NULL, NULL),
+(78, '2025-04-17 23:37:58', 5, 109.00, 'Pending', 6, 28, NULL, NULL),
+(85, '2025-04-18 00:04:31', 5, 98.25, 'Paid', 1, 30, NULL, NULL),
+(86, '2025-04-18 00:04:31', 5, 98.25, 'Pending', 2, 30, NULL, NULL),
+(87, '2025-04-18 00:04:31', 5, 97.00, 'Pending', 4, 30, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -166,7 +164,7 @@ INSERT INTO `program` (`program_id`, `program_date`, `is_highSeason`, `special_d
 (23, '2025-04-23', 0, '0'),
 (24, '2025-04-24', 0, '0'),
 (25, '2025-04-25', 0, '0'),
-(26, '2025-04-26', 0, '0'),
+(26, '2025-04-26', 0, '1'),
 (27, '2025-04-27', 1, '0'),
 (28, '2025-04-28', 0, '0'),
 (29, '2025-04-29', 0, '0'),
@@ -435,15 +433,15 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   PRIMARY KEY (`reservation_id`),
   KEY `program_id` (`program_id`),
   KEY `account_id` (`account_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `reservation`
 --
 
 INSERT INTO `reservation` (`reservation_id`, `adult_count`, `children_count`, `baby_count`, `dateReservation`, `program_id`, `account_id`) VALUES
-(5, 3, 2, 2, '2025-04-22', 1, 2),
-(8, 4, 2, 5, '2025-04-30', 1, 5);
+(30, 4, 1, 1, '2025-08-22', 1, 10),
+(28, 2, 3, 10, '2025-06-14', 1, 9);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
