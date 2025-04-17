@@ -9,16 +9,14 @@ import java.util.Locale;
 import java.util.List;
 import java.util.ArrayList;
 
-import DAO.DaoFactory;
-import DAO.ReservationDAO;
-import DAO.AttractionDAO;
-import DAO.OrdersDAOImpl;
+import DAO.*;
 import Model.AttractionModel;
 import Model.OrdersModel;
 import Model.PlanningModel;
 import Model.ReservationModel;
 import view.PlanningView;
 import view.PaymentView;
+
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
@@ -27,7 +25,7 @@ public class PlanningController {
     private YearMonth currentYearMonth;
     private List<PlanningModel> specialDays; // Liste des jours spéciaux
     private LocalDate lastClickedDate = null;
-    private Color lastClickedColor= null;
+    private Color lastClickedColor = null;
     private int lastClickedPrice = 0;
     private ReservationModel reservation;
     private ReservationDAO reservationDAO;
@@ -45,9 +43,8 @@ public class PlanningController {
 
         // Exemples de jours spéciaux pour la démonstration :
         // Par exemple, le 10 du mois courant en type 1 (vert), le 15 en type 2 (bleu) et le 20 en type 3 (violet)
-        specialDays.add(new PlanningModel(1, 1, LocalDate.parse("13/04/2025", formatter)));
-        specialDays.add(new PlanningModel(2, 2, LocalDate.parse("15/04/2025", formatter)));
-        specialDays.add(new PlanningModel(3, 3,  LocalDate.parse("18/04/2025", formatter)));
+        PlanningDAOImpl planningDAO = new PlanningDAOImpl(daoFactory);
+        specialDays = planningDAO.getAllPrograms();
 
         initController();
         updatePlanning();
@@ -85,7 +82,7 @@ public class PlanningController {
                 if (lastClickedDate != null && lastClickedPrice != 0) {
 
                     reservation.addReservationDate(lastClickedDate.format(formatter));
-                    reservation.addPrice((lastClickedPrice*reservation.getAdultCount())+(lastClickedPrice*reservation.getChildrenCount()*0.7));
+                    reservation.addPrice((lastClickedPrice * reservation.getAdultCount()) + (lastClickedPrice * reservation.getChildrenCount() * 0.7));
                     boolean inserted = reservationDAO.createReservation(reservation);
                     if (inserted) {
                         System.out.println("Réservation insérée avec succès. ID = " + reservation.getReservationId());
@@ -162,17 +159,39 @@ public class PlanningController {
                     } else if (view.getOption3().isSelected()) {
                         selectedOption = view.getOption3().getText();
                     }
+
                     if (!selectedOption.isEmpty()) {
-                        System.out.println("Choix sélectionné: " + selectedOption + " Jour sélectionné: " + lastClickedDate.format(formatter));
+                        // Appel DAO
+                        PlanningDAOImpl planningDAO = new PlanningDAOImpl(DaoFactory.getInstance("attractions_db", "root", ""));
+                        PlanningModel program = planningDAO.getProgramByDate(lastClickedDate);
+
+                        if (program != null) {
+                            boolean highSeason = view.getOption2().isSelected();
+                            boolean specialDay = view.getOption1().isSelected();
+
+                            boolean ok = planningDAO.updateProgramType(program.getId(), highSeason, specialDay);
+                            if (ok) {
+                                JOptionPane.showMessageDialog(view, "Le jour a été mis à jour !");
+                                //updatePlanning();
+                                view.dispose();  // Ferme la vue actuelle
+                                new PlanningView(1);
+                            } else {
+                                JOptionPane.showMessageDialog(view, "Erreur lors de la mise à jour.");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(view, "Aucun jour trouvé dans la BDD pour cette date.");
+                        }
                     } else {
-                        System.out.println("Aucune option n'a été sélectionnée.");
+                        JOptionPane.showMessageDialog(view, "Veuillez sélectionner un type de jour.");
                     }
+                } else {
+                    JOptionPane.showMessageDialog(view, "Veuillez d'abord cliquer sur un jour.");
                 }
             });
         }
     }
 
-    // Construit la grille du planning et colore les jours spéciaux
+
     private void drawPlanning() {
         view.clearPlanningPanel();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -187,76 +206,55 @@ public class PlanningController {
 
         // Détermine le jour de la semaine pour le premier jour du mois
         LocalDate firstOfMonth = currentYearMonth.atDay(1);
-        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // 1 = lundi, 7 = dimanche
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // 1 = lundi
 
-        // Ajoute des cases vides pour les jours précédant le 1er du mois
         for (int i = 1; i < dayOfWeek; i++) {
             view.addToPlanningPanel(new JLabel(""));
         }
 
-        // Ajoute chaque jour du mois dans la grille
         int daysInMonth = currentYearMonth.lengthOfMonth();
 
         for (int day = 1; day <= daysInMonth; day++) {
             final LocalDate currentDate = currentYearMonth.atDay(day);
             JLabel dayLabel = new JLabel(String.valueOf(day), SwingConstants.CENTER);
-
-            dayLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            dayLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
             if (lastClickedDate != null && currentDate.equals(lastClickedDate)) {
-                dayLabel.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
-                // Actualisation de la référence pour la dernière case cliquée (optionnel)
+                dayLabel.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
                 lastClickedDayLabel = dayLabel;
-            } else {
-                dayLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
             }
 
-
-
+            // Couleur en fonction des attributs en BDD
             PlanningModel planning = getPlanningByDate(currentDate);
+            dayLabel.setOpaque(true);
             if (planning != null) {
-                // Application de la couleur en fonction de la spécialité
-                switch (planning.getTypeDay()) {
-                    case 1:
-                        dayLabel.setOpaque(true);
-                        dayLabel.setBackground(new Color(234, 197, 4, 137));
-                        break;
-                    case 2:
-                        dayLabel.setOpaque(true);
-                        dayLabel.setBackground(new Color(218, 45, 4, 137));
-                        break;
-                    case 3:
-                        dayLabel.setOpaque(true);
-                        dayLabel.setBackground(new Color(72, 255, 255));
-                        break;
+                if (planning.isSpecialDay()) {
+                    dayLabel.setBackground(new Color(72, 255, 255)); // Violet - Jour spécial
+                } else if (planning.isHighSeason()) {
+                    dayLabel.setBackground(new Color(218, 45, 4, 137)); // Rouge - Haute saison
+                } else {
+                    dayLabel.setBackground(new Color(234, 197, 4, 137)); // Jaune - Basse saison
                 }
             } else {
-                // Jour normal : Couleur en fonction du weekend ou de la semaine
                 int dayOfWeekValue = currentDate.getDayOfWeek().getValue();
-                dayLabel.setOpaque(true);
-                if (dayOfWeekValue == 6 || dayOfWeekValue == 7) { // Weekend
-                    dayLabel.setBackground(new Color(218, 45, 4, 137));
-                } else { // Semaine
-                    dayLabel.setBackground(new Color(234, 197, 4, 137));
+                if (dayOfWeekValue == 6 || dayOfWeekValue == 7) {
+                    dayLabel.setBackground(new Color(218, 45, 4, 137)); // Week-end = haute saison par défaut
+                } else {
+                    dayLabel.setBackground(new Color(234, 197, 4, 137)); // Semaine = basse saison par défaut
                 }
             }
 
-
-
-            // Stocker la date et la couleur lors d'un clic
+            // Gestion du clic sur le jour
             dayLabel.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-
                     lastClickedDate = currentDate;
                     lastClickedColor = dayLabel.getBackground();
                     if (lastClickedColor.equals(new Color(234, 197, 4, 137))) {
                         lastClickedPrice = 20;
-                    }
-                    if (lastClickedColor.equals(new Color(218, 45, 4, 137))) {
+                    } else if (lastClickedColor.equals(new Color(218, 45, 4, 137))) {
                         lastClickedPrice = 25;
-                    }
-                    if (lastClickedColor.equals(new Color(72, 255, 255))) {
+                    } else if (lastClickedColor.equals(new Color(72, 255, 255))) {
                         lastClickedPrice = 40;
                     }
                     updatePlanning();
@@ -267,8 +265,8 @@ public class PlanningController {
         }
 
         view.refreshPlanningPanel();
-
     }
+
 
     // Retourne le PlanningModel correspondant à la date donnée (s'il existe)
     private PlanningModel getPlanningByDate(LocalDate date) {

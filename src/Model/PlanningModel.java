@@ -18,12 +18,33 @@ public class PlanningModel {
     int typeDay;
     // date du jour
     LocalDate date;
+    private boolean isHighSeason;
+    private boolean isSpecialDay;
 
-    public PlanningModel(int id, int typeDay, LocalDate date) {
+    public PlanningModel(int id, LocalDate date, boolean isHighSeason, boolean isSpecialDay) {
         this.id = id;
-        this.typeDay = typeDay;
         this.date = date;
+        this.isHighSeason = isHighSeason;
+        this.isSpecialDay = isSpecialDay;
+
+        // Automatiquement définir le typeDay en fonction des booléens
+        if (isSpecialDay) this.typeDay = 1;
+        else if (isHighSeason) this.typeDay = 2;
+        else this.typeDay = 3;
     }
+    //  Constructeur simplifié
+    public PlanningModel(int id, boolean isHighSeason, boolean isSpecialDay, LocalDate date) {
+        this.id = id;
+        this.isHighSeason = isHighSeason;
+        this.isSpecialDay = isSpecialDay;
+        this.date = date;
+
+        // Type de jour déterminé automatiquement
+        if (isSpecialDay) this.typeDay = 1;
+        else if (isHighSeason) this.typeDay = 2;
+        else this.typeDay = 3;
+    }
+
 
     /**
      * @author erelr
@@ -47,4 +68,28 @@ public class PlanningModel {
     public LocalDate getDate() {
         return date;
     }
+
+    public boolean isHighSeason() {
+        return isHighSeason;
+    }
+    public boolean isSpecialDay() {
+        return isSpecialDay;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setTypeDay(int typeDay) {
+        this.typeDay = typeDay;
+    }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+    public void setHighSeason(boolean highSeason) {
+        isHighSeason = highSeason;
+    }
+    public void setSpecialDay(boolean specialDay) {
+        isSpecialDay = specialDay;
+    }
+
 }
