@@ -1,6 +1,6 @@
 package toolbox;
 
-import Model.OrdersModel;
+import Model.Reservation.OrdersModel;
 
 import java.util.List;
 

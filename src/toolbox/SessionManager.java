@@ -1,5 +1,5 @@
 package toolbox;//Import des packages nécessaires
-import Model.ClientModel;
+import Model.Client.ClientModel;
 
 /**
  * Classe qui va gérer la connection ou non d'un utilisateur

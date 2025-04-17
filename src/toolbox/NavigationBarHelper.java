@@ -1,10 +1,10 @@
 package toolbox;
 
-import Model.ClientModel;
-import Model.OrdersModel;
-import view.LoginView;
-import view.AttractionView;
-import view.PaymentView;
+import Model.Client.ClientModel;
+import Model.Reservation.OrdersModel;
+import view.Connect.LoginView;
+import view.Attraction.AttractionView;
+import view.Reservation.PaymentView;
 
 import javax.swing.*;
 

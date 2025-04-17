@@ -1,4 +1,4 @@
-import view.AttractionView;
+import view.Attraction.AttractionView;
 
 public class Main {
     public static void main(String[] args) {
