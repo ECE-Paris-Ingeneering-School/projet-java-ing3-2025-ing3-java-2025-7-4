@@ -1,16 +1,13 @@
 package view.Client;
 
 import Model.Client.ClientModel;
-import toolbox.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ClientInfosView extends JFrame {
 
-    public ClientInfosView() {
-        ClientModel user = SessionManager.getCurrentUser();
-
+    public ClientInfosView(ClientModel user) {
         setTitle("Mes informations - Legendaria");
         setSize(800, 600);
         setLocationRelativeTo(null);

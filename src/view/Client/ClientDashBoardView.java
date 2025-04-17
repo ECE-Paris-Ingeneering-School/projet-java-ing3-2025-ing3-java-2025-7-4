@@ -1,26 +1,39 @@
+//Package
 package view.Client;
 
+
+//Import
+import DAO.DaoFactory;
+
+import Controller.Client.ClientController;
 import Controller.Reservation.PlanningController;
 import Controller.Stats.ReportingController;
-import DAO.DaoFactory;
+
+
 import Model.Client.ClientModel;
 import Model.Reservation.ReservationModel;
-import toolbox.SessionManager;
-import toolbox.NavigationBarHelper;
+
 import view.Attraction.AttractionAdminView;
-import toolbox.NavigationBar;
 import view.Reservation.PlanningView;
 import view.Reservation.ReservationListView;
 import view.Connect.UserManagementView;
+
+import toolbox.SessionManager;
+import toolbox.NavigationBarHelper;
+import toolbox.NavigationBar;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ClientDashBoardView extends JFrame {
 
+    private final ClientController controller;
+
     public ClientDashBoardView() {
         ClientModel user = SessionManager.getCurrentUser();
         boolean isAdmin = user != null && user.getAccountType() == 2;
+
+        controller = new ClientController(DaoFactory.getInstance("attractions_db", "root", ""));
 
         setTitle("Espace personnel - Legendaria");
         setSize(800, 600);
@@ -28,9 +41,7 @@ public class ClientDashBoardView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Ajout de la barre de navigation
         add(new NavigationBar("Espace personnel"), BorderLayout.NORTH);
-
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -44,7 +55,7 @@ public class ClientDashBoardView extends JFrame {
 
         JButton btnInfos = new JButton("Mes informations");
         btnInfos.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnInfos.addActionListener(e -> new ClientInfosView());
+        btnInfos.addActionListener(e -> new ClientInfosView(user)); // passe par constructeur
         panel.add(btnInfos);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
@@ -62,7 +73,6 @@ public class ClientDashBoardView extends JFrame {
             btnAttractions.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnAttractions.addActionListener(e -> {
                 dispose();
-                DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
                 new AttractionAdminView(user.getAccountType());
             });
             panel.add(btnAttractions);
@@ -77,27 +87,26 @@ public class ClientDashBoardView extends JFrame {
             panel.add(btnClients);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-
             JButton btnStats = new JButton("Afficher les statistiques");
             btnStats.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnStats.addActionListener(e -> {
                 dispose();
-                DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
-                ReportingController controller = new ReportingController(daoFactory.getOrdersDAO());
-                controller.afficherReporting();
+                ReportingController reporting = new ReportingController(
+                        DaoFactory.getInstance("attractions_db", "root", "").getOrdersDAO());
+                reporting.afficherReporting();
             });
             panel.add(btnStats);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
             JButton btnPlanning = new JButton("Gérer le planning");
             btnPlanning.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnPlanning.addActionListener(e -> {
-                PlanningView planningView = new PlanningView(1); // Vue en mode admin
-                new PlanningController(planningView,new ReservationModel(0,0,0,0,0,0,null));
+                PlanningView planningView = new PlanningView(1);
+                new PlanningController(planningView, new ReservationModel(0, 0, 0, 0, 0, 0, null));
                 planningView.setVisible(true);
             });
             panel.add(btnPlanning);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
-
         }
 
         JButton btnLogout = new JButton("Se déconnecter");
