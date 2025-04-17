@@ -197,7 +197,9 @@ public class PlanningController {
                                 JOptionPane.showMessageDialog(view, "Le jour a été mis à jour !");
                                 //updatePlanning();
                                 view.dispose();  // Ferme la vue actuelle
-                                new PlanningView(1);
+                                PlanningView newView = new PlanningView(1);
+                                new PlanningController(newView, new ReservationModel(0, 0, 0, 0, 0, 0, null));
+                                newView.setVisible(true);
                             } else {
                                 JOptionPane.showMessageDialog(view, "Erreur lors de la mise à jour.");
                             }
