@@ -7,6 +7,7 @@ import Model.Client.ClientModel;
 import toolbox.SessionManager;
 import toolbox.NavigationBarHelper;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,14 +52,11 @@ public class LoginView extends JFrame {
         formPanel.add(loginButton);
         formPanel.add(goToRegisterButton);
 
-        // ===== Footer =====
-        JLabel footer = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
-        footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
         // ===== NavigationBar (avec logo et bouton compte) =====
         panel.add(new NavigationBar("Legendaria"), BorderLayout.NORTH);
         panel.add(formPanel, BorderLayout.CENTER);
-        panel.add(footer, BorderLayout.SOUTH);
+        panel.add(new FooterBar(), BorderLayout.SOUTH);
 
         add(panel);
         setVisible(true);

@@ -3,6 +3,7 @@ package view.Reservation;
 import Model.Attraction.AttractionModel;
 import Model.Client.ClientModel;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,6 +90,7 @@ public class ReservationView extends JFrame {
 
         // Ajout du panneau principal à la fenêtre
         add(mainPanel,BorderLayout.CENTER);
+        add(new FooterBar(), BorderLayout.SOUTH);
         setVisible(true);
     }
     public void setAttraction(AttractionModel attractionModel) {

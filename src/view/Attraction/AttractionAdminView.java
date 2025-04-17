@@ -6,6 +6,7 @@ import DAO.DaoFactory;
 import Controller.Attraction.AttractionController;
 import Model.Attraction.AttractionModel;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import java.util.Map;
 import java.util.List;
@@ -67,6 +68,8 @@ public class AttractionAdminView extends JFrame {
 
         add(new NavigationBar("Gestion des Attractions"), BorderLayout.NORTH);
         add(bottomPanel, BorderLayout.SOUTH);
+        add(new FooterBar(), BorderLayout.SOUTH);
+
 
         setVisible(true);
     }

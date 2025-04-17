@@ -13,6 +13,7 @@ import Controller.Stats.StatsController;
 import Model.Client.ClientModel;
 import Model.Reservation.ReservationModel;
 
+import view.Assets.FooterBar;
 import view.Attraction.AttractionAdminView;
 import view.Reservation.PlanningView;
 import view.Reservation.ReservationListView;
@@ -119,6 +120,7 @@ public class ClientDashBoardView extends JFrame {
 
         panel.add(btnLogout);
         add(panel);
+        add(new FooterBar(),BorderLayout.SOUTH);
         setVisible(true);
     }
 }

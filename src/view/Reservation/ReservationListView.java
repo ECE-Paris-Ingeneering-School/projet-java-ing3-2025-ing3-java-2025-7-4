@@ -10,6 +10,7 @@ import Model.Reservation.OrdersModel;
 import toolbox.SessionManager;
 import Model.Client.ClientModel;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +25,6 @@ public class ReservationListView extends JFrame {
     private OrdersDAOImpl ordersDAO;
 
     public ReservationListView() {
-        ReservationListController controller = new ReservationListController(this, reservationDAO, ordersDAO, model);
 
         setTitle("Liste des réservations");
         setSize(1000, 600);
@@ -38,9 +38,9 @@ public class ReservationListView extends JFrame {
         reservationDAO = new ReservationDAO(daoFactory);
         ordersDAO = new OrdersDAOImpl(daoFactory);
 
-        model = new DefaultTableModel(new Object[]{
-                "ID", "ClientID", "ProgrammeID", "Adultes", "Enfants", "Bébés", "Date", "Total", "Statut"
-        }, 0);
+        model = new DefaultTableModel(new Object[]{"ID", "ClientID", "ProgrammeID", "Adultes", "Enfants", "Bébés", "Date", "Total", "Statut"}, 0);
+
+        ReservationListController controller = new ReservationListController(this, reservationDAO, ordersDAO, model);
 
         table = new JTable(model);
         controller.loadReservations();
@@ -82,6 +82,7 @@ public class ReservationListView extends JFrame {
         bottomPanel.add(deleteButton);
         bottomPanel.add(payButton);
         add(bottomPanel, BorderLayout.SOUTH);
+        add(new FooterBar(), BorderLayout.SOUTH);
 
         setVisible(true);
     }

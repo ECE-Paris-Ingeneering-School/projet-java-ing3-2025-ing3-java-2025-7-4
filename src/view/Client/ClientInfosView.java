@@ -1,6 +1,7 @@
 package view.Client;
 
 import Model.Client.ClientModel;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,8 +38,9 @@ public class ClientInfosView extends JFrame {
         retourBtn.addActionListener(e -> dispose());
 
         panel.add(retourBtn);
-
+        panel.add(new FooterBar(), BorderLayout.SOUTH);
         add(panel);
+
         setVisible(true);
     }
 }

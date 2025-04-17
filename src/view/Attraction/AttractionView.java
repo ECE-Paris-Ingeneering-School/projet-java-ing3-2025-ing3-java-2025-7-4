@@ -11,6 +11,7 @@ import Controller.Reservation.ReservationController;
 import Model.Attraction.AttractionModel;
 import Model.Client.ClientModel;
 
+import view.Assets.FooterBar;
 import view.Connect.LoginView;
 import view.Reservation.ReservationView;
 
@@ -48,6 +49,7 @@ public class AttractionView extends JFrame {
 
         // ✅ PANEL PRINCIPAL
         add(mainPanel, BorderLayout.CENTER);
+        add(new FooterBar(),BorderLayout.SOUTH);
 
         buildAccueilPanel();
         buildDetailPanel();
@@ -85,12 +87,9 @@ public class AttractionView extends JFrame {
             grid.add(card);
         }
 
-        JLabel credits = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
-        credits.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
         accueilPanel.add(grid, BorderLayout.CENTER);
-        accueilPanel.add(credits, BorderLayout.SOUTH);
         mainPanel.add(accueilPanel, "accueil");
+        add(new FooterBar(),BorderLayout.SOUTH);
     }
 
     private void buildDetailPanel() {
@@ -151,11 +150,10 @@ public class AttractionView extends JFrame {
         content.add(Box.createRigidArea(new Dimension(0, 15)));
         content.add(reserver);
 
-        JLabel credits = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
-        credits.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
 
         detailPanel.add(content, BorderLayout.CENTER);
-        detailPanel.add(credits, BorderLayout.SOUTH);
+
         mainPanel.add(detailPanel, "detail");
         setVisible(true);
     }

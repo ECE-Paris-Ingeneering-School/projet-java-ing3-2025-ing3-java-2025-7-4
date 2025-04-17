@@ -4,6 +4,7 @@ import DAO.Client.ClientDAO;
 import DAO.DaoFactory;
 import Model.Client.ClientModel;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -73,6 +74,7 @@ public class UserManagementView extends JFrame {
         bottomPanel.add(deleteButton);
         bottomPanel.add(btnChangeRole);
         add(bottomPanel, BorderLayout.SOUTH);
+        add(new FooterBar(), BorderLayout.SOUTH);
 
         setVisible(true);
     }

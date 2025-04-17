@@ -22,8 +22,4 @@ public class NavigationBarHelper {
         new AttractionView();
     }
 
-    public static void openPaymentView(JFrame from, OrdersModel order) {
-        if (from != null) from.dispose();
-        new PaymentView(order); // on modifie la classe tout de suite après pour virer les params inutiles
-    }
 }

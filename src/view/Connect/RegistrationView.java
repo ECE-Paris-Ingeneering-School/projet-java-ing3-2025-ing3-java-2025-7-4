@@ -2,6 +2,7 @@ package view.Connect;
 
 import Controller.Connect.RegistrationController;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,13 +77,11 @@ public class RegistrationView extends JFrame {
         formPanel.add(registerButton);
         formPanel.add(backToLoginButton);
 
-        // ===== Footer =====
-        JLabel footer = new JLabel("© Legendaria - Projet Java 2025", SwingConstants.CENTER);
-        footer.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
 
         panel.add(new NavigationBar("Legendaria"), BorderLayout.NORTH);
         panel.add(formPanel, BorderLayout.CENTER);
-        panel.add(footer, BorderLayout.SOUTH);
+        panel.add(new FooterBar(), BorderLayout.SOUTH);
 
         add(panel);
         setVisible(true);

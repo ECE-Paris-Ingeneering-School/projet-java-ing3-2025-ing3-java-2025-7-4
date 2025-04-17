@@ -7,6 +7,7 @@ import Model.Reservation.OrdersModel;
 import toolbox.SessionManager;
 import toolbox.NavigationBarHelper;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,6 +89,7 @@ public class PaymentView extends JFrame {
 
             add(contentPanel, BorderLayout.CENTER);
             add(footer, BorderLayout.SOUTH);
+            add(new FooterBar(), BorderLayout.SOUTH);
 
             setLocationRelativeTo(null);
             setVisible(true);

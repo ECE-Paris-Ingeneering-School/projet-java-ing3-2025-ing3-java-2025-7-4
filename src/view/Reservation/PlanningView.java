@@ -2,6 +2,7 @@ package view.Reservation;
 
 import Model.Reservation.ReservationModel;
 import toolbox.NavigationBar;
+import view.Assets.FooterBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -122,6 +123,7 @@ public class PlanningView extends JFrame {
             validateButton2.setBackground(Color.GREEN);
             validateButton2.setBounds((width / 2) - 100, 500, 200, 40);
             add(validateButton2);
+            add(new FooterBar(), BorderLayout.SOUTH);
         }
 
         setLocationRelativeTo(null);
