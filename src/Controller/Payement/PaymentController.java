@@ -4,8 +4,9 @@ package Controller.Payement;
 
 import DAO.Reservation.OrdersDAOImpl;
 import Model.Reservation.OrdersModel;
+import toolbox.NavigationBarHelper;
+import toolbox.SessionManager;
 import view.Reservation.PaymentView;
-
 
 
 // Contrôleur PaymentController.java
@@ -22,19 +23,6 @@ public class PaymentController {
         this.orderDAO = orderDAO;
     }
 
-    /**
-     * Méthode pour effectuer un payement d'une commande déja présente dans la base de donnée
-     *
-     * @param orderId identifiant de la commande
-     */
-    public void effectuerPaiement(int orderId) {
-        OrdersModel orderToPay = orderDAO.getOrderById(orderId);
-        if (orderToPay != null) {
-            new PaymentView(orderToPay); // appel simplifié
-        } else {
-            System.out.println("Commande introuvable.");
-        }
-    }
 
     /**
      * Méthode pour valider le payement (en fonction du nom et des chiffres sur la carte)
@@ -85,4 +73,9 @@ public class PaymentController {
         boolean ok = orderDAO.updateOrderStatus(order.getOrderId(), nouveauStatut);
         if (ok) order.setStatus(nouveauStatut);
     }
+
+    public void terminerPaiementAvecSucces() {
+        NavigationBarHelper.openAttractionView(null, SessionManager.getCurrentUser());
+    }
+
 }
