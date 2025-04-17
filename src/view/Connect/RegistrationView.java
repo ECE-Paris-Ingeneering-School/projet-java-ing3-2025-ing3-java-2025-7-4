@@ -22,8 +22,8 @@ public class RegistrationView extends JFrame {
     private JButton backToLoginButton;
     private RegistrationController controller;
 
-    public RegistrationView() {
-        controller = new RegistrationController();
+    public RegistrationView(RegistrationController controller) {
+        this.controller = controller;
 
         setTitle("Création de compte - Legendaria");
         setSize(800, 600);

@@ -7,7 +7,7 @@ import DAO.DaoFactory;
 
 import Controller.Client.ClientController;
 import Controller.Reservation.PlanningController;
-import Controller.Stats.ReportingController;
+import Controller.Stats.StatsController;
 
 
 import Model.Client.ClientModel;
@@ -91,9 +91,9 @@ public class ClientDashBoardView extends JFrame {
             btnStats.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnStats.addActionListener(e -> {
                 dispose();
-                ReportingController reporting = new ReportingController(
+                StatsController reporting = new StatsController(
                         DaoFactory.getInstance("attractions_db", "root", "").getOrdersDAO());
-                reporting.afficherReporting();
+                reporting.displayStats();
             });
             panel.add(btnStats);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));

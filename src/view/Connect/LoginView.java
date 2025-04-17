@@ -2,6 +2,7 @@
 package view.Connect;
 
 import Controller.Connect.LoginController;
+import Controller.Connect.RegistrationController;
 import Model.Client.ClientModel;
 import toolbox.SessionManager;
 import toolbox.NavigationBarHelper;
@@ -72,6 +73,7 @@ public class LoginView extends JFrame {
                     "password", password
             ));
 
+
             if (!isAuthenticated) {
                 JOptionPane.showMessageDialog(this,
                         "Identifiants incorrects, connexion échouée.",
@@ -81,6 +83,11 @@ public class LoginView extends JFrame {
                 NavigationBarHelper.openAttractionView(this, controller.getCurrentUser());
             }
         });
+        goToRegisterButton.addActionListener(e -> {
+            dispose();
+            new RegistrationView(new RegistrationController());
+        });
+
 
     }
 }
