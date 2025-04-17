@@ -1,16 +1,17 @@
-// ======================= ATTRACTION ADMIN VIEW =======================
+//Package
 package view.Attraction;
 
-import Controller.Attraction.AttractionController;
+//Import nécessaire
 import DAO.DaoFactory;
+import Controller.Attraction.AttractionController;
 import Model.Attraction.AttractionModel;
 import toolbox.NavigationBar;
 
+import java.util.Map;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.List;
-import java.util.Map;
 
 public class AttractionAdminView extends JFrame {
     private AttractionController controller;
@@ -82,36 +83,41 @@ public class AttractionAdminView extends JFrame {
     }
 
     private void showAddDialog() {
-        JTextField nomField = new JTextField();
+        JTextField nameField = new JTextField();
         JTextField descField = new JTextField();
         JTextField typeField = new JTextField();
-        JTextField videoField = new JTextField();
         JTextField imageField = new JTextField();
-        JTextField prixField = new JTextField();
+        JTextField priceField = new JTextField();
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        panel.add(new JLabel("Nom:")); panel.add(nomField);
+        panel.add(new JLabel("Nom:")); panel.add(nameField);
         panel.add(new JLabel("Description:")); panel.add(descField);
         panel.add(new JLabel("Type de public:")); panel.add(typeField);
-        panel.add(new JLabel("Chemin vidéo:")); panel.add(videoField);
         panel.add(new JLabel("Chemin image:")); panel.add(imageField);
-        panel.add(new JLabel("Prix:")); panel.add(prixField);
+        panel.add(new JLabel("Prix:")); panel.add(priceField);
 
         int result = JOptionPane.showConfirmDialog(this, panel, "Ajouter une attraction",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            controller.createAttra(Map.of(
-                    "nom", nomField.getText(),
-                    "description", descField.getText(),
-                    "typePers", typeField.getText(),
-                    "video", videoField.getText(),
-                    "image", imageField.getText(),
-                    "prix", Float.parseFloat(prixField.getText())
-            ));
-            loadAttractions();
+            try {
+                double prix = Double.parseDouble(priceField.getText());
+
+                controller.createAttra(Map.of(
+                        "name", nameField.getText(),
+                        "description", descField.getText(),
+                        "person_type", typeField.getText(),
+                        "image_path", imageField.getText(),
+                        "price", prix
+                ));
+
+                loadAttractions();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Le prix doit être un nombre valide.");
+            }
         }
     }
+
 
     private void showEditDialog() {
         int row = table.getSelectedRow();
@@ -147,14 +153,14 @@ public class AttractionAdminView extends JFrame {
 
         if (result == JOptionPane.OK_OPTION) {
             controller.updateAttra(Map.of(
-                    "id", tableModel.getValueAt(row, 0),
-                    "nom", nomField.getText(),
+                    "attraction_id", tableModel.getValueAt(row, 0),
+                    "name", nomField.getText(),
                     "description", descField.getText(),
-                    "typePers", typeField.getText(),
-                    "video", videoField.getText(),
-                    "image", imageField.getText(),
-                    "prix", Float.parseFloat(prixField.getText())
+                    "person_type", typeField.getText(),
+                    "image_path", imageField.getText(),
+                    "price", Double.parseDouble(prixField.getText())
             ));
+
             loadAttractions();
         }
     }

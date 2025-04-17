@@ -1,14 +1,22 @@
+//Packages
 package view.Attraction;
+
+//Import nécessaire
+
+import DAO.DaoFactory;
 
 import Controller.Attraction.AttractionController;
 import Controller.Reservation.ReservationController;
-import DAO.DaoFactory;
+
 import Model.Attraction.AttractionModel;
 import Model.Client.ClientModel;
-import toolbox.SessionManager;
+
 import view.Connect.LoginView;
-import toolbox.NavigationBar;
 import view.Reservation.ReservationView;
+
+import toolbox.SessionManager;
+import toolbox.NavigationBar;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,6 +72,10 @@ public class AttractionView extends JFrame {
                     showDetail(attraction);
                     if (attraction.getName().equalsIgnoreCase("Dragon")) playSound("rugissement.wav");
                     if (attraction.getName().equalsIgnoreCase("Zeus")) playSound("eclair.wav");
+                    if (attraction.getName().equalsIgnoreCase("Carroussel")) playSound("carrousel.wav");
+                    if (attraction.getName().equalsIgnoreCase("Meduse Express")) playSound("meduse.wav");
+                    if (attraction.getName().equalsIgnoreCase("Par Isis")) playSound("isis.wav");
+                    if (attraction.getName().equalsIgnoreCase("Belenos")) playSound("belenos.wav");
                 }
             });
 
@@ -109,16 +121,7 @@ public class AttractionView extends JFrame {
             ClientModel user = SessionManager.getCurrentUser();
 
             if (user == null) {
-                int choix = JOptionPane.showOptionDialog(
-                        this,
-                        "Souhaitez-vous vous connecter pour retrouver votre réservation plus tard ?",
-                        "Réservation en invité",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        new String[]{"Se connecter", "Continuer en invité"},
-                        "Se connecter"
-                );
+                int choix = JOptionPane.showOptionDialog(this, "Souhaitez-vous vous connecter pour retrouver votre réservation plus tard ?", "Réservation en invité", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Se connecter", "Continuer en invité"}, "Se connecter");
 
                 if (choix == JOptionPane.YES_OPTION) {
                     dispose();
@@ -165,7 +168,5 @@ public class AttractionView extends JFrame {
         cardLayout.show(mainPanel, "detail");
         this.attractionCourante = attraction;
     }
-
-
 }
 
