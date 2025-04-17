@@ -1,8 +1,10 @@
 package view;
 
+import Controller.PlanningController;
 import Controller.ReportingController;
 import DAO.DaoFactory;
 import Model.ClientModel;
+import Model.ReservationModel;
 import toolbox.SessionManager;
 import toolbox.NavigationBarHelper;
 
@@ -85,6 +87,7 @@ public class ClientDashBoardView extends JFrame {
             btnPlanning.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnPlanning.addActionListener(e -> {
                 PlanningView planningView = new PlanningView(1); // Vue en mode admin
+                new PlanningController(planningView,new ReservationModel(0,0,0,0,0,0,null));
                 planningView.setVisible(true);
             });
             panel.add(btnPlanning);
