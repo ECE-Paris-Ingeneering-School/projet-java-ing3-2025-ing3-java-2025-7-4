@@ -6,7 +6,6 @@ import Model.Client.ClientModel;
 import toolbox.SessionManager;
 import toolbox.NavigationBarHelper;
 import toolbox.NavigationBar;
-import view.Reservation.RegistrationView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,25 +67,20 @@ public class LoginView extends JFrame {
             String email = emailField.getText();
             String password = new String(passwordField.getPassword());
 
-            ClientModel client = controller.attemptLogin(Map.of(
+            boolean isAuthenticated = controller.handleLogin(Map.of(
                     "email", email,
                     "password", password
             ));
 
-            if (client.getId() == 7) {
+            if (!isAuthenticated) {
                 JOptionPane.showMessageDialog(this,
-                        "Identifiants mauvais, pas de connexion possible",
-                        "Échec", JOptionPane.WARNING_MESSAGE);
+                        "Identifiants incorrects, connexion échouée.",
+                        "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
             } else {
-                SessionManager.setCurrentUser(client);
-                NavigationBarHelper.openAttractionView(this, client);
+                dispose();
+                NavigationBarHelper.openAttractionView(this, controller.getCurrentUser());
             }
         });
 
-        // Bouton pour l'inscription
-        goToRegisterButton.addActionListener(e -> {
-            dispose();
-            new RegistrationView();
-        });
     }
 }

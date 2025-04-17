@@ -2,12 +2,10 @@ package Controller.Connect;
 
 import DAO.Connect.LoginDAO;
 import Model.Client.ClientModel;
+import toolbox.SessionManager;
 
 import java.util.Map;
 
-/**
- * Contrôleur de connexion.
- */
 public class LoginController {
 
     private final LoginDAO dao;
@@ -17,13 +15,24 @@ public class LoginController {
     }
 
     /**
-     * Authentifie un utilisateur à partir d'une Map d'infos (email, password).
-     * @param credentials map des infos
-     * @return un ClientModel correspondant ou invité
+     * Tente une connexion utilisateur.
+     * Si réussite, stocke l'utilisateur dans la session et renvoie true.
+     * Sinon, renvoie false.
      */
-    public ClientModel attemptLogin(Map<String, String> credentials) {
+    public boolean handleLogin(Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
-        return dao.authenticate(email, password);
+        ClientModel client = dao.authenticate(email, password);
+
+        if (client == null || client.getId() == 7) {
+            return false;
+        }
+
+        SessionManager.setCurrentUser(client);
+        return true;
+    }
+
+    public ClientModel getCurrentUser() {
+        return SessionManager.getCurrentUser();
     }
 }
