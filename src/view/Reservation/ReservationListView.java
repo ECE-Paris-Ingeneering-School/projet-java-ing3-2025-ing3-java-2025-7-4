@@ -1,6 +1,7 @@
 package view.Reservation;
 
 import Controller.Payement.PaymentController;
+import Controller.Reservation.ReservationListController;
 import DAO.DaoFactory;
 import DAO.Reservation.ReservationDAO;
 import DAO.Reservation.OrdersDAOImpl;
@@ -23,6 +24,8 @@ public class ReservationListView extends JFrame {
     private OrdersDAOImpl ordersDAO;
 
     public ReservationListView() {
+        ReservationListController controller = new ReservationListController(this, reservationDAO, ordersDAO, model);
+
         setTitle("Liste des réservations");
         setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -40,7 +43,7 @@ public class ReservationListView extends JFrame {
         }, 0);
 
         table = new JTable(model);
-        loadReservations();
+        controller.loadReservations();
 
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -50,42 +53,30 @@ public class ReservationListView extends JFrame {
             int selectedRow = table.getSelectedRow();
             if (selectedRow >= 0) {
                 int reservationId = (int) model.getValueAt(selectedRow, 0);
-                boolean ok = reservationDAO.deleteReservationById(reservationId);
-                if (ok) {
-                    JOptionPane.showMessageDialog(this, "Réservation supprimée.");
-                    loadReservations();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erreur lors de la suppression.");
-                }
+                controller.deleteReservation(reservationId);
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner une réservation.");
             }
         });
 
+
         JButton payButton = new JButton("Payer la réservation");
         payButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow >= 0) {
-                String status = (String) model.getValueAt(selectedRow, 8); // Colonne "Statut"
+                String status = (String) model.getValueAt(selectedRow, 8);
                 if ("Paid".equalsIgnoreCase(status)) {
                     JOptionPane.showMessageDialog(this, "Cette réservation est déjà payée.");
                     return;
                 }
 
                 int reservationId = (int) model.getValueAt(selectedRow, 0);
-                List<OrdersModel> commandes = ordersDAO.getOrdersByReservationId(reservationId);
-
-                if (commandes.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Aucune commande associée à cette réservation.");
-                } else {
-                    dispose();
-                    PaymentController paymentController = new PaymentController(ordersDAO);
-                    new PaymentView(commandes.get(0),paymentController);
-                }
+                controller.payerReservation(reservationId);
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner une réservation.");
             }
         });
+
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(deleteButton);
@@ -93,33 +84,6 @@ public class ReservationListView extends JFrame {
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
-    }
-
-    public void loadReservations() {
-        model.setRowCount(0);
-        ClientModel user = SessionManager.getCurrentUser();
-        List<ReservationModel> reservations = reservationDAO.getAllReservations();
-
-        for (ReservationModel r : reservations) {
-            if (user.getAccountType() != 2 && r.getAccountId() != user.getId()) {
-                continue; // Ignore les réservations qui ne sont pas à lui
-            }
-
-            float total = ordersDAO.getTotalPriceByReservationId(r.getReservationId());
-            String status = ordersDAO.getStatusByReservationId(r.getReservationId());
-
-            model.addRow(new Object[]{
-                    r.getReservationId(),
-                    r.getAccountId(),
-                    r.getProgramId(),
-                    r.getAdultCount(),
-                    r.getChildrenCount(),
-                    r.getBabyCount(),
-                    r.getDateReservation(),
-                    total,
-                    status
-            });
-        }
     }
 }
 

@@ -87,7 +87,7 @@ public class PlanningController {
                 if (lastClickedDate != null && lastClickedPrice != 0) {
 
                     reservation.addReservationDate(lastClickedDate.format(formatter));
-                    reservation.addPrice((lastClickedPrice * reservation.getAdultCount()) + (lastClickedPrice * reservation.getChildrenCount() * 0.7));
+                    reservation.setPrice((lastClickedPrice * reservation.getAdultCount()) + (lastClickedPrice * reservation.getChildrenCount() * 0.7));
                     boolean inserted = reservationDAO.createReservation(reservation);
                     if (inserted) {
                         System.out.println("Réservation insérée avec succès. ID = " + reservation.getReservationId());

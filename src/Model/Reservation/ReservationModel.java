@@ -12,8 +12,8 @@ public class ReservationModel {
     private LocalDate dateReservation;
     private double price;
 
-    public ReservationModel(int reservationId,int accountId, int programId, int adultCount, int childrenCount, int babyCount, LocalDate dateReservation) {
-        this.reservationId=reservationId;
+    public ReservationModel(int reservationId, int accountId, int programId, int adultCount, int childrenCount, int babyCount, LocalDate dateReservation) {
+        this.reservationId = reservationId;
         this.accountId = accountId;
         this.programId = programId;
         this.adultCount = adultCount;
@@ -58,9 +58,10 @@ public class ReservationModel {
         this.dateReservation = LocalDate.parse(reservationDate, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
-    public void addPrice(double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
+
     public double getPrice() {
         return this.price;
     }
