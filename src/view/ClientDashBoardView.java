@@ -43,7 +43,7 @@ public class ClientDashBoardView extends JFrame {
 
         JButton btnRDV = new JButton("Voir mes rendez-vous");
         btnRDV.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnRDV.addActionListener(e -> JOptionPane.showMessageDialog(this, "Affichage des rendez-vous (non implémenté)."));
+        btnRDV.addActionListener(e -> new ReservationListView());
         panel.add(btnRDV);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 

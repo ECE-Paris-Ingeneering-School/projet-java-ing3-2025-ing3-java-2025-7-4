@@ -73,7 +73,7 @@ public class ReservationDAO {
 
         return list;
     }
-    public List<ReservationModel> getReservationsByClient(int accountId) {
+    public List<ReservationModel> getReservationsByUserId(int accountId) {
         List<ReservationModel> list = new ArrayList<>();
         String sql = "SELECT * FROM reservation WHERE account_id = ?";
 
@@ -117,6 +117,21 @@ public class ReservationDAO {
         }
 
         return false;
+    }
+    public boolean deleteReservationById(int id) {
+        String sql = "DELETE FROM reservation WHERE reservation_id = ?";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
