@@ -1,7 +1,6 @@
-package view.Reservation;
+package view.Connect;
 
 import Controller.Connect.RegistrationController;
-import view.Connect.LoginView;
 import toolbox.NavigationBar;
 
 import javax.swing.*;
@@ -88,24 +87,24 @@ public class RegistrationView extends JFrame {
         add(panel);
         setVisible(true);
 
-        // Action: créer un compte
         registerButton.addActionListener(e -> {
-            String firstname = firstnameField.getText();
-            String surname = surnameField.getText();
-            String birthdate = birthdateField.getText(); // ex: 2003-05-12
-            String email = emailField.getText();
-            String password = new String(passwordField.getPassword());
-            String ageText = ageField.getText();
+            String firstname = firstnameField.getText().trim();
+            String surname = surnameField.getText().trim();
+            String birthdate = birthdateField.getText().trim();
+            String email = emailField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+            String ageText = ageField.getText().trim();
 
-            if (firstname.isBlank() || surname.isBlank() || birthdate.isBlank()
-                    || email.isBlank() || password.isBlank() || ageText.isBlank()) {
+            if (firstname.isEmpty() || surname.isEmpty() || birthdate.isEmpty()
+                    || email.isEmpty() || password.isEmpty() || ageText.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.");
                 return;
             }
 
             try {
                 int age = Integer.parseInt(ageText);
-                boolean created = controller.registerNewClient(Map.of(
+
+                RegistrationController.RegistrationResult result = controller.handleRegistration(Map.of(
                         "firstname", firstname,
                         "surname", surname,
                         "birthdate", birthdate,
@@ -114,27 +113,24 @@ public class RegistrationView extends JFrame {
                         "age", String.valueOf(age)
                 ));
 
-                if (created) {
-                    JOptionPane.showMessageDialog(this, "Compte créé avec succès !");
-                    dispose();
-                    new LoginView();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Email déjà utilisé. Choisissez un autre.",
+                switch (result) {
+                    case SUCCESS -> {
+                        JOptionPane.showMessageDialog(this, "Compte créé avec succès !");
+                        dispose();
+                        new LoginView();
+                    }
+                    case EMAIL_EXISTS -> JOptionPane.showMessageDialog(this,
+                            "Email déjà utilisé. Choisissez un autre.",
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                    case ERROR -> JOptionPane.showMessageDialog(this,
+                            "Une erreur est survenue. Veuillez réessayer plus tard.",
                             "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "L'âge doit être un nombre entier.");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage(),
-                        "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        // Bouton retour
-        backToLoginButton.addActionListener(e -> {
-            dispose();
-            new LoginView();
-        });
     }
 }
