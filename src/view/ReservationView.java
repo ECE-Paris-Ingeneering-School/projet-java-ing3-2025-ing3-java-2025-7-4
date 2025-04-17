@@ -21,6 +21,9 @@ public class ReservationView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        add(new NavigationBar("Réservation"), BorderLayout.NORTH);
+
 
         // Panneau principal avec GridBagLayout pour gérer la disposition
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -84,7 +87,7 @@ public class ReservationView extends JFrame {
         add(validateButton);
 
         // Ajout du panneau principal à la fenêtre
-        add(mainPanel);
+        add(mainPanel,BorderLayout.CENTER);
         setVisible(true);
     }
     public void setAttraction(AttractionModel attractionModel) {

@@ -106,10 +106,30 @@ public class AttractionView extends JFrame {
         reserver.setForeground(Color.WHITE);
         reserver.addActionListener(e -> {
             ClientModel user = SessionManager.getCurrentUser();
+
             if (user == null) {
-                JOptionPane.showMessageDialog(this, "Vous devez être connecté pour réserver.");
-                return;
+                int choix = JOptionPane.showOptionDialog(
+                        this,
+                        "Souhaitez-vous vous connecter pour retrouver votre réservation plus tard ?",
+                        "Réservation en invité",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new String[]{"Se connecter", "Continuer en invité"},
+                        "Se connecter"
+                );
+
+                if (choix == JOptionPane.YES_OPTION) {
+                    dispose();
+                    new LoginView(); // ou NavigationBarHelper.openLoginView(this);
+                    return;
+                }
+
+                // Sinon : continuer en invité
+                user = SessionManager.createGuestUser();
+                SessionManager.setCurrentUser(user);
             }
+
             ReservationView reservationView = new ReservationView();
             reservationView.setAttraction(attractionCourante);
             reservationView.setClient(user);

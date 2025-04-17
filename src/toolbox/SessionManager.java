@@ -43,6 +43,23 @@ public class SessionManager {
     }
 
     /**
+     *
+     * @return ClientModel , un objet client invité
+     */
+    public static ClientModel createGuestUser() {
+        return new ClientModel(
+                0,                  // ID fictif ou réservé en BDD pour "invité"
+                0,                  // accountType = 0 → invité
+                "Invité",          // prénom
+                "",                // nom
+                0,                 // âge
+                null,              // date de naissance
+                "guest@legendaria.com",
+                ""                 // mot de passe vide
+        );
+    }
+
+    /**
      * Permet de se déconnecter
      */
     public static void logout() {

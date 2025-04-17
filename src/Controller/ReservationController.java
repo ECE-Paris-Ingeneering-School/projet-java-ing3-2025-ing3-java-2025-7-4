@@ -20,11 +20,6 @@ public class ReservationController {
     private void initController() {
         view.getValidateButton().addActionListener(e -> {
             ClientModel user = SessionManager.getCurrentUser();
-            if (user == null) {
-                JOptionPane.showMessageDialog(view, "Vous devez être connecté pour effectuer une réservation.");
-                return;
-            }
-
             int nbAdulte = (Integer) view.getAdultsBox().getSelectedItem();
             int nbEnfant = (Integer) view.getChildrenBox().getSelectedItem();
             int nbBebe = (Integer) view.getBabiesBox().getSelectedItem();
