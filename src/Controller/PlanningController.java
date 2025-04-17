@@ -8,10 +8,19 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.List;
 import java.util.ArrayList;
+
+import DAO.DaoFactory;
+import DAO.ReservationDAO;
+import DAO.AttractionDAO;
+import DAO.OrdersDAOImpl;
+import Model.AttractionModel;
+import Model.OrdersModel;
 import Model.PlanningModel;
 import Model.ReservationModel;
 import view.PlanningView;
+import view.PaymentView;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class PlanningController {
     private PlanningView view;
@@ -21,11 +30,14 @@ public class PlanningController {
     private Color lastClickedColor= null;
     private int lastClickedPrice = 0;
     private ReservationModel reservation;
+    private ReservationDAO reservationDAO;
     private JLabel lastClickedDayLabel = null;
 
     public PlanningController(PlanningView view, ReservationModel reservation) {
         this.reservation = reservation;
         this.view = view;
+        DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
+        reservationDAO = new ReservationDAO(daoFactory);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         // Initialisation sur le mois en cours
         currentYearMonth = YearMonth.now();
@@ -74,6 +86,58 @@ public class PlanningController {
 
                     reservation.addReservationDate(lastClickedDate.format(formatter));
                     reservation.addPrice((lastClickedPrice*reservation.getAdultCount())+(lastClickedPrice*reservation.getChildrenCount()*0.7));
+                    boolean inserted = reservationDAO.createReservation(reservation);
+                    if (inserted) {
+                        System.out.println("Réservation insérée avec succès. ID = " + reservation.getReservationId());
+                        AttractionDAO attractionDAO = new AttractionDAO(DaoFactory.getInstance("attractions_db", "root", ""));
+                        OrdersDAOImpl ordersDAO = new OrdersDAOImpl(DaoFactory.getInstance("attractions_db", "root", ""));
+                        PaymentController controller = new PaymentController(ordersDAO);
+
+                        List<AttractionModel> attractions = attractionDAO.getAllAttractions();
+
+                        JPanel panel = new JPanel();
+                        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                        panel.add(new JLabel("Sélectionnez les attractions désirées :"));
+
+                        List<JCheckBox> checkBoxes = new ArrayList<>();
+                        for (AttractionModel attraction : attractions) {
+                            JCheckBox checkBox = new JCheckBox(attraction.getName() + " (" + attraction.getPrix() + "€)");
+                            checkBoxes.add(checkBox);
+                            panel.add(checkBox);
+                        }
+
+                        int result = JOptionPane.showConfirmDialog(view, panel, "Choix des attractions",
+                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                        if (result == JOptionPane.OK_OPTION) {
+                            List<OrdersModel> commandes = new ArrayList<>();
+                            LocalDateTime now = LocalDateTime.now();
+                            int personCount = reservation.getAdultCount() + reservation.getChildrenCount(); // bébés gratuits
+
+                            for (int i = 0; i < checkBoxes.size(); i++) {
+                                if (checkBoxes.get(i).isSelected()) {
+                                    AttractionModel attr = attractions.get(i);
+                                    float total = (float) (reservation.getPrice() + attr.getPrix());
+                                    OrdersModel order = new OrdersModel(
+                                            0, now, personCount, total, "Pending",
+                                            attr.getAttractionID(), reservation.getReservationId()
+                                    );
+                                    ordersDAO.createOrder(order);
+                                    commandes.add(order);
+                                }
+                            }
+
+                            if (!commandes.isEmpty()) {
+                                new PaymentView(commandes.get(0));
+                                view.dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(view, "Aucune attraction sélectionnée. Réservation seule enregistrée.");
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(view, "Erreur lors de l'enregistrement de la réservation.");
+                        return;
+                    }
 
                     System.out.println("Dernière date sélectionnée : "
                             + reservation.getDateReservation()

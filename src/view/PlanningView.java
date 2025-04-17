@@ -1,5 +1,7 @@
 package view;
 
+import Model.ReservationModel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,6 +15,7 @@ public class PlanningView extends JFrame {
     private JRadioButton option1;
     private JRadioButton option2;
     private JRadioButton option3;
+    private ReservationModel reservationModel;
 
     public PlanningView(int page) {
         setTitle("Planning Mensuel - MVC");
