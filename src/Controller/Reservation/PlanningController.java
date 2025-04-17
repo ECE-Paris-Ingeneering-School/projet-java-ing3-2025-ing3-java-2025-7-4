@@ -130,7 +130,8 @@ public class PlanningController {
                             }
 
                             if (!commandes.isEmpty()) {
-                                new PaymentView(commandes.get(0));
+                                PaymentController paymentController = new PaymentController(ordersDAO);
+                                new PaymentView(commandes.get(0), paymentController);
                                 view.dispose();
                             } else {
                                 JOptionPane.showMessageDialog(view, "Aucune attraction sélectionnée. Réservation seule enregistrée.");
@@ -150,9 +151,10 @@ public class PlanningController {
             });
         }
     }
+
     private void initValidateButtonForRadio() {
         JButton validateButton = view.getValidateButton2();
-        if (validateButton != null ) {
+        if (validateButton != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             validateButton.addActionListener(e -> {
                 if (lastClickedDate != null) {

@@ -1,13 +1,13 @@
 package Model.Reservation;
+
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  * @author erelr
- *
+ * <p>
  * Il s'agit du model planning ça servira à ajouter
  * les jours modifié présent dans la Database
- *
  */
 
 public class PlanningModel {
@@ -32,6 +32,7 @@ public class PlanningModel {
         else if (isHighSeason) this.typeDay = 2;
         else this.typeDay = 3;
     }
+
     //  Constructeur simplifié
     public PlanningModel(int id, boolean isHighSeason, boolean isSpecialDay, LocalDate date) {
         this.id = id;
@@ -45,17 +46,6 @@ public class PlanningModel {
         else this.typeDay = 3;
     }
 
-
-    /**
-     * @author erelr
-     * @param listPlanningModel liste de tout les jours spéciaux
-     * @param planningModel jour spécial à ajouter à la liste
-     * @return listPlanningModel
-     */
-    List<PlanningModel> addToPlanningModel(List<PlanningModel> listPlanningModel, PlanningModel planningModel) {
-        listPlanningModel.add(planningModel);
-        return listPlanningModel;
-    }
 
     public int getId() {
         return id;
@@ -72,6 +62,7 @@ public class PlanningModel {
     public boolean isHighSeason() {
         return isHighSeason;
     }
+
     public boolean isSpecialDay() {
         return isSpecialDay;
     }
@@ -79,17 +70,9 @@ public class PlanningModel {
     public void setId(int id) {
         this.id = id;
     }
-    public void setTypeDay(int typeDay) {
-        this.typeDay = typeDay;
-    }
+
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-    public void setHighSeason(boolean highSeason) {
-        isHighSeason = highSeason;
-    }
-    public void setSpecialDay(boolean specialDay) {
-        isSpecialDay = specialDay;
     }
 
 }

@@ -1,5 +1,6 @@
 package view.Reservation;
 
+import Controller.Payement.PaymentController;
 import DAO.DaoFactory;
 import DAO.Reservation.ReservationDAO;
 import DAO.Reservation.OrdersDAOImpl;
@@ -78,7 +79,8 @@ public class ReservationListView extends JFrame {
                     JOptionPane.showMessageDialog(this, "Aucune commande associée à cette réservation.");
                 } else {
                     dispose();
-                    new PaymentView(commandes.get(0));
+                    PaymentController paymentController = new PaymentController(ordersDAO);
+                    new PaymentView(commandes.get(0),paymentController);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner une réservation.");
