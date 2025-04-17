@@ -133,6 +133,41 @@ public class ReservationDAO {
             return false;
         }
     }
+    public int deletePendingGuestOrdersAndReservations() {
+        String deleteOrdersSql = """
+        DELETE FROM orders
+        WHERE status = 'Pending'
+        AND reservation_id IN (
+            SELECT reservation_id FROM reservation WHERE account_id = 0
+        )
+    """;
+
+        String deleteReservationsSql = """
+        DELETE FROM reservation
+        WHERE account_id = 0
+    """;
+
+        int deletedOrders = 0;
+        int deletedReservations = 0;
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmtOrders = conn.prepareStatement(deleteOrdersSql);
+             PreparedStatement stmtReservations = conn.prepareStatement(deleteReservationsSql)) {
+
+            deletedOrders = stmtOrders.executeUpdate();
+            deletedReservations = stmtReservations.executeUpdate();
+
+            System.out.println("Commandes 'Pending' supprimées : " + deletedOrders);
+            System.out.println("Réservations invité supprimées : " + deletedReservations);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return deletedOrders + deletedReservations;
+    }
+
+
 
 }
 

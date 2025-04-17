@@ -7,6 +7,7 @@ import view.Attraction.AttractionView;
 import view.Reservation.PaymentView;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class NavigationBarHelper {
 
@@ -16,7 +17,7 @@ public class NavigationBarHelper {
         new LoginView();
     }
 
-    public static void openAttractionView(JFrame from, ClientModel client) {
+    public static void openAttractionView(Window from, ClientModel client) {
         if (from != null) from.dispose();
         SessionManager.setCurrentUser(client);
         new AttractionView();

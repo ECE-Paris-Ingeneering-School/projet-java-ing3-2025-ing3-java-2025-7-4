@@ -70,6 +70,9 @@ public class LoginView extends JFrame {
                     "email", email,
                     "password", password
             ));
+            System.out.println("isAuthenticated = " + isAuthenticated);
+            //System.out.println("Session user : " + SessionManager.getCurrentUser().getFullName());
+
 
 
             if (!isAuthenticated) {

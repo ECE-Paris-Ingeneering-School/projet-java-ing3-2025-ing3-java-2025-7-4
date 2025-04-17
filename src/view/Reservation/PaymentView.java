@@ -12,13 +12,13 @@ import view.Assets.FooterBar;
 import javax.swing.*;
 import java.awt.*;
 
-public class PaymentView extends JFrame {
+public class PaymentView extends JDialog {
 
-    public PaymentView(OrdersModel order, PaymentController controller) {
+    public PaymentView(JFrame Parent,OrdersModel order, PaymentController controller) {
         {
             setTitle("Paiement de la commande");
             setSize(800, 600);
-            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
             setLayout(new BorderLayout());
 
             // Barre de navigation
@@ -84,12 +84,16 @@ public class PaymentView extends JFrame {
             });
 
 
-            JPanel footer = new JPanel();
-            footer.add(boutonPayer);
+            // Crée un panneau global pour le bas de la fenêtre
+            JPanel southPanel = new JPanel(new BorderLayout());
+            southPanel.add(new FooterBar(), BorderLayout.SOUTH);
+            southPanel.add(boutonPayer, BorderLayout.CENTER);
 
+            // Et ajoute ce panneau au sud de la fenêtre principale
             add(contentPanel, BorderLayout.CENTER);
-            add(footer, BorderLayout.SOUTH);
-            add(new FooterBar(), BorderLayout.SOUTH);
+            add(southPanel, BorderLayout.SOUTH);
+
+
 
             setLocationRelativeTo(null);
             setVisible(true);

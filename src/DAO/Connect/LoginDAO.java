@@ -42,7 +42,7 @@ public class LoginDAO {
 
         // Retourne un client "invité" en cas d'échec (ID fictif = 7)
         return new ClientModel(
-                7,
+                -1,
                 0,
                 "Invité",
                 "",

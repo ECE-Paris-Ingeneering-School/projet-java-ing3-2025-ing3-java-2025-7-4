@@ -36,9 +36,13 @@ public class AttractionAdminView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // 1. Barre de navigation
+        NavigationBar nav = new NavigationBar("Gestion des Attractions");
+        add(nav, BorderLayout.NORTH);
 
 
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Nom", "Description", "Type", "Vidéo", "Image", "Prix"}, 0);
+
+        tableModel = new DefaultTableModel(new Object[]{"ID", "Nom", "Description", "Type", "Image", "Prix"}, 0);
         table = new JTable(tableModel);
         loadAttractions();
         add(new JScrollPane(table), BorderLayout.CENTER);
@@ -61,14 +65,19 @@ public class AttractionAdminView extends JFrame {
             }
         });
 
+        JPanel footerPanel = new JPanel(new BorderLayout());
+
+        // Panel des boutons
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(addButton);
         bottomPanel.add(editButton);
         bottomPanel.add(deleteButton);
 
-        add(new NavigationBar("Gestion des Attractions"), BorderLayout.NORTH);
-        add(bottomPanel, BorderLayout.SOUTH);
-        add(new FooterBar(), BorderLayout.SOUTH);
+        // Ajout des boutons + footer ensemble
+        footerPanel.add(bottomPanel, BorderLayout.CENTER);
+        footerPanel.add(new FooterBar(), BorderLayout.SOUTH);
+
+        add(footerPanel, BorderLayout.SOUTH);
 
 
         setVisible(true);
@@ -132,14 +141,12 @@ public class AttractionAdminView extends JFrame {
         String nom = safeGetValue(row, 1);
         String desc = safeGetValue(row, 2);
         String type = safeGetValue(row, 3);
-        String video = safeGetValue(row, 4);
-        String image = safeGetValue(row, 5);
-        String prixStr = safeGetValue(row, 6);
+        String image = safeGetValue(row, 4);
+        String prixStr = safeGetValue(row, 5);
 
         JTextField nomField = new JTextField(nom);
         JTextField descField = new JTextField(desc);
         JTextField typeField = new JTextField(type);
-        JTextField videoField = new JTextField(video);
         JTextField imageField = new JTextField(image);
         JTextField prixField = new JTextField(prixStr);
 
@@ -147,7 +154,6 @@ public class AttractionAdminView extends JFrame {
         panel.add(new JLabel("Nom:")); panel.add(nomField);
         panel.add(new JLabel("Description:")); panel.add(descField);
         panel.add(new JLabel("Type de public:")); panel.add(typeField);
-        panel.add(new JLabel("Chemin vidéo:")); panel.add(videoField);
         panel.add(new JLabel("Chemin image:")); panel.add(imageField);
         panel.add(new JLabel("Prix:")); panel.add(prixField);
 

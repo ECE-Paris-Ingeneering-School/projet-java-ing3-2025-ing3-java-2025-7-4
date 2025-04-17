@@ -22,15 +22,22 @@ public class LoginController {
     public boolean handleLogin(Map<String, String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
-        ClientModel client = dao.authenticate(email, password);
 
-        if (client == null || client.getId() == 7) {
+        ClientModel client = dao.authenticate(email, password);
+        System.out.println("Tentative de connexion :");
+        System.out.println("Email : " + email);
+        System.out.println("Mot de passe : " + password);
+        System.out.println("Client trouvé : " + client);
+
+        if (client == null || client.getId() == -1) {
             return false;
         }
 
         SessionManager.setCurrentUser(client);
+        System.out.println("Authentification validée pour : " + client.getFullName());
         return true;
     }
+
 
     public ClientModel getCurrentUser() {
         return SessionManager.getCurrentUser();

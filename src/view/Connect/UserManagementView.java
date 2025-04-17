@@ -29,7 +29,7 @@ public class UserManagementView extends JFrame {
         DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
         clientDAO = new ClientDAO(daoFactory);
 
-        model = new DefaultTableModel(new Object[]{"ID", "Nom complet", "Email", "Rôle","RoleCode"}, 0);
+        model = new DefaultTableModel(new Object[]{"ID", "Nom complet", "Email", "Rôle", "RoleCode"}, 0);
         table = new JTable(model);
 
         loadUsers();
@@ -70,11 +70,15 @@ public class UserManagementView extends JFrame {
         });
 
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.add(deleteButton);
-        bottomPanel.add(btnChangeRole);
-        add(bottomPanel, BorderLayout.SOUTH);
-        add(new FooterBar(), BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(btnChangeRole);
+
+        JPanel footerPanel = new JPanel(new BorderLayout());
+        footerPanel.add(buttonPanel, BorderLayout.CENTER);
+        footerPanel.add(new FooterBar(), BorderLayout.SOUTH);
+
+        add(footerPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -88,7 +92,7 @@ public class UserManagementView extends JFrame {
                 case 1 -> "Utilisateur";
                 default -> "Invité";
             };
-            model.addRow(new Object[]{c.getId(), c.getFullName(), c.getEmail(), roleLabel,c.getAccountType()});
+            model.addRow(new Object[]{c.getId(), c.getFullName(), c.getEmail(), roleLabel, c.getAccountType()});
         }
     }
 

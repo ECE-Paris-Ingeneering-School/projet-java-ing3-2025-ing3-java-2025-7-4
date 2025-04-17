@@ -78,12 +78,18 @@ public class ReservationListView extends JFrame {
         });
 
 
+        JPanel footer = new JPanel(new BorderLayout());
+
+        // Panel des boutons
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(deleteButton);
         bottomPanel.add(payButton);
-        add(bottomPanel, BorderLayout.SOUTH);
-        add(new FooterBar(), BorderLayout.SOUTH);
 
+        // Ajout du Footer et des boutons dans le même SOUTH
+        footer.add(bottomPanel, BorderLayout.CENTER);
+        footer.add(new FooterBar(), BorderLayout.SOUTH);
+
+        add(footer, BorderLayout.SOUTH);
         setVisible(true);
     }
 }

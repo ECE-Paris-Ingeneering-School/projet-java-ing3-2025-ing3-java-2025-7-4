@@ -58,6 +58,11 @@ public class SessionManager {
                 ""                 // mot de passe vide
         );
     }
+    public static boolean isGuest() {
+        ClientModel user = getCurrentUser();
+        return user == null || user.getAccountType() == 0;
+    }
+
 
     /**
      * Permet de se déconnecter

@@ -27,8 +27,9 @@ public class NavigationBar extends JPanel {
         logoBtn.setFocusPainted(false);
         logoBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoBtn.addActionListener((ActionEvent e) -> {
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            NavigationBarHelper.openAttractionView(frame, user);
+            Window window = SwingUtilities.getWindowAncestor(this);
+            NavigationBarHelper.openAttractionView(window, user);
+
         });
 
         // ---- Titre au centre ----
@@ -51,7 +52,10 @@ public class NavigationBar extends JPanel {
         compteBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         compteBtn.setToolTipText(isLoggedIn ? "Mon compte" : "Se connecter");
 
+
+
         compteBtn.addActionListener((ActionEvent e) -> {
+
             Window window = SwingUtilities.getWindowAncestor(this);
             if (window instanceof JFrame frame) {
                 frame.dispose();

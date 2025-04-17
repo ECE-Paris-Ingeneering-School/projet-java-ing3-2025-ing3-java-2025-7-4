@@ -44,6 +44,34 @@ public class ClientDashBoardView extends JFrame {
 
         add(new NavigationBar("Espace personnel"), BorderLayout.NORTH);
 
+        if (SessionManager.isGuest()) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+
+            JLabel message = new JLabel("Accès interdit aux invités.");
+            message.setFont(new Font("Serif", Font.BOLD, 18));
+            message.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panel.add(message);
+            panel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+            JButton logoutBtn = new JButton("Se déconnecter");
+            logoutBtn.setBackground(Color.RED);          // Couleur de fond
+            logoutBtn.setForeground(Color.WHITE);        // Couleur du texte
+            logoutBtn.setOpaque(true);
+            logoutBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+            logoutBtn.addActionListener(e -> {
+                dispose();
+                NavigationBarHelper.openLoginView(null);
+            });
+            panel.add(logoutBtn);
+
+            add(panel, BorderLayout.CENTER);
+            add(new FooterBar(), BorderLayout.SOUTH);
+            setVisible(true);
+            return;
+        }
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
@@ -102,6 +130,7 @@ public class ClientDashBoardView extends JFrame {
             JButton btnPlanning = new JButton("Gérer le planning");
             btnPlanning.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnPlanning.addActionListener(e -> {
+                dispose();
                 PlanningView planningView = new PlanningView(1);
                 new PlanningController(planningView, new ReservationModel(0, 0, 0, 0, 0, 0, null));
                 planningView.setVisible(true);

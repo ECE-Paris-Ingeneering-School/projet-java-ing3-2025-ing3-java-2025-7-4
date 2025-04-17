@@ -19,6 +19,7 @@ import Model.Attraction.AttractionModel;
 import Model.Reservation.OrdersModel;
 import Model.Reservation.PlanningModel;
 import Model.Reservation.ReservationModel;
+import toolbox.SessionManager;
 import view.Reservation.PlanningView;
 import view.Reservation.PaymentView;
 
@@ -108,6 +109,7 @@ public class PlanningController {
                             panel.add(checkBox);
                         }
 
+
                         int result = JOptionPane.showConfirmDialog(view, panel, "Choix des attractions",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
@@ -128,10 +130,24 @@ public class PlanningController {
                                     commandes.add(order);
                                 }
                             }
+                            if (SessionManager.isGuest()) {
+                                if (!commandes.isEmpty()) {
+                                    PaymentController paymentController = new PaymentController(ordersDAO);
+                                    PaymentView dialog = new PaymentView(null, commandes.get(0), paymentController);
+                                    dialog.setVisible(true);
+
+                                    view.dispose();
+                                } else {
+                                    JOptionPane.showMessageDialog(view, "Aucune attraction sélectionnée. Paiement impossible.");
+                                }
+                                return; // empêche d'aller plus loin
+                            }
 
                             if (!commandes.isEmpty()) {
                                 PaymentController paymentController = new PaymentController(ordersDAO);
-                                new PaymentView(commandes.get(0), paymentController);
+                                PaymentView dialog = new PaymentView(null, commandes.get(0), paymentController);
+                                dialog.setVisible(true);
+
                                 view.dispose();
                             } else {
                                 JOptionPane.showMessageDialog(view, "Aucune attraction sélectionnée. Réservation seule enregistrée.");
