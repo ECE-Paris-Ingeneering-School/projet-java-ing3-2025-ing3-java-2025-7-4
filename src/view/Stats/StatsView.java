@@ -12,8 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
-public class ReportingView extends JFrame {
-    public ReportingView(Map<String, Integer> pieData, Map<String, Float> revenueData, Map<String, Integer> popularityData) {
+public class StatsView extends JFrame {
+    public StatsView(Map<String, Integer> pieData, Map<String, Float> revenueData, Map<String, Integer> popularityData) {
         setTitle("Dashboard Reporting");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

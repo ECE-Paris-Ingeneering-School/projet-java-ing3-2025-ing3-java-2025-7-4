@@ -1,17 +1,17 @@
 package Controller.Stats;
 
 import DAO.Reservation.OrdersDAOImpl;
-import view.Stats.ReportingView;
+import view.Stats.StatsView;
 
 import java.util.Map;
 
 /**
  * Reporting controller pour faire le lien avec la vue (pas de modèle nécessaire ici)
  */
-public class ReportingController {
+public class StatsController {
     private final OrdersDAOImpl ordersDAO;
 
-    public ReportingController(OrdersDAOImpl ordersDAO) {
+    public StatsController(OrdersDAOImpl ordersDAO) {
         this.ordersDAO = ordersDAO;
     }
 
@@ -21,11 +21,11 @@ public class ReportingController {
      * - les revenus par attraction
      * - la popularité des attractions (nombre de commandes)
      */
-    public void afficherReporting() {
+    public void displayStats() {
         Map<String, Integer> pieData = ordersDAO.getStatusCount();
         Map<String, Float> revenueData = ordersDAO.getRevenueByAttraction();
         Map<String, Integer> popularityData = ordersDAO.getOrderCountByAttraction(); // 🆕
 
-        new ReportingView(pieData, revenueData, popularityData);
+        new StatsView(pieData, revenueData, popularityData);
     }
 }
