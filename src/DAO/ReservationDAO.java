@@ -2,11 +2,10 @@ package DAO;
 
 import Model.ReservationModel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReservationDAO {
     private final DaoFactory daoFactory;
@@ -46,5 +45,80 @@ public class ReservationDAO {
         }
         return false;
     }
+
+    public List<ReservationModel> getAllReservations() {
+        List<ReservationModel> list = new ArrayList<>();
+        String sql = "SELECT * FROM reservation";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                ReservationModel r = new ReservationModel(
+                        rs.getInt("reservation_id"),
+                        rs.getInt("account_id"),
+                        rs.getInt("program_id"),
+                        rs.getInt("adult_count"),
+                        rs.getInt("children_count"),
+                        rs.getInt("baby_count"),
+                        rs.getDate("dateReservation").toLocalDate()
+                );
+                list.add(r);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    public List<ReservationModel> getReservationsByClient(int accountId) {
+        List<ReservationModel> list = new ArrayList<>();
+        String sql = "SELECT * FROM reservation WHERE account_id = ?";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, accountId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ReservationModel r = new ReservationModel(
+                        rs.getInt("reservation_id"),
+                        rs.getInt("account_id"),
+                        rs.getInt("program_id"),
+                        rs.getInt("adult_count"),
+                        rs.getInt("children_count"),
+                        rs.getInt("baby_count"),
+                        rs.getDate("dateReservation").toLocalDate()
+                );
+                list.add(r);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    public boolean deleteReservation(int reservationId) {
+        String sql = "DELETE FROM reservation WHERE reservation_id = ?";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reservationId);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
+
 
