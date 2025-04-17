@@ -58,6 +58,7 @@ public class OrdersDAOImpl {
 
     /**
      * Récupère à l'aide d'un call au DAO toutes les commandes
+     *
      * @return list , liste de toutes les commandes
      */
     public List<OrdersModel> getAllOrders() {
@@ -83,6 +84,7 @@ public class OrdersDAOImpl {
         }
         return list;
     }
+
     public Map<String, Integer> getStatusCount() {
         Map<String, Integer> statusMap = new HashMap<>();
         String sql = "SELECT status, COUNT(*) as total FROM Orders GROUP BY status";
@@ -101,6 +103,7 @@ public class OrdersDAOImpl {
         }
         return statusMap;
     }
+
     public Map<String, Float> getRevenueByAttraction() {
         Map<String, Float> revenueMap = new HashMap<>();
         String sql = "SELECT a.name AS attraction_name, SUM(o.price) AS revenue " +
@@ -155,6 +158,7 @@ public class OrdersDAOImpl {
         }
         return resultOrder;
     }
+
     public List<OrdersModel> getOrdersByUser(int accountId) {
         List<OrdersModel> list = new ArrayList<>();
         String sql = "SELECT * FROM orders o JOIN reservation r ON o.reservation_id = r.reservation_id WHERE r.account_id = ?";
@@ -208,4 +212,75 @@ public class OrdersDAOImpl {
             return false;
         }
     }
+
+    public float getTotalPriceByReservationId(int reservationId) {
+        float total = 0;
+        String sql = "SELECT SUM(price) AS total_price FROM orders WHERE reservation_id = ?";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reservationId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getFloat("total_price");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    public String getStatusByReservationId(int reservationId) {
+        String status = "Inconnu";
+        String sql = "SELECT status FROM orders WHERE reservation_id = ? LIMIT 1";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reservationId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                status = rs.getString("status");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    public List<OrdersModel> getOrdersByReservationId(int reservationId) {
+        List<OrdersModel> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE reservation_id = ?";
+
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reservationId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                OrdersModel order = new OrdersModel(
+                        rs.getInt("order_id"),
+                        rs.getTimestamp("rdv_fulltime").toLocalDateTime(),
+                        rs.getInt("person_count"),
+                        rs.getFloat("price"),
+                        rs.getString("status"),
+                        rs.getInt("attraction_id"),
+                        rs.getInt("reservation_id")
+                );
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+    }
+
 }

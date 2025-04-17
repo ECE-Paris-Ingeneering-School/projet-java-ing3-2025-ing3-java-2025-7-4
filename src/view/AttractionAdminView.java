@@ -33,30 +33,7 @@ public class AttractionAdminView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Bandeau haut avec logo, titre et bouton compte
-        JPanel topBar = new JPanel(new BorderLayout());
-        topBar.setBackground(Color.BLACK);
-        topBar.setPreferredSize(new Dimension(800, 50));
 
-        JLabel logo = new JLabel(loadImage("logo.png", 40, 40));
-        logo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        logo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                // retour éventuel à une autre vue
-            }
-        });
-
-        JLabel title = new JLabel("Legendaria", SwingConstants.CENTER);
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 25));
-
-        JButton btnCompte = new JButton(loadImage("compte.png", 40, 40));
-        btnCompte.setBorderPainted(false);
-        btnCompte.setContentAreaFilled(false);
-
-        topBar.add(logo, BorderLayout.WEST);
-        topBar.add(title, BorderLayout.CENTER);
-        topBar.add(btnCompte, BorderLayout.EAST);
 
         tableModel = new DefaultTableModel(new Object[]{"ID", "Nom", "Description", "Type", "Vidéo", "Image", "Prix"}, 0);
         table = new JTable(tableModel);
@@ -86,7 +63,7 @@ public class AttractionAdminView extends JFrame {
         bottomPanel.add(editButton);
         bottomPanel.add(deleteButton);
 
-        add(topBar, BorderLayout.NORTH);
+        add(new NavigationBar("Gestion des Attractions"), BorderLayout.NORTH);
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);

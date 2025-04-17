@@ -2,9 +2,11 @@ package view;
 
 import DAO.DaoFactory;
 import DAO.ReservationDAO;
-import Model.ClientModel;
+import DAO.OrdersDAOImpl;
 import Model.ReservationModel;
+import Model.OrdersModel;
 import toolbox.SessionManager;
+import Model.ClientModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,10 +18,11 @@ public class ReservationListView extends JFrame {
     private JTable table;
     private DefaultTableModel model;
     private ReservationDAO reservationDAO;
+    private OrdersDAOImpl ordersDAO;
 
     public ReservationListView() {
         setTitle("Liste des réservations");
-        setSize(900, 600);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -28,9 +31,10 @@ public class ReservationListView extends JFrame {
 
         DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
         reservationDAO = new ReservationDAO(daoFactory);
+        ordersDAO = new OrdersDAOImpl(daoFactory);
 
         model = new DefaultTableModel(new Object[]{
-                "ID", "ClientID", "ProgrammeID", "Adultes", "Enfants", "Bébés", "Date", "Total"
+                "ID", "ClientID", "ProgrammeID", "Adultes", "Enfants", "Bébés", "Date", "Total", "Statut"
         }, 0);
 
         table = new JTable(model);
@@ -56,8 +60,33 @@ public class ReservationListView extends JFrame {
             }
         });
 
+        JButton payButton = new JButton("Payer la réservation");
+        payButton.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow >= 0) {
+                String status = (String) model.getValueAt(selectedRow, 8); // Colonne "Statut"
+                if ("Paid".equalsIgnoreCase(status)) {
+                    JOptionPane.showMessageDialog(this, "Cette réservation est déjà payée.");
+                    return;
+                }
+
+                int reservationId = (int) model.getValueAt(selectedRow, 0);
+                List<OrdersModel> commandes = ordersDAO.getOrdersByReservationId(reservationId);
+
+                if (commandes.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Aucune commande associée à cette réservation.");
+                } else {
+                    dispose();
+                    new PaymentView(commandes.get(0));
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une réservation.");
+            }
+        });
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(deleteButton);
+        bottomPanel.add(payButton);
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
@@ -66,17 +95,16 @@ public class ReservationListView extends JFrame {
     public void loadReservations() {
         model.setRowCount(0);
         ClientModel user = SessionManager.getCurrentUser();
-        List<ReservationModel> reservations;
-
-        if (user != null && user.getAccountType() == 2) {
-            // Admin : affiche toutes les réservations
-            reservations = reservationDAO.getAllReservations();
-        } else {
-            // Utilisateur : affiche uniquement ses réservations
-            reservations = reservationDAO.getReservationsByUserId(user.getId());
-        }
+        List<ReservationModel> reservations = reservationDAO.getAllReservations();
 
         for (ReservationModel r : reservations) {
+            if (user.getAccountType() != 2 && r.getAccountId() != user.getId()) {
+                continue; // Ignore les réservations qui ne sont pas à lui
+            }
+
+            float total = ordersDAO.getTotalPriceByReservationId(r.getReservationId());
+            String status = ordersDAO.getStatusByReservationId(r.getReservationId());
+
             model.addRow(new Object[]{
                     r.getReservationId(),
                     r.getAccountId(),
@@ -85,8 +113,10 @@ public class ReservationListView extends JFrame {
                     r.getChildrenCount(),
                     r.getBabyCount(),
                     r.getDateReservation(),
-                    r.getPrice()
+                    total,
+                    status
             });
         }
     }
 }
+

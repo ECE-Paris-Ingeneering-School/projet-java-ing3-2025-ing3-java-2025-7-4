@@ -43,7 +43,10 @@ public class ClientDashBoardView extends JFrame {
 
         JButton btnRDV = new JButton("Voir mes rendez-vous");
         btnRDV.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnRDV.addActionListener(e -> new ReservationListView());
+        btnRDV.addActionListener(e -> {
+            dispose();
+            new ReservationListView();
+        });
         panel.add(btnRDV);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
@@ -51,6 +54,7 @@ public class ClientDashBoardView extends JFrame {
             JButton btnAttractions = new JButton("Gérer les attractions");
             btnAttractions.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnAttractions.addActionListener(e -> {
+                dispose();
                 DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
                 new AttractionAdminView(user.getAccountType());
             });
@@ -77,6 +81,15 @@ public class ClientDashBoardView extends JFrame {
             });
             panel.add(btnStats);
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
+            JButton btnPlanning = new JButton("Gérer le planning");
+            btnPlanning.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnPlanning.addActionListener(e -> {
+                PlanningView planningView = new PlanningView(1); // Vue en mode admin
+                planningView.setVisible(true);
+            });
+            panel.add(btnPlanning);
+            panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
         }
 
         JButton btnLogout = new JButton("Se déconnecter");
