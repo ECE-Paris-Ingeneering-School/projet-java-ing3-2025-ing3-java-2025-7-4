@@ -6,10 +6,15 @@ import toolbox.SessionManager;
 
 import java.util.Map;
 
+
+
 public class LoginController {
 
     private final LoginDAO dao;
 
+    /**
+     * Le constructeur initialise l'objet `dao` en créant une nouvelle instance de `LoginDAO`.
+     */
     public LoginController() {
         dao = new LoginDAO();
     }
