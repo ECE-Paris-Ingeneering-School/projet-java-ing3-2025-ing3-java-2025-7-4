@@ -46,6 +46,40 @@ public class ReservationDAO {
         return false;
     }
 
+    public ReservationModel getReservationById(int reservationId) {
+        String sql = "SELECT * FROM reservation WHERE reservation_id = ?";
+        try (Connection conn = daoFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reservationId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                ReservationModel reservation= new ReservationModel(
+                        rs.getInt("reservation_id"),
+                        rs.getInt("account_id"),
+                        rs.getInt("program_id"),
+                        rs.getInt("adult_count"),
+                        rs.getInt("children_count"),
+                        rs.getInt("baby_count"),
+                        rs.getDate("dateReservation").toLocalDate(),0
+                );
+
+                //Calcul du prix
+                OrdersDAOImpl ordersDAO=new OrdersDAOImpl(daoFactory);
+                double totalPrice=ordersDAO.getTotalPriceByReservationId(reservationId);
+                reservation.setPrice(totalPrice);
+                return reservation;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors de la récupération de la réservation ID " + reservationId);
+        }
+
+        return null;
+    }
+
     public List<ReservationModel> getAllReservations() {
         List<ReservationModel> list = new ArrayList<>();
         String sql = "SELECT * FROM reservation";
@@ -53,6 +87,8 @@ public class ReservationDAO {
         try (Connection conn = daoFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
+
+            OrdersDAOImpl ordersDAO=new OrdersDAOImpl(daoFactory);
 
             while (rs.next()) {
                 ReservationModel r = new ReservationModel(
@@ -62,8 +98,10 @@ public class ReservationDAO {
                         rs.getInt("adult_count"),
                         rs.getInt("children_count"),
                         rs.getInt("baby_count"),
-                        rs.getDate("dateReservation").toLocalDate()
+                        rs.getDate("dateReservation").toLocalDate(),0
                 );
+                double totalPrice=ordersDAO.getTotalPriceByReservationId(r.getReservationId());
+                r.setPrice(totalPrice);
                 list.add(r);
             }
 
@@ -73,6 +111,7 @@ public class ReservationDAO {
 
         return list;
     }
+
     public List<ReservationModel> getReservationsByUserId(int accountId) {
         List<ReservationModel> list = new ArrayList<>();
         String sql = "SELECT * FROM reservation WHERE account_id = ?";
@@ -83,6 +122,8 @@ public class ReservationDAO {
             stmt.setInt(1, accountId);
             ResultSet rs = stmt.executeQuery();
 
+            OrdersDAOImpl ordersDAO=new OrdersDAOImpl(daoFactory);
+
             while (rs.next()) {
                 ReservationModel r = new ReservationModel(
                         rs.getInt("reservation_id"),
@@ -91,8 +132,11 @@ public class ReservationDAO {
                         rs.getInt("adult_count"),
                         rs.getInt("children_count"),
                         rs.getInt("baby_count"),
-                        rs.getDate("dateReservation").toLocalDate()
+                        rs.getDate("dateReservation").toLocalDate(),0
                 );
+
+                double totalPrice=ordersDAO.getTotalPriceByReservationId(r.getReservationId());
+                r.setPrice(totalPrice);
                 list.add(r);
             }
 
@@ -102,6 +146,7 @@ public class ReservationDAO {
 
         return list;
     }
+
     public boolean deleteReservation(int reservationId) {
         String sql = "DELETE FROM reservation WHERE reservation_id = ?";
 
@@ -118,6 +163,7 @@ public class ReservationDAO {
 
         return false;
     }
+
     public boolean deleteReservationById(int id) {
         String sql = "DELETE FROM reservation WHERE reservation_id = ?";
 
@@ -133,19 +179,20 @@ public class ReservationDAO {
             return false;
         }
     }
+
     public int deletePendingGuestOrdersAndReservations() {
         String deleteOrdersSql = """
-        DELETE FROM orders
-        WHERE status = 'Pending'
-        AND reservation_id IN (
-            SELECT reservation_id FROM reservation WHERE account_id = 0
-        )
-    """;
+                    DELETE FROM orders
+                    WHERE status = 'Pending'
+                    AND reservation_id IN (
+                        SELECT reservation_id FROM reservation WHERE account_id = 0
+                    )
+                """;
 
         String deleteReservationsSql = """
-        DELETE FROM reservation
-        WHERE account_id = 0
-    """;
+                    DELETE FROM reservation
+                    WHERE account_id = 0
+                """;
 
         int deletedOrders = 0;
         int deletedReservations = 0;
@@ -166,7 +213,6 @@ public class ReservationDAO {
 
         return deletedOrders + deletedReservations;
     }
-
 
 
 }

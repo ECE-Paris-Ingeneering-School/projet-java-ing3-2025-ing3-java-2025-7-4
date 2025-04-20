@@ -30,7 +30,8 @@ public class ReservationController {
                     nbAdulte,
                     nbEnfant,
                     nbBebe,
-                    null // pas encore de date choisie
+                    null// pas encore de date choisie
+                    , 0
             );
 
             view.dispose();

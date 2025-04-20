@@ -12,7 +12,7 @@ public class ReservationModel {
     private LocalDate dateReservation;
     private double price;
 
-    public ReservationModel(int reservationId, int accountId, int programId, int adultCount, int childrenCount, int babyCount, LocalDate dateReservation) {
+    public ReservationModel(int reservationId, int accountId, int programId, int adultCount, int childrenCount, int babyCount, LocalDate dateReservation,double price) {
         this.reservationId = reservationId;
         this.accountId = accountId;
         this.programId = programId;
@@ -20,6 +20,7 @@ public class ReservationModel {
         this.childrenCount = childrenCount;
         this.babyCount = babyCount;
         this.dateReservation = dateReservation;
+        this.price = price;
     }
 
     public int getReservationId() {

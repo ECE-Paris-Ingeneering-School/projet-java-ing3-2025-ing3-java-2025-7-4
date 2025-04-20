@@ -4,6 +4,7 @@ import Controller.Payement.PaymentController;
 import DAO.DaoFactory;
 import DAO.Reservation.OrdersDAOImpl;
 import Model.Reservation.OrdersModel;
+import Model.Reservation.ReservationModel;
 import toolbox.SessionManager;
 import toolbox.NavigationBarHelper;
 import toolbox.NavigationBar;
@@ -14,7 +15,7 @@ import java.awt.*;
 
 public class PaymentView extends JDialog {
 
-    public PaymentView(JFrame Parent,OrdersModel order, PaymentController controller) {
+    public PaymentView(JFrame Parent, OrdersModel order, ReservationModel reservation, PaymentController controller) {
         {
             setTitle("Paiement de la commande");
             setSize(800, 600);
@@ -27,7 +28,7 @@ public class PaymentView extends JDialog {
             // Header commande
             JLabel labelInfos = new JLabel("Commande n°" + order.getOrderId());
             JLabel labelStatut = new JLabel("Statut actuel : " + order.getStatus());
-            JLabel labelPrix = new JLabel("Montant à payer : " + order.getPrice() + " €");
+            JLabel labelPrix = new JLabel("Montant à payer : " + reservation.getPrice() + " €");
 
             JPanel header = new JPanel(new GridLayout(3, 1));
             header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));

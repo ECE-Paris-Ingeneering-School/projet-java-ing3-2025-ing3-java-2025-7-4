@@ -71,7 +71,10 @@ public class ReservationListView extends JFrame {
                 }
 
                 int reservationId = (int) model.getValueAt(selectedRow, 0);
-                controller.payerReservation(reservationId);
+                ReservationModel reservation = reservationDAO.getReservationById(reservationId);
+                controller.payerReservation(reservation);
+
+
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner une réservation.");
             }

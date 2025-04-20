@@ -132,7 +132,7 @@ public class ClientDashBoardView extends JFrame {
             btnPlanning.addActionListener(e -> {
                 dispose();
                 PlanningView planningView = new PlanningView(1);
-                new PlanningController(planningView, new ReservationModel(0, 0, 0, 0, 0, 0, null));
+                new PlanningController(planningView, new ReservationModel(0, 0, 0, 0, 0, 0, null,0));
                 planningView.setVisible(true);
             });
             panel.add(btnPlanning);

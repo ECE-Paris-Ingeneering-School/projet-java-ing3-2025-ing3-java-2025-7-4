@@ -133,7 +133,7 @@ public class PlanningController {
                             if (SessionManager.isGuest()) {
                                 if (!commandes.isEmpty()) {
                                     PaymentController paymentController = new PaymentController(ordersDAO);
-                                    PaymentView dialog = new PaymentView(null, commandes.get(0), paymentController);
+                                    PaymentView dialog = new PaymentView(null, commandes.get(0),reservation, paymentController);
                                     dialog.setVisible(true);
 
                                     view.dispose();
@@ -145,7 +145,7 @@ public class PlanningController {
 
                             if (!commandes.isEmpty()) {
                                 PaymentController paymentController = new PaymentController(ordersDAO);
-                                PaymentView dialog = new PaymentView(null, commandes.get(0), paymentController);
+                                PaymentView dialog = new PaymentView(null, commandes.get(0),reservation, paymentController);
                                 dialog.setVisible(true);
 
                                 view.dispose();
@@ -198,7 +198,7 @@ public class PlanningController {
                                 //updatePlanning();
                                 view.dispose();  // Ferme la vue actuelle
                                 PlanningView newView = new PlanningView(1);
-                                new PlanningController(newView, new ReservationModel(0, 0, 0, 0, 0, 0, null));
+                                new PlanningController(newView, new ReservationModel(0, 0, 0, 0, 0, 0, null,0));
                                 newView.setVisible(true);
                             } else {
                                 JOptionPane.showMessageDialog(view, "Erreur lors de la mise à jour.");

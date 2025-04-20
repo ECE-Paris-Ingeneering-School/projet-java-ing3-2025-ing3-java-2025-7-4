@@ -69,13 +69,13 @@ public class ReservationListController {
         }
     }
 
-    public void payerReservation(int reservationId) {
-        List<OrdersModel> commandes = ordersDAO.getOrdersByReservationId(reservationId);
+    public void payerReservation(ReservationModel reservation) {
+        List<OrdersModel> commandes = ordersDAO.getOrdersByReservationId(reservation.getReservationId());
         if (commandes.isEmpty()) {
             JOptionPane.showMessageDialog(view, "Aucune commande associée à cette réservation.");
         } else {
             PaymentController paymentController = new PaymentController(ordersDAO);
-            PaymentView dialog = new PaymentView(null, commandes.get(0), paymentController);
+            PaymentView dialog = new PaymentView(null, commandes.get(0), reservation,paymentController);
             dialog.setVisible(true);
             view.dispose();
         }
