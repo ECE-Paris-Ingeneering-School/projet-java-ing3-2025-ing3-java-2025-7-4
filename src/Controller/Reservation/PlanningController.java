@@ -80,6 +80,7 @@ public class PlanningController {
     }
 
     // Ajout de l'écouteur pour le bouton "Valider"
+// Ajout de l'écouteur pour le bouton "Valider"
     private void initValidateButton1() {
         JButton validateButton = view.getValidateButton1();
         if (validateButton != null) {
@@ -89,11 +90,14 @@ public class PlanningController {
 
                     reservation.addReservationDate(lastClickedDate.format(formatter));
                     reservation.setPrice((lastClickedPrice * reservation.getAdultCount()) + (lastClickedPrice * reservation.getChildrenCount() * 0.7));
+                    System.out.println(reservation);
+
                     boolean inserted = reservationDAO.createReservation(reservation);
                     if (inserted) {
                         System.out.println("Réservation insérée avec succès. ID = " + reservation.getReservationId());
-                        AttractionDAO attractionDAO = new AttractionDAO(DaoFactory.getInstance("attractions_db", "root", ""));
-                        OrdersDAOImpl ordersDAO = new OrdersDAOImpl(DaoFactory.getInstance("attractions_db", "root", ""));
+                        DaoFactory daoFactory = DaoFactory.getInstance("attractions_db", "root", "");
+                        AttractionDAO attractionDAO = new AttractionDAO(daoFactory);
+                        OrdersDAOImpl ordersDAO = new OrdersDAOImpl(daoFactory);
                         PaymentController controller = new PaymentController(ordersDAO);
 
                         List<AttractionModel> attractions = attractionDAO.getAllAttractions();
@@ -109,7 +113,6 @@ public class PlanningController {
                             panel.add(checkBox);
                         }
 
-
                         int result = JOptionPane.showConfirmDialog(view, panel, "Choix des attractions",
                                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
@@ -118,39 +121,36 @@ public class PlanningController {
                             LocalDateTime now = LocalDateTime.now();
                             int personCount = reservation.getAdultCount() + reservation.getChildrenCount(); // bébés gratuits
 
+                            // 1) Créer l'order pour l'entrée
+                            OrdersModel entreeOrder = new OrdersModel(
+                                    0, now, personCount, reservation.getPrice(), "Pending",
+                                    0, // Pas d'attraction spécifique pour l'entrée
+                                    reservation.getReservationId()
+                            );
+                            ordersDAO.createOrder(entreeOrder);
+                            commandes.add(entreeOrder);
+
+                            // 2) Créer les orders pour les attractions cochées
                             for (int i = 0; i < checkBoxes.size(); i++) {
                                 if (checkBoxes.get(i).isSelected()) {
                                     AttractionModel attr = attractions.get(i);
-                                    float total = (float) (reservation.getPrice() + attr.getPrix());
-                                    OrdersModel order = new OrdersModel(
-                                            0, now, personCount, total, "Pending",
-                                            attr.getAttractionID(), reservation.getReservationId()
+                                    OrdersModel attractionOrder = new OrdersModel(
+                                            0, now, personCount, attr.getPrix(), "Pending",
+                                            attr.getAttractionID(),
+                                            reservation.getReservationId()
                                     );
-                                    ordersDAO.createOrder(order);
-                                    commandes.add(order);
+                                    ordersDAO.createOrder(attractionOrder);
+                                    commandes.add(attractionOrder);
                                 }
-                            }
-                            if (SessionManager.isGuest()) {
-                                if (!commandes.isEmpty()) {
-                                    PaymentController paymentController = new PaymentController(ordersDAO);
-                                    PaymentView dialog = new PaymentView(null, commandes.get(0),reservation, paymentController);
-                                    dialog.setVisible(true);
-
-                                    view.dispose();
-                                } else {
-                                    JOptionPane.showMessageDialog(view, "Aucune attraction sélectionnée. Paiement impossible.");
-                                }
-                                return; // empêche d'aller plus loin
                             }
 
                             if (!commandes.isEmpty()) {
                                 PaymentController paymentController = new PaymentController(ordersDAO);
-                                PaymentView dialog = new PaymentView(null, commandes.get(0),reservation, paymentController);
+                                PaymentView dialog = new PaymentView(null, commandes, reservation, paymentController);
                                 dialog.setVisible(true);
-
                                 view.dispose();
                             } else {
-                                JOptionPane.showMessageDialog(view, "Aucune attraction sélectionnée. Réservation seule enregistrée.");
+                                JOptionPane.showMessageDialog(view, "Erreur : aucune commande générée !");
                             }
                         }
                     } else {
@@ -167,6 +167,7 @@ public class PlanningController {
             });
         }
     }
+
 
     private void initValidateButtonForRadio() {
         JButton validateButton = view.getValidateButton2();

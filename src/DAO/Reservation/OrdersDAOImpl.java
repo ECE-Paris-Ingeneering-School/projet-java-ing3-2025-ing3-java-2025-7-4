@@ -35,7 +35,7 @@ public class OrdersDAOImpl {
 
             LocalDateTime rdvFulltime = order.getRdvFulltime();
             int personCount = order.getPersonCount();
-            float price = order.getPrice();
+            double price = order.getPrice();
             String status = order.getStatus();
             int attractionId = order.getAttractionId();
             int reservationId = order.getReservationId();

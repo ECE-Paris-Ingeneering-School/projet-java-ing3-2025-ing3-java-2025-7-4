@@ -12,7 +12,7 @@ public class OrdersModel {
     private int orderId;
     private LocalDateTime rdvFulltime;
     private int personCount;
-    private float price;
+    private double price;
     private String status; // "Paid", "Pending", "Cancelled"
     private int attractionId;
     private int reservationId;
@@ -27,7 +27,7 @@ public class OrdersModel {
      * @param attractionId
      * @param reservationId
      */
-    public OrdersModel(int orderId, LocalDateTime rdvFulltime, int personCount, float price,
+    public OrdersModel(int orderId, LocalDateTime rdvFulltime, int personCount, double price,
                        String status, int attractionId, int reservationId) {
         this.orderId = orderId;
         this.rdvFulltime = rdvFulltime;
@@ -67,7 +67,7 @@ public class OrdersModel {
      *
      * @return price
      */
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 

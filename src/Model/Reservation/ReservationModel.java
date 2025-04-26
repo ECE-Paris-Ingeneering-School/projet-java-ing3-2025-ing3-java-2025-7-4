@@ -66,4 +66,19 @@ public class ReservationModel {
     public double getPrice() {
         return this.price;
     }
+
+    @Override
+    public String toString() {
+        return "ReservationModel{" +
+                "reservationId=" + reservationId +
+                ", userId=" + accountId +
+                ", programId=" + programId +
+                ", adultCount=" + adultCount +
+                ", childrenCount=" + childrenCount +
+                ", babyCount=" + babyCount +
+                ", dateReservation='" + dateReservation + '\'' +
+                ", price=" + price +
+                '}';
+    }
+
 }

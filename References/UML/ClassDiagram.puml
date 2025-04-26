@@ -1,6 +1,6 @@
 @startuml
 
-'skinparam classAttributeIconSize 0
+skinparam classAttributeIconSize 0
 
 ' ---------------------------
 ' Client MVC

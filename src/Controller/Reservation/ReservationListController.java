@@ -75,7 +75,7 @@ public class ReservationListController {
             JOptionPane.showMessageDialog(view, "Aucune commande associée à cette réservation.");
         } else {
             PaymentController paymentController = new PaymentController(ordersDAO);
-            PaymentView dialog = new PaymentView(null, commandes.get(0), reservation,paymentController);
+            PaymentView dialog = new PaymentView(null, commandes, reservation,paymentController);
             dialog.setVisible(true);
             view.dispose();
         }
